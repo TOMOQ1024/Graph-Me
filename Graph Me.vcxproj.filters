@@ -15,34 +15,34 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="framework.h">
+    <ClInclude Include="Include\framework.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="targetver.h">
+    <ClInclude Include="Include\Graph Me.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Resource.h">
+    <ClInclude Include="Include\Resource.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Graph Me.h">
+    <ClInclude Include="Include\targetver.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Graph Me.cpp">
+    <ClCompile Include="Source\Graph Me.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Graph Me.rc">
+    <ResourceCompile Include="Resource\Graph Me.rc">
       <Filter>リソース ファイル</Filter>
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="small.ico">
+    <Image Include="Resource\Graph Me.ico">
       <Filter>リソース ファイル</Filter>
     </Image>
-    <Image Include="Graph Me.ico">
+    <Image Include="Resource\small.ico">
       <Filter>リソース ファイル</Filter>
     </Image>
   </ItemGroup>
