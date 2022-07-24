@@ -142,7 +142,8 @@
     <ClInclude Include="Resource\resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Graph Me.cpp" />
+    <ClCompile Include="Source\DrawCtrl.c" />
+    <ClCompile Include="Source\Graph Me.c" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource\Graph Me.rc" />
