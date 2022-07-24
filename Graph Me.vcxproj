@@ -139,6 +139,7 @@
     <ClInclude Include="Include\Graph Me.h" />
     <ClInclude Include="Include\Resource.h" />
     <ClInclude Include="Include\targetver.h" />
+    <ClInclude Include="Resource\resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Graph Me.cpp" />
