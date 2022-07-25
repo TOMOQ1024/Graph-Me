@@ -1,7 +1,6 @@
 ﻿// Graph Me.cpp : アプリケーションのエントリ ポイントを定義します。
 //
 
-#include "framework.h"
 #include "Graph Me.h"
 #include <math.h>
 
@@ -105,8 +104,18 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // グローバル変数にインスタンス ハンドルを格納する
 
-   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
+   HWND hWnd = CreateWindowW(
+       szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL
+   );
+   //HWND hWnd = CreateWindowEx(
+   //    WS_EX_COMPOSITED,
+   //    szWindowClass, szTitle,
+   //    WS_OVERLAPPEDWINDOW,
+   //    CW_USEDEFAULT, 0,
+   //    CW_USEDEFAULT, 0,
+   //    NULL, NULL, hInstance, NULL
+   //);
 
    if (!hWnd)
    {
@@ -118,6 +127,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
    return TRUE;
 }
+
+
 
 //
 //  関数: WndProc(HWND, UINT, WPARAM, LPARAM)
@@ -135,12 +146,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     static INT mx, my;
     static BOOL flg0 = FALSE;
     static BOOL flg1 = FALSE;
-    static HCURSOR hCursor = NULL;
+
+    static HDC hdc;
+    static HDC hMemDC;
+    static HBITMAP hBMP;
+    static HPEN hPen;
 
     switch (message)
     {
     case WM_CREATE:
     {
+        hPen = CreatePen(PS_NULL, 2, RGB(0xFF, 0, 0));
+        hdc = GetDC(hWnd);
+        hMemDC = CreateCompatibleDC(hdc);
         //int i;
         //
         //cur_width = GetSystemMetrics(SM_CXCURSOR);
@@ -173,34 +191,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         width = LOWORD(lParam);
         height = HIWORD(lParam);
+        //GetClientRect(hWnd, &client);
+        hBMP = CreateCompatibleBitmap(hdc, width, height);
+        SelectObject(hMemDC, hBMP);
+        DrawCtrl(hdc, hMemDC, mx, my, flg0, flg1, ctrl_width, width, height);
         break;
     }
     case WM_PAINT:
     {
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(hWnd, &ps);
-
-        
-
-        // コントロールの描画
-        SelectObject(hdc, CreateSolidBrush(RGB(0xFF, 0xFF, 0xFF)));
-        Rectangle(hdc, 0, 0, ctrl_width, height);
-        SelectObject(hdc, CreateSolidBrush(RGB(0x00, 0x00, 0x00)));
-        Rectangle(hdc, ctrl_width, 0, width, height);
-
-        TCHAR str[128];
-        wsprintf(str, L"width: %d, height: %d", width, height);
-        TextOut(hdc, 10, 10, str, lstrlen(str));
-        wsprintf(str, L"mouseX: %d, mouseY: %d", mx, my);
-        TextOut(hdc, 10, 30, str, lstrlen(str));
-        wsprintf(str, L"cwidth: %d", ctrl_width);
-        TextOut(hdc, 10, 50, str, lstrlen(str));
-        wsprintf(str, L"%s", flg0 ? L"TRUE" : L"FALSE");
-        TextOut(hdc, 10, 70, str, lstrlen(str));
-        wsprintf(str, L"%s", flg1 ? L"TRUE" : L"FALSE");
-        TextOut(hdc, 10, 90, str, lstrlen(str));
-
-        EndPaint(hWnd, &ps);
+        //DrawCtrl(hdc, hMemDC, mx, my, flg0, flg1, ctrl_width, width, height);
+        BitBlt(hdc, 0, 0, width, height, hMemDC, 0, 0, SRCCOPY);
+        break;
     }
     break;
     case WM_LBUTTONDOWN:
@@ -208,7 +209,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         flg1 = FALSE;
         if (flg0) {
             flg1 = TRUE;
-            InvalidateRect(hWnd, NULL, FALSE);
+            //InvalidateRect(hWnd, NULL, FALSE);
+            DrawCtrl(hdc, hMemDC, mx, my, flg0, flg1, ctrl_width, width, height);
         }
         break;
     }
@@ -232,10 +234,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         else {
             flg0 = FALSE;
         }
-        InvalidateRect(hWnd, NULL, FALSE);
+        //InvalidateRect(hWnd, NULL, FALSE);
+        DrawCtrl(hdc, hMemDC, mx, my, flg0, flg1, ctrl_width, width, height);
         break;
     }
     case WM_DESTROY:
+        DeleteDC(hMemDC);
+        DeleteDC(hdc);
+        DeleteObject(hPen);
         //free(cur_and);
         //free(cur_xor);
         //DestroyCursor(hCursor);
