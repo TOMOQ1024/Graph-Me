@@ -11,6 +11,8 @@ HINSTANCE hInst;                                // 現在のインターフェ�
 WCHAR szTitle[MAX_LOADSTRING];                  // タイトル バーのテキスト
 WCHAR szWindowClass[MAX_LOADSTRING];            // メイン ウィンドウ クラス名
 
+extern struct SLIDER sliders[4];
+
 // カーソルの描画(没)
 // http://nagoyacoder.web.fc2.com/win32api/mcursor.html
 //INT cur_width;
@@ -142,7 +144,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    static UINT width = 0, height = 0, ctrl_width = 250;
+    static UINT width = 0, height = 0, ctrl_width = 300;
     static INT mx, my;
     static BOOL flg0 = FALSE;
     static BOOL flg1 = FALSE;
@@ -159,33 +161,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         hPen = CreatePen(PS_NULL, 2, RGB(0xFF, 0, 0));
         hdc = GetDC(hWnd);
         hMemDC = CreateCompatibleDC(hdc);
-        //int i;
-        //
-        //cur_width = GetSystemMetrics(SM_CXCURSOR);
-        //cur_height = GetSystemMetrics(SM_CYCURSOR);
-        //cur_size = cur_width / 8 * cur_height;
-        //cur_and = (char*)malloc(cur_size);
-        //cur_xor = (char*)malloc(cur_size);
-        // 
-        //for (i = 0; i < cur_size; i++) {
-        //    if (i % (cur_width / 8) < (cur_width / 16)) {
-        //        cur_and[i] = 0x00;
-        //    }
-        //    else {
-        //        cur_and[i] = 0xFF;
-        //    }
-        //    if (i < (cur_size / 2)) {
-        //        cur_xor[i] = 0x00;
-        //    }
-        //    else {
-        //        cur_xor[i] = 0xFF;
-        //    }
-        //}
-        //
-        //SetCursor(NULL);
-        //DestroyCursor(hCursor);
-        //hCursor = CreateCursor(hInst, cur_width / 2, cur_height / 2, cur_width, cur_height, cur_and, cur_xor);
-        //SetCursor(hCursor);
+        
+        SetSliders();
     }
     case WM_SIZE:
     {
@@ -194,12 +171,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         //GetClientRect(hWnd, &client);
         hBMP = CreateCompatibleBitmap(hdc, width, height);
         SelectObject(hMemDC, hBMP);
-        DrawCtrl(hdc, hMemDC, mx, my, flg0, flg1, ctrl_width, width, height);
+        Draw(hdc, hMemDC, mx, my, flg0, flg1, ctrl_width, width, height);
         break;
     }
     case WM_PAINT:
     {
-        //DrawCtrl(hdc, hMemDC, mx, my, flg0, flg1, ctrl_width, width, height);
         BitBlt(hdc, 0, 0, width, height, hMemDC, 0, 0, SRCCOPY);
         break;
     }
@@ -210,7 +186,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         if (flg0) {
             flg1 = TRUE;
             //InvalidateRect(hWnd, NULL, FALSE);
-            DrawCtrl(hdc, hMemDC, mx, my, flg0, flg1, ctrl_width, width, height);
+            Draw(hdc, hMemDC, mx, my, flg0, flg1, ctrl_width, width, height);
         }
         break;
     }
@@ -224,7 +200,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         mx = mousePos.x;
         my = mousePos.y;
         if (flg1) {
-            ctrl_width = mx;
+            ctrl_width = 300 < mx ? mx : 300;
             SetCursor(LoadCursor(NULL, IDC_SIZEWE));
         }
         else if (abs((LONG)(mx - ctrl_width)) < 3) {
@@ -235,7 +211,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             flg0 = FALSE;
         }
         //InvalidateRect(hWnd, NULL, FALSE);
-        DrawCtrl(hdc, hMemDC, mx, my, flg0, flg1, ctrl_width, width, height);
+        Draw(hdc, hMemDC, mx, my, flg0, flg1, ctrl_width, width, height);
         break;
     }
     case WM_DESTROY:
