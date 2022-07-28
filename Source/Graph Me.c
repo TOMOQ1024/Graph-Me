@@ -152,6 +152,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     static HDC hdc;
     static HDC hMemDC;
     static HBITMAP hBMP;
+    static HBITMAP hOldBMP;
 
     switch (message)
     {
@@ -168,7 +169,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         height = HIWORD(lParam);
         //GetClientRect(hWnd, &client);
         hBMP = CreateCompatibleBitmap(hdc, width, height);
-        SelectObject(hMemDC, hBMP);
+        hOldBMP = SelectObject(hMemDC, hBMP);
+        if (hOldBMP) DeleteObject(hOldBMP);
         Draw(hdc, hMemDC, mx, my, flg0, flg1, ctrl_width, width, height);
         break;
     }

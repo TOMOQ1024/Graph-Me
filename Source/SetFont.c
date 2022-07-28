@@ -1,7 +1,8 @@
 #include "Graph Me.h"
 
-void SetFont(HDC hdc, INT nHeight, COLORREF textColor, COLORREF bkColor)
+HFONT SetFont(HDC hdc, INT nHeight, COLORREF textColor, COLORREF bkColor)
 {
+	HFONT hOldFont;
 	HFONT hFont = CreateFont(
 		nHeight, 0, 0, 0,
 		FW_LIGHT, FALSE, FALSE, FALSE,
@@ -9,7 +10,9 @@ void SetFont(HDC hdc, INT nHeight, COLORREF textColor, COLORREF bkColor)
 		OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
 		DEFAULT_QUALITY, VARIABLE_PITCH, NULL
 	);
-	SelectObject(hdc, hFont);
+	hOldFont = SelectObject(hdc, hFont);
 	SetTextColor(hdc, textColor);
 	SetBkColor(hdc, bkColor);
+
+	return hOldFont;
 }

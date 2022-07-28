@@ -15,7 +15,7 @@ void SetSliders();
 
 double GetProportion(struct SLIDER slider);
 
-void SetFont(HDC hdc, INT nHeight, COLORREF textColor, COLORREF bkColor);
+HFONT SetFont(HDC hdc, INT nHeight, COLORREF textColor, COLORREF bkColor);
 
 // 全ての描画
 void Draw(HDC hdc, HDC hMemDC, INT mx, INT my, BOOL flg0, BOOL flg1, UINT ctrl_width, UINT width, UINT height);
@@ -25,3 +25,4 @@ void DrawCtrl(HDC hdc, HDC hMemDC, INT mx, INT my, BOOL flg0, BOOL flg1, UINT ct
 
 // デバッグ情報の描画
 void DrawDebug(HDC hdc, HDC hMemDC, INT mx, INT my, BOOL flg0, BOOL flg1, UINT ctrl_width, UINT width, UINT height);
+

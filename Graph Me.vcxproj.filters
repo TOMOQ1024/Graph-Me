@@ -38,9 +38,6 @@
     <ClCompile Include="Source\DrawCtrl.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SetFont.c">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Source\DrawDebug.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -48,6 +45,9 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\Slider.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\SetFont.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>

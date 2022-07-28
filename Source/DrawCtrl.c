@@ -5,6 +5,7 @@ extern struct SLIDER sliders[4];
 void DrawCtrl(HDC hdc, HDC hMemDC, INT mx, INT my, BOOL flg0, BOOL flg1, UINT ctrl_width, UINT width, UINT height)
 {
     TCHAR str[8];
+
     SetTextAlign(hMemDC, TA_CENTER | TA_BOTTOM);
 
     // è„å¿, â∫å¿
@@ -27,9 +28,9 @@ void DrawCtrl(HDC hdc, HDC hMemDC, INT mx, INT my, BOOL flg0, BOOL flg1, UINT ct
         MoveToEx(hMemDC, 60, i * 80 + 45, NULL);
         LineTo(hMemDC, ctrl_width - 60, i * 80 + 45);
     }
-    SelectObject(hMemDC, CreatePen(PS_SOLID, 0, 0x00));
-    SelectObject(hMemDC, CreateSolidBrush(0x0080FF80));
-    SetFont(hMemDC, 22, 0x00000000, 0x0080FF80);
+    DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 0, 0x00)));
+    DeleteObject(SelectObject(hMemDC, CreateSolidBrush(0x0080FF80)));
+    DeleteObject(SetFont(hMemDC, 22, 0x00000000, 0x0080FF80));
     for (int i = 0; i < 4; i++) {
         double x = GetProportion(sliders[i]) * (ctrl_width - 120) + 60;
         double y = i * 80 + 45;
@@ -39,11 +40,15 @@ void DrawCtrl(HDC hdc, HDC hMemDC, INT mx, INT my, BOOL flg0, BOOL flg1, UINT ct
     }
 
     // PREV, RESET, NEXTÉ{É^Éì
-    SelectObject(hMemDC, CreateSolidBrush(0x0080FF80));
-    SetFont(hMemDC, 22, 0x00000000, 0x0080FF80);
+    DeleteObject(SelectObject(hMemDC, CreateSolidBrush(0x0080FF80)));
+    DeleteObject(SetFont(hMemDC, 22, 0x00000000, 0x0080FF80));
     for (int i = 0; i < 3; i++) {
         Rectangle(hMemDC, ctrl_width / 3 * i + 10, height - 50, ctrl_width / 3 * (i + 1) - 10, height - 10);
         wsprintf(str, L"%s", i==0 ? L"PREV" : i==1 ? L"RESET" : L"NEXT");
         TextOut(hMemDC, ctrl_width / 3 * (i+0.5), height - 20, str, lstrlen(str));
     }
+
+    DeleteObject(SelectObject(hMemDC, GetStockObject(WHITE_BRUSH)));
+    DeleteObject(SelectObject(hMemDC, GetStockObject(BLACK_PEN)));
+    DeleteObject(SelectObject(hMemDC, GetStockObject(SYSTEM_FONT)));
 }

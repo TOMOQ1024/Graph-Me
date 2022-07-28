@@ -16,4 +16,6 @@ void DrawDebug(HDC hdc, HDC hMemDC, INT mx, INT my, BOOL flg0, BOOL flg1, UINT c
 	TextOut(hMemDC, ctrl_width + 10, 70, str, lstrlen(str));
 	wsprintf(str, L"%s", flg1 ? L"TRUE" : L"FALSE");
 	TextOut(hMemDC, ctrl_width + 10, 90, str, lstrlen(str));
+
+	DeleteObject(SelectObject(hMemDC, GetStockObject(SYSTEM_FONT)));
 }

@@ -5,8 +5,9 @@ void Draw(HDC hdc, HDC hMemDC, INT mx, INT my, BOOL flg0, BOOL flg1, UINT ctrl_w
 	// îwåi
 	SelectObject(hMemDC, CreateSolidBrush(0x00000000));
 	Rectangle(hMemDC, 0, 0, width, height);
-	SelectObject(hMemDC, CreateSolidBrush(0x00FFFFFF));
+	DeleteObject(SelectObject(hMemDC, CreateSolidBrush(0x00FFFFFF)));
 	Rectangle(hMemDC, 0, 0, ctrl_width, height);
+	DeleteObject(SelectObject(hMemDC, GetStockObject(BLACK_BRUSH)));
 
 	// ÉRÉìÉgÉçÅ[Éã
 	DrawCtrl(hdc, hMemDC, mx, my, flg0, flg1, ctrl_width, width, height);
