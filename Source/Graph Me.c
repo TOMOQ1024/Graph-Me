@@ -152,13 +152,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     static HDC hdc;
     static HDC hMemDC;
     static HBITMAP hBMP;
-    static HPEN hPen;
 
     switch (message)
     {
     case WM_CREATE:
     {
-        hPen = CreatePen(PS_NULL, 2, RGB(0xFF, 0, 0));
         hdc = GetDC(hWnd);
         hMemDC = CreateCompatibleDC(hdc);
         
@@ -174,12 +172,24 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         Draw(hdc, hMemDC, mx, my, flg0, flg1, ctrl_width, width, height);
         break;
     }
-    case WM_PAINT:
+    case WM_MOVE:
     {
-        BitBlt(hdc, 0, 0, width, height, hMemDC, 0, 0, SRCCOPY);
+        Draw(hdc, hMemDC, mx, my, flg0, flg1, ctrl_width, width, height);
         break;
     }
-    break;
+    case WM_SETCURSOR:
+    {
+        if (flg0) {
+            SetCursor(LoadCursor(NULL, IDC_SIZEWE));
+            break;
+        }
+        return DefWindowProc(hWnd, message, wParam, lParam);
+    }
+    //case WM_PAINT:
+    //{
+    //    BitBlt(hdc, 0, 0, width, height, hMemDC, 0, 0, SRCCOPY);
+    //    break;
+    //}
     case WM_LBUTTONDOWN:
     {
         flg1 = FALSE;
@@ -188,6 +198,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             //InvalidateRect(hWnd, NULL, FALSE);
             Draw(hdc, hMemDC, mx, my, flg0, flg1, ctrl_width, width, height);
         }
+        BitBlt(hdc, 0, 0, width, height, hMemDC, 0, 0, SRCCOPY);
         break;
     }
     case WM_LBUTTONUP:
@@ -201,26 +212,19 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         my = mousePos.y;
         if (flg1) {
             ctrl_width = 300 < mx ? mx : 300;
-            SetCursor(LoadCursor(NULL, IDC_SIZEWE));
         }
         else if (abs((LONG)(mx - ctrl_width)) < 3) {
             flg0 = TRUE;
-            SetCursor(LoadCursor(NULL, IDC_SIZEWE));
         }
         else {
             flg0 = FALSE;
         }
-        //InvalidateRect(hWnd, NULL, FALSE);
         Draw(hdc, hMemDC, mx, my, flg0, flg1, ctrl_width, width, height);
         break;
     }
     case WM_DESTROY:
         DeleteDC(hMemDC);
         DeleteDC(hdc);
-        DeleteObject(hPen);
-        //free(cur_and);
-        //free(cur_xor);
-        //DestroyCursor(hCursor);
         PostQuitMessage(0);
         break;
     default:
