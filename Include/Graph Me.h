@@ -17,6 +17,9 @@ double GetProportion(struct SLIDER slider);
 
 HFONT SetFont(HDC hdc, INT nHeight, COLORREF textColor, COLORREF bkColor);
 
+// グラデーション付きブラシの作成
+HBRUSH CreateGradientBrushV(COLORREF top, COLORREF bottom, HDC hdc, int dcWidth, int dcHeight, int y0, int height);
+
 // 全ての描画
 void Draw(HDC hdc, HDC hMemDC, INT mx, INT my, BOOL flg0, BOOL flg1, UINT ctrl_width, UINT width, UINT height);
 

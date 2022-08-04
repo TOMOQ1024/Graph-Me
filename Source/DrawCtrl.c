@@ -29,18 +29,20 @@ void DrawCtrl(HDC hdc, HDC hMemDC, INT mx, INT my, BOOL flg0, BOOL flg1, UINT ct
         LineTo(hMemDC, ctrl_width - 60, i * 80 + 45);
     }
     DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 0, 0x00)));
-    DeleteObject(SelectObject(hMemDC, CreateSolidBrush(0x0080FF80)));
+    //DeleteObject(SelectObject(hMemDC, CreateSolidBrush(0x0080FF80)));
     DeleteObject(SetFont(hMemDC, 22, 0x00000000, 0x0080FF80));
     for (int i = 0; i < 4; i++) {
-        double x = GetProportion(sliders[i]) * (ctrl_width - 120) + 60;
-        double y = i * 80 + 45;
+        int x = GetProportion(sliders[i]) * (ctrl_width - 120) + 60;
+        int y = i * 80 + 45;
+        DeleteObject(SelectObject(hMemDC, CreateGradientBrushV(0x90FF90, 0x30B030, hMemDC, ctrl_width, height, y - 20, 40)));
         RoundRect(hMemDC, x - 10, y - 20, x + 10, y + 20, 10, 15);
         wsprintf(str, L"%c", 'a' + i);
         TextOut(hMemDC, x, y + 10, str, 1);
     }
 
     // PREV, RESET, NEXTƒ{ƒ^ƒ“
-    DeleteObject(SelectObject(hMemDC, CreateSolidBrush(0x0080FF80)));
+    //DeleteObject(SelectObject(hMemDC, CreateSolidBrush(0x0080FF80)));
+    DeleteObject(SelectObject(hMemDC, CreateGradientBrushV(0x90FF90, 0x20B020, hMemDC, ctrl_width, height, height - 50, 40)));
     DeleteObject(SetFont(hMemDC, 22, 0x00000000, 0x0080FF80));
     for (int i = 0; i < 3; i++) {
         Rectangle(hMemDC, ctrl_width / 3 * i + 10, height - 50, ctrl_width / 3 * (i + 1) - 10, height - 10);

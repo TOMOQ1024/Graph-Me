@@ -145,6 +145,7 @@
     <ClCompile Include="Source\Draw.c" />
     <ClCompile Include="Source\DrawCtrl.c" />
     <ClCompile Include="Source\DrawDebug.c" />
+    <ClCompile Include="Source\Gradient.c" />
     <ClCompile Include="Source\Graph Me.c" />
     <ClCompile Include="Source\SetFont.c" />
     <ClCompile Include="Source\Slider.c" />
