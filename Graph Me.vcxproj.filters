@@ -50,6 +50,9 @@
     <ClCompile Include="Source\SetFont.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Gradient.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource\Graph Me.rc">
