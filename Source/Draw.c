@@ -6,11 +6,22 @@ void Draw(HDC hdc, HDC hMemDC, INT mx, INT my, BOOL flg0, BOOL flg1, UINT ctrl_w
 	SetBkMode(hMemDC, TRANSPARENT);
 	
 	// îwåi
+	SelectObject(hMemDC, GetStockObject(NULL_PEN));
+
 	SelectObject(hMemDC, CreateSolidBrush(0x00000000));
 	Rectangle(hMemDC, 0, 0, width, height);
-	DeleteObject(SelectObject(hMemDC, CreateSolidBrush(0x00FFFFFF)));
-	//DeleteObject(SelectObject(hMemDC, CreateGradientBrush(0xC0C0C0, 0x404040, hMemDC, ctrl_width, height, 0, 0, ctrl_width, 80)));
-	Rectangle(hMemDC, 0, 0, ctrl_width, height);
+
+	DeleteObject(SelectObject(
+		hMemDC,
+		CreateGradientBrushH(0xA0A0A0, 0xD0D0D0, hMemDC, ctrl_width, height, 0, ctrl_width * 3 / 4 + 1)
+	));
+	Rectangle(hMemDC, 0, 0, ctrl_width * 3 / 4 + 1, height);
+	DeleteObject(SelectObject(
+		hMemDC,
+		CreateGradientBrushH(0xD0D0D0, 0xB0B0B0, hMemDC, ctrl_width, height, ctrl_width * 3 / 4, ctrl_width / 4)
+	));
+	Rectangle(hMemDC, ctrl_width * 3 / 4, 0, ctrl_width, height);
+
 	DeleteObject(SelectObject(hMemDC, GetStockObject(BLACK_BRUSH)));
 
 	// ÉRÉìÉgÉçÅ[Éã
