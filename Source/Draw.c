@@ -1,6 +1,6 @@
 #include "Graph Me.h"
 
-void Draw(HDC hdc, HDC hMemDC, INT mx, INT my, BOOL flg0, BOOL flg1, UINT ctrl_width, UINT width, UINT height)
+void Draw(HDC hdc, HDC hMemDC, INT mx, INT my, UINT width, UINT height)
 {
 	// テキストの背景色をなくす
 	SetBkMode(hMemDC, TRANSPARENT);
@@ -13,22 +13,22 @@ void Draw(HDC hdc, HDC hMemDC, INT mx, INT my, BOOL flg0, BOOL flg1, UINT ctrl_w
 
 	DeleteObject(SelectObject(
 		hMemDC,
-		CreateGradientBrushH(0xA0A0A0, 0xD0D0D0, hMemDC, ctrl_width, height, 0, ctrl_width * 3 / 4 + 1)
+		CreateGradientBrushH(0xA0A0A0, 0xD0D0D0, hMemDC, ctrl_pane.lWidth, height, 0, ctrl_pane.lWidth * 3 / 4 + 1)
 	));
-	Rectangle(hMemDC, 0, 0, ctrl_width * 3 / 4 + 1, height);
+	Rectangle(hMemDC, 0, 0, ctrl_pane.lWidth * 3 / 4 + 1, height);
 	DeleteObject(SelectObject(
 		hMemDC,
-		CreateGradientBrushH(0xD0D0D0, 0xB0B0B0, hMemDC, ctrl_width, height, ctrl_width * 3 / 4, ctrl_width / 4)
+		CreateGradientBrushH(0xD0D0D0, 0xB0B0B0, hMemDC, ctrl_pane.lWidth, height, ctrl_pane.lWidth * 3 / 4, ctrl_pane.lWidth / 4)
 	));
-	Rectangle(hMemDC, ctrl_width * 3 / 4, 0, ctrl_width, height);
+	Rectangle(hMemDC, ctrl_pane.lWidth * 3 / 4, 0, ctrl_pane.lWidth, height);
 
 	DeleteObject(SelectObject(hMemDC, GetStockObject(BLACK_BRUSH)));
 
 	// コントロール
-	DrawCtrl(hdc, hMemDC, mx, my, flg0, flg1, ctrl_width, width, height);
+	DrawCtrl(hdc, hMemDC, mx, my, width, height);
 
 	// デバッグ情報
-	DrawDebug(hdc, hMemDC, mx, my, flg0, flg1, ctrl_width, width, height);
+	DrawDebug(hdc, hMemDC, mx, my, width, height);
 
 	BitBlt(hdc, 0, 0, width, height, hMemDC, 0, 0, SRCCOPY);
 }

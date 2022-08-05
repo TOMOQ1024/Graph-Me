@@ -142,6 +142,7 @@
     <ClInclude Include="Resource\resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Controls.c" />
     <ClCompile Include="Source\Draw.c" />
     <ClCompile Include="Source\DrawCtrl.c" />
     <ClCompile Include="Source\DrawDebug.c" />

@@ -11,7 +11,13 @@ HINSTANCE hInst;                                // 現在のインターフェ�
 WCHAR szTitle[MAX_LOADSTRING];                  // タイトル バーのテキスト
 WCHAR szWindowClass[MAX_LOADSTRING];            // メイン ウィンドウ クラス名
 
-extern struct SLIDER sliders[4];
+double median(double x, double y, double z)
+{
+    return x < y ? y < z ? y : z : z < x ? z : x;
+}
+
+extern PANE ctrl_pane;
+extern SLIDER sliders[4];
 
 // カーソルの描画(没)
 // http://nagoyacoder.web.fc2.com/win32api/mcursor.html
@@ -34,9 +40,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-    // TODO: ここにコードを挿入してください。
-
-    // グローバル文字列を初期化する
+    // グローバル変数の初期化
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_GRAPHME, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
@@ -144,10 +148,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    static UINT width = 0, height = 0, ctrl_width = 300;
+    static UINT width = 0, height = 0;
     static INT mx, my;
-    static BOOL flg0 = FALSE;
-    static BOOL flg1 = FALSE;
 
     static HDC hdc;
     static HDC hMemDC;
@@ -161,6 +163,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         hdc = GetDC(hWnd);
         hMemDC = CreateCompatibleDC(hdc);
         
+        ctrl_pane.lWidth = 300;
+        ctrl_pane.mHover = FALSE;
+        ctrl_pane.mDrag = FALSE;
+
         SetSliders();
     }
     case WM_SIZE:
@@ -171,17 +177,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         hBMP = CreateCompatibleBitmap(hdc, width, height);
         hOldBMP = SelectObject(hMemDC, hBMP);
         if (hOldBMP) DeleteObject(hOldBMP);
-        Draw(hdc, hMemDC, mx, my, flg0, flg1, ctrl_width, width, height);
+        Draw(hdc, hMemDC, mx, my, width, height);
         break;
     }
     case WM_MOVE:
     {
-        Draw(hdc, hMemDC, mx, my, flg0, flg1, ctrl_width, width, height);
+        Draw(hdc, hMemDC, mx, my, width, height);
         break;
     }
     case WM_SETCURSOR:
     {
-        if (flg0) {
+        if (ctrl_pane.mHover || sliders[0].mHover || sliders[1].mHover || sliders[2].mHover || sliders[3].mHover) {
             SetCursor(LoadCursor(NULL, IDC_SIZEWE));
             break;
         }
@@ -194,34 +200,40 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     //}
     case WM_LBUTTONDOWN:
     {
-        flg1 = FALSE;
-        if (flg0) {
-            flg1 = TRUE;
+        OnLButtonDown(LOWORD(lParam), HIWORD(lParam));
+        ctrl_pane.mDrag = FALSE;
+        if (ctrl_pane.mHover) {
+            ctrl_pane.mDrag = TRUE;
             //InvalidateRect(hWnd, NULL, FALSE);
-            Draw(hdc, hMemDC, mx, my, flg0, flg1, ctrl_width, width, height);
         }
-        BitBlt(hdc, 0, 0, width, height, hMemDC, 0, 0, SRCCOPY);
+        Draw(hdc, hMemDC, mx, my, width, height);
         break;
     }
     case WM_LBUTTONUP:
     {
-        flg1 = FALSE;
+        OnLButtonUp(LOWORD(lParam), HIWORD(lParam));
+        ctrl_pane.mDrag = FALSE;
+        Draw(hdc, hMemDC, mx, my, width, height);
+        break;
     }
     case WM_MOUSEMOVE:
     {
+        OnMouseMove(LOWORD(lParam), HIWORD(lParam));
         POINTS mousePos = MAKEPOINTS(lParam);
         mx = mousePos.x;
         my = mousePos.y;
-        if (flg1) {
-            ctrl_width = 300 < mx ? mx : 300;
+        if (ctrl_pane.mDrag) {
+            ctrl_pane.lWidth = 300 < mx ? mx : 300;
+
+            for (INT i = 0; i < 4; i++) sliders[i].length = ctrl_pane.lWidth - 120;
         }
-        else if (abs((LONG)(mx - ctrl_width)) < 3) {
-            flg0 = TRUE;
+        else if (abs((LONG)(mx - ctrl_pane.lWidth)) < 3) {
+            ctrl_pane.mHover = TRUE;
         }
         else {
-            flg0 = FALSE;
+            ctrl_pane.mHover = FALSE;
         }
-        Draw(hdc, hMemDC, mx, my, flg0, flg1, ctrl_width, width, height);
+        Draw(hdc, hMemDC, mx, my, width, height);
         break;
     }
     case WM_DESTROY:
