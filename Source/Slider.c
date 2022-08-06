@@ -19,7 +19,7 @@ double GetProportion(const SLIDER *slider) {
 
 void GetSliderRect(const SLIDER* slider, RECT* rect)
 {
-	INT x = (INT)(GetProportion(slider) * (ctrl_pane.lWidth - 120)) + 60;
+	INT x = GetProportion(slider) * slider->length + ctrl_pane.lWidth / 2.0 - slider->length / 2.0;
 	INT y = slider->id * 80 + 45;
 	rect->left = x - 10;
 	rect->top = y - 20;
