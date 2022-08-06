@@ -3,7 +3,9 @@
 
 #include "Slider.h"
 #include "Button.h"
-#include <math.h>
+#include "Draw.h"
+#include "Controls.h"
+//#include <math.h>
 
 #define MAX_LOADSTRING 100
 

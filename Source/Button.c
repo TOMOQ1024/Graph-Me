@@ -4,7 +4,7 @@ void InitButtons(void)
 {
 	for (INT i = 0; i < 3; i++) {
 		buttons[i].id = i;
-		buttons[i].active = TRUE;
+		buttons[i].active = 1 < i;//////////////////////////////////////
 		buttons[i].mHover = FALSE;
 		buttons[i].mLDown = FALSE;
 		buttons[i].width = pane.lWidth / 3.0 - 20;
@@ -19,7 +19,7 @@ void GetButtonRect(const BUTTON* button, RECT* rect)
 	INT y = pane.height - 30;
 	rect->left = x - button->width / 2;
 	rect->top = y - button->height / 2;
-	rect->right = x + 10+button->width / 2;
+	rect->right = x + button->width / 2;
 	rect->bottom = y + button->height / 2;
 }
 
@@ -30,7 +30,7 @@ void OnMouseMove_Button(INT x, INT y)
 	RECT rc;
 	for (INT i = 0; i < 3; i++) {
 		GetButtonRect(&buttons[i], &rc);
-		if (IsIn(x, y, rc)) {
+		if (buttons[i].active && IsIn(x, y, rc)) {
 			buttons[i].mHover = TRUE;
 		}
 		else {

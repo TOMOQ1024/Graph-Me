@@ -5,7 +5,7 @@
 void InitSliders(void) {
 	for (int i = 0; i < 4; i++) {
 		sliders[i].id = i;
-		sliders[i].active = TRUE;
+		sliders[i].active = i < 3;////////////////////////////
 		sliders[i].min = 0;
 		sliders[i].max = 1;
 		sliders[i].value = 0.5;
@@ -28,7 +28,7 @@ void GetSliderRect(const SLIDER* slider, RECT* rect)
 	INT y = slider->id * 80 + 45;
 	rect->left = x - slider->width / 2;
 	rect->top = y - slider->height / 2;
-	rect->right = x + 10 + slider->width / 2;
+	rect->right = x + slider->width / 2;
 	rect->bottom = y + slider->height / 2;
 }
 
@@ -42,7 +42,7 @@ void OnMouseMove_Slider(INT x, INT y)
 			sliders[i].value = median(0, sliders[i].value, 1);
 		}
 		else {
-			if (IsIn(x, y, rc)) {
+			if (sliders[i].active && IsIn(x, y, rc)) {
 				sliders[i].mHover = TRUE;
 			}
 			else {
