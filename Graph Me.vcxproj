@@ -135,20 +135,27 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Include\Button.h" />
+    <ClInclude Include="Include\Controls.h" />
+    <ClInclude Include="Include\Draw.h" />
+    <ClInclude Include="Include\Font.h" />
     <ClInclude Include="Include\framework.h" />
-    <ClInclude Include="Include\Graph Me.h" />
+    <ClInclude Include="Include\Gradient.h" />
+    <ClInclude Include="Include\Main.h" />
     <ClInclude Include="Include\Resource.h" />
+    <ClInclude Include="Include\Slider.h" />
     <ClInclude Include="Include\targetver.h" />
     <ClInclude Include="Resource\resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Button.c" />
     <ClCompile Include="Source\Controls.c" />
     <ClCompile Include="Source\Draw.c" />
     <ClCompile Include="Source\DrawCtrl.c" />
     <ClCompile Include="Source\DrawDebug.c" />
     <ClCompile Include="Source\Gradient.c" />
-    <ClCompile Include="Source\Graph Me.c" />
-    <ClCompile Include="Source\SetFont.c" />
+    <ClCompile Include="Source\Main.c" />
+    <ClCompile Include="Source\Font.c" />
     <ClCompile Include="Source\Slider.c" />
   </ItemGroup>
   <ItemGroup>

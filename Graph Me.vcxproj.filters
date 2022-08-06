@@ -18,7 +18,7 @@
     <ClInclude Include="Include\framework.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graph Me.h">
+    <ClInclude Include="Include\Main.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Include\Resource.h">
@@ -30,9 +30,27 @@
     <ClInclude Include="Resource\resource.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Include\Slider.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Button.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Font.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Controls.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Draw.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Include\Gradient.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Graph Me.c">
+    <ClCompile Include="Source\Main.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\DrawCtrl.c">
@@ -47,13 +65,16 @@
     <ClCompile Include="Source\Slider.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Source\SetFont.c">
+    <ClCompile Include="Source\Font.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\Gradient.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\Controls.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Button.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>

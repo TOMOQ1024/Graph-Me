@@ -1,4 +1,4 @@
-#include "Graph Me.h"
+#include "Controls.h"
 
 void OnMouseMove(INT x, INT y)
 {

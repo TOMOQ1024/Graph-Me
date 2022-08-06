@@ -1,15 +1,20 @@
-#include "Graph Me.h"
+#include "Slider.h"
 
-void SetSliders() {
+
+
+void InitSliders(void) {
 	for (int i = 0; i < 4; i++) {
 		sliders[i].id = i;
+		sliders[i].active = TRUE;
 		sliders[i].min = 0;
 		sliders[i].max = 1;
 		sliders[i].value = 0.5;
 		sliders[i].scale = 0;
 		sliders[i].mHover = FALSE;
 		sliders[i].mDrag = FALSE;
-		sliders[i].length = ctrl_pane.lWidth - 130;
+		sliders[i].length = pane.lWidth - 140;
+		sliders[i].width = 20;
+		sliders[i].height = 40;
 	}
 }
 
@@ -19,12 +24,12 @@ double GetProportion(const SLIDER *slider) {
 
 void GetSliderRect(const SLIDER* slider, RECT* rect)
 {
-	INT x = GetProportion(slider) * slider->length + ctrl_pane.lWidth / 2.0 - slider->length / 2.0;
+	INT x = GetProportion(slider) * slider->length + pane.lWidth / 2.0 - slider->length / 2.0;
 	INT y = slider->id * 80 + 45;
-	rect->left = x - 10;
-	rect->top = y - 20;
-	rect->right = x + 10;
-	rect->bottom = y + 20;
+	rect->left = x - slider->width / 2;
+	rect->top = y - slider->height / 2;
+	rect->right = x + 10 + slider->width / 2;
+	rect->bottom = y + slider->height / 2;
 }
 
 void OnMouseMove_Slider(INT x, INT y)
@@ -33,7 +38,7 @@ void OnMouseMove_Slider(INT x, INT y)
 	for (INT i = 0; i < 4; i++) {
 		GetSliderRect(&sliders[i], &rc);
 		if (sliders[i].mDrag) {
-			sliders[i].value = (sliders[i].max - sliders[i].min) * (x - (ctrl_pane.lWidth / 2.0 - sliders[i].length / 2.0)) / sliders[i].length + sliders[i].min;
+			sliders[i].value = (sliders[i].max - sliders[i].min) * (x - (pane.lWidth / 2.0 - sliders[i].length / 2.0)) / sliders[i].length + sliders[i].min;
 			sliders[i].value = median(0, sliders[i].value, 1);
 		}
 		else {
