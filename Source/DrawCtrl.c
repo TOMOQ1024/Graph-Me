@@ -1,53 +1,65 @@
-#include "Graph Me.h"
+#include "Draw.h"
+#include "Slider.h"
+#include "Button.h"
 
-extern struct SLIDER sliders[4];
-
-void DrawCtrl(HDC hdc, HDC hMemDC, INT mx, INT my, BOOL flg0, BOOL flg1, UINT ctrl_width, UINT width, UINT height)
+void DrawCtrl(HDC hdc, HDC hMemDC, INT mx, INT my)
 {
     TCHAR str[8];
+    RECT rc;
 
     SetTextAlign(hMemDC, TA_CENTER | TA_BOTTOM);
 
     // 上限, 下限
     SelectObject(hMemDC, CreateSolidBrush(0x00000000));
-    for (int i = 0; i < 4; i++) {
+    for (INT i = 0; i < 4; i++) {
         Rectangle(hMemDC, 10, i * 80 + 10, 50, i * 80 + 80);
-        Rectangle(hMemDC, ctrl_width - 50, i * 80 + 10, ctrl_width - 10, i * 80 + 80);
+        Rectangle(hMemDC, pane.lWidth - 50, i * 80 + 10, pane.lWidth - 10, i * 80 + 80);
     }
     SetFont(hMemDC, 30, 0x000000FF, 0x00000000);
-    for (int i = 0; i < 4; i++) {
+    for (INT i = 0; i < 4; i++) {
         wsprintf(str, L"%d", sliders[i].min);
         TextOut(hMemDC, 30, i * 80 + 50 + 10, str, lstrlen(str));
         wsprintf(str, L"%d", sliders[i].max);
-        TextOut(hMemDC, ctrl_width - 30, i * 80 + 50 + 10, str, lstrlen(str));
+        TextOut(hMemDC, pane.lWidth - 30, i * 80 + 50 + 10, str, lstrlen(str));
     }
 
-    // スライダー
+    // スライダー背景
     SelectObject(hMemDC, CreatePen(PS_SOLID | PS_ENDCAP_ROUND, 5, 0x00606060));
-    for (int i = 0; i < 4; i++) {
-        MoveToEx(hMemDC, 60, i * 80 + 45, NULL);
-        LineTo(hMemDC, ctrl_width - 60, i * 80 + 45);
+    for (INT i = 0; i < 4; i++) {
+        MoveToEx(hMemDC, pane.lWidth / 2 - sliders[i].length / 2, i * 80 + 45, NULL);
+        LineTo(hMemDC, pane.lWidth / 2 + sliders[i].length / 2, i * 80 + 45);
     }
+    // スライダー本体
     DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 0, 0x00)));
     //DeleteObject(SelectObject(hMemDC, CreateSolidBrush(0x0080FF80)));
     DeleteObject(SetFont(hMemDC, 22, 0x00000000, 0x0080FF80));
-    for (int i = 0; i < 4; i++) {
-        int x = GetProportion(sliders[i]) * (ctrl_width - 120) + 60;
-        int y = i * 80 + 45;
-        DeleteObject(SelectObject(hMemDC, CreateGradientBrushV(0x90FF90, 0x30B030, hMemDC, ctrl_width, height, y - 20, 40)));
-        RoundRect(hMemDC, x - 10, y - 20, x + 10, y + 20, 10, 15);
+    for (INT i = 0; i < 4; i++) {
+        //INT x = GetProportion(&sliders[i]) * sliders[i].length + pane.lWidth / 2.0 - sliders[i].length / 2.0;
+        //INT y = i * 80 + 45;
+        GetSliderRect(&sliders[i], &rc);
+        DeleteObject(SelectObject(hMemDC, CreateGradientBrushV(
+            sliders[i].active ? 0x90FF90 : 0x909090,
+            sliders[i].active ? 0x30B030 : 0x505050,
+            hMemDC, pane.lWidth, pane.height, rc.top, sliders[i].height
+        )));
+        RoundRect(hMemDC, rc.left, rc.top, rc.right, rc.bottom, 10, 15);
         wsprintf(str, L"%c", 'a' + i);
-        TextOut(hMemDC, x, y + 10, str, 1);
+        TextOut(hMemDC, (rc.left + rc.right) / 2, (rc.top + rc.bottom) / 2+10, str, 1);
     }
 
     // PREV, RESET, NEXTボタン
     //DeleteObject(SelectObject(hMemDC, CreateSolidBrush(0x0080FF80)));
-    DeleteObject(SelectObject(hMemDC, CreateGradientBrushV(0x90FF90, 0x20B020, hMemDC, ctrl_width, height, height - 50, 40)));
     DeleteObject(SetFont(hMemDC, 22, 0x00000000, 0x0080FF80));
-    for (int i = 0; i < 3; i++) {
-        Rectangle(hMemDC, ctrl_width / 3 * i + 10, height - 50, ctrl_width / 3 * (i + 1) - 10, height - 10);
+    for (INT i = 0; i < 3; i++) {
+        GetButtonRect(&buttons[i], &rc);
+        DeleteObject(SelectObject(hMemDC, CreateGradientBrushV(
+            buttons[i].active ? 0x90FF90 : 0x909090,
+            buttons[i].active ? 0x20B020 : 0x404040,
+            hMemDC, pane.lWidth, pane.height, pane.height - 50, 40
+        )));
+        Rectangle(hMemDC, rc.left, rc.top, rc.right, rc.bottom);
         wsprintf(str, L"%s", i==0 ? L"PREV" : i==1 ? L"RESET" : L"NEXT");
-        TextOut(hMemDC, ctrl_width / 3 * (i+0.5), height - 20, str, lstrlen(str));
+        TextOut(hMemDC, pane.lWidth / 3 * (i * 2 + 1) / 2, pane.height - 20, str, lstrlen(str));
     }
 
     DeleteObject(SelectObject(hMemDC, GetStockObject(WHITE_BRUSH)));

@@ -1,4 +1,4 @@
-#include "Graph Me.h"
+#include "Gradient.h"
 
 HBRUSH CreateGradientBrushV(COLORREF top, COLORREF bottom, HDC hdc, int dcWidth, int dcHeight, int y0, int height) {
 	HBRUSH hBrush = NULL;
