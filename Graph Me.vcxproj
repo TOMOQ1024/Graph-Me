@@ -142,6 +142,7 @@
     <ClInclude Include="Include\framework.h" />
     <ClInclude Include="Include\Gradient.h" />
     <ClInclude Include="Include\Main.h" />
+    <ClInclude Include="Include\Problem.h" />
     <ClInclude Include="Include\Resource.h" />
     <ClInclude Include="Include\Slider.h" />
     <ClInclude Include="Include\targetver.h" />

@@ -18,7 +18,19 @@ void InitSliders(void) {
 	}
 }
 
-double GetProportion(const SLIDER *slider) {
+void SetSliders(const PROBLEM* p)
+{
+	for (int i = 0; i < 4; i++) {
+		sliders[i].active = p->active;
+		sliders[i].max = p->max[i];
+		sliders[i].min = p->min[i];
+		sliders[i].value = p->value[i];
+		sliders[i].scale = p->scale[i];
+	}
+}
+
+double GetProportion(const SLIDER *slider)
+{
 	return slider->value / (slider->max - slider->min);
 }
 

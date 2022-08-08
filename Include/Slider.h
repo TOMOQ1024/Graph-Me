@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Main.h"
+#include "Problem.h"
 
 // スライダー構造体
 typedef struct tagSLIDER {
@@ -23,6 +24,9 @@ SLIDER sliders[4];
 
 // スライダー初期化
 void InitSliders(void);
+
+// スライダーの設定
+void SetSliders(const PROBLEM* p);
 
 // スライダーの現在位置(0...1)
 double GetProportion(const SLIDER* slider);

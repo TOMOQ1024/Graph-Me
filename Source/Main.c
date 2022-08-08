@@ -22,6 +22,7 @@ double median(double x, double y, double z)
 extern PANE pane;
 extern SLIDER sliders[4];
 extern BUTTON buttons[3];
+extern PROBLEM problems[144];
 
 // カーソルの描画(没)
 // http://nagoyacoder.web.fc2.com/win32api/mcursor.html
