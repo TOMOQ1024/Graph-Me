@@ -8,6 +8,9 @@
 #define IDI_SMALL				108
 #define IDC_GRAPHME			109
 #define IDC_MYICON				2
+
+#define IDR_PROBLEMTEXT     101
+#define TEXTFILE                256
 // 新しいオブジェクトの次の既定値
 //
 #ifdef APSTUDIO_INVOKED

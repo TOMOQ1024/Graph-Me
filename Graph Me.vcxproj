@@ -166,6 +166,9 @@
     <Image Include="Resource\Graph Me.ico" />
     <Image Include="Resource\small.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Resource\Problems.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

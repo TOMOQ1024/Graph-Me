@@ -24,7 +24,7 @@ void InitButtons(void);
 // ƒ{ƒ^ƒ“‚Ì‘¶İ‚·‚é‹éŒ`‚Ìæ“¾
 void GetButtonRect(const BUTTON* button, RECT* rect);
 
-void OnMouseMove_Slider(INT x, INT y);
-void OnLButtonDown_Slider(INT x, INT y);
-void OnLButtonUp_Slider(INT x, INT y);
+void OnMouseMove_Button(INT x, INT y);
+void OnLButtonDown_Button(INT x, INT y);
+void OnLButtonUp_Button(INT x, INT y);
 

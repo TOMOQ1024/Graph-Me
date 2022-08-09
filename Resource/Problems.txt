@@ -1,0 +1,7 @@
+# problem data
+# hoge
+hoge
+
+# 0-0          title
+
+# 0-1 to 0-C   explicit functions

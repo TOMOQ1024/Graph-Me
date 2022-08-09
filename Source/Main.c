@@ -22,7 +22,10 @@ double median(double x, double y, double z)
 extern PANE pane;
 extern SLIDER sliders[4];
 extern BUTTON buttons[3];
-extern PROBLEM problems[144];
+extern PROBLEM problems[146];
+
+extern DWORD problem_data_size = 0;
+extern const char* problem_data = NULL;
 
 // カーソルの描画(没)
 // http://nagoyacoder.web.fc2.com/win32api/mcursor.html
@@ -49,6 +52,13 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
     LoadStringW(hInstance, IDC_GRAPHME, szWindowClass, MAX_LOADSTRING);
     MyRegisterClass(hInstance);
+
+    // 問題の読み込み
+    //HMODULE handle = GetModuleHandle(NULL);
+    HRSRC rc = FindResource(NULL, MAKEINTRESOURCE(IDR_PROBLEMTEXT), MAKEINTRESOURCE(TEXTFILE));
+    HGLOBAL hGlobal = LoadResource(NULL, rc);
+    problem_data = (char*)LockResource(hGlobal);
+    problem_data_size = strlen(problem_data);
 
     // アプリケーション初期化の実行:
     if (!InitInstance (hInstance, nCmdShow))
@@ -258,3 +268,4 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
     return 0;
 }
+

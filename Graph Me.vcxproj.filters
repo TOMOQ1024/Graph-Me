@@ -94,4 +94,7 @@
       <Filter>リソース ファイル</Filter>
     </Image>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Resource\Problems.txt" />
+  </ItemGroup>
 </Project>

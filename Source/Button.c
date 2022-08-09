@@ -7,7 +7,7 @@ void InitButtons(void)
 		buttons[i].active = 1 < i;//////////////////////////////////////
 		buttons[i].mHover = FALSE;
 		buttons[i].mLDown = FALSE;
-		buttons[i].width = pane.lWidth / 3.0 - 20;
+		buttons[i].width = (INT)(pane.lWidth / 3.0) - 20;
 		buttons[i].height = 40;
 	}
 }
@@ -15,7 +15,7 @@ void InitButtons(void)
 void GetButtonRect(const BUTTON* button, RECT* rect)
 {
 	// pane.lWidth / 3 * i + 10, height - 50, pane.lWidth / 3 * (i + 1) - 10, height - 10
-	INT x = pane.lWidth / 6.0 * (button->id * 2 + 1);
+	INT x = (INT)(pane.lWidth / 6.0 * (button->id * 2 + 1));
 	INT y = pane.height - 30;
 	rect->left = x - button->width / 2;
 	rect->top = y - button->height / 2;
