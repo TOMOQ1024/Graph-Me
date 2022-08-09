@@ -58,7 +58,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     HRSRC rc = FindResource(NULL, MAKEINTRESOURCE(IDR_PROBLEMTEXT), MAKEINTRESOURCE(TEXTFILE));
     HGLOBAL hGlobal = LoadResource(NULL, rc);
     problem_data = (char*)LockResource(hGlobal);
-    problem_data_size = strlen(problem_data);
+    problem_data_size = (DWORD)strlen(problem_data);
 
     // アプリケーション初期化の実行:
     if (!InitInstance (hInstance, nCmdShow))
