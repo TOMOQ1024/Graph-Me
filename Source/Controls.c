@@ -1,4 +1,6 @@
 #include "Controls.h"
+#include "Slider.h"
+#include "Button.h"
 
 void OnMouseMove(INT x, INT y)
 {

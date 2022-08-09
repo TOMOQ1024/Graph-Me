@@ -21,7 +21,7 @@ void InitSliders(void) {
 void SetSliders(const PROBLEM* p)
 {
 	for (int i = 0; i < 4; i++) {
-		sliders[i].active = p->active;
+		sliders[i].active = p->active[i];
 		sliders[i].max = p->max[i];
 		sliders[i].min = p->min[i];
 		sliders[i].value = p->value[i];
@@ -36,7 +36,7 @@ double GetProportion(const SLIDER *slider)
 
 void GetSliderRect(const SLIDER* slider, RECT* rect)
 {
-	INT x = GetProportion(slider) * slider->length + pane.lWidth / 2.0 - slider->length / 2.0;
+	INT x = (INT)(GetProportion(slider) * slider->length + pane.lWidth / 2.0 - slider->length / 2.0);
 	INT y = slider->id * 80 + 45;
 	rect->left = x - slider->width / 2;
 	rect->top = y - slider->height / 2;

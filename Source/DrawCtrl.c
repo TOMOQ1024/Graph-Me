@@ -1,6 +1,8 @@
 #include "Draw.h"
 #include "Slider.h"
 #include "Button.h"
+#include "Font.h"
+#include "Gradient.h"
 
 void DrawCtrl(HDC hdc, HDC hMemDC, INT mx, INT my)
 {

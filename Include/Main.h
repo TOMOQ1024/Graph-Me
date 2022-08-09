@@ -5,6 +5,11 @@
 
 
 
+DWORD problem_data_size;
+const char* problem_data;
+
+
+
 // ÉyÉCÉìç\ë¢ëÃ
 typedef struct tagPANE {
 	INT lWidth;
@@ -14,6 +19,7 @@ typedef struct tagPANE {
 	BOOL mDrag;
 } PANE;
 PANE pane;
+
 
 
 
