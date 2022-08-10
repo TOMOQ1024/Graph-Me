@@ -5,6 +5,7 @@
 #include "Button.h"
 #include "Draw.h"
 #include "Controls.h"
+#include "Problem.h"
 //#include <math.h>
 
 #define MAX_LOADSTRING 100
@@ -20,6 +21,7 @@ double median(double x, double y, double z)
 }
 
 extern PANE pane;
+extern INT scene = SCENE_TITLE;
 extern SLIDER sliders[4];
 extern BUTTON buttons[3];
 extern PROBLEM problems[146];

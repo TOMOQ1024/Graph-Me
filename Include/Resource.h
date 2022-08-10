@@ -11,6 +11,14 @@
 
 #define IDR_PROBLEMTEXT     101
 #define TEXTFILE                256
+
+#define SCENE_TITLE				0
+#define SCENE_SETTINGS			1
+#define SCENE_STAGES			2
+#define SCENE_LEVELS			3
+#define SCENE_PROBLEM			4
+
+
 // 新しいオブジェクトの次の既定値
 //
 #ifdef APSTUDIO_INVOKED
