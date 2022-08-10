@@ -5,8 +5,7 @@
 
 
 
-DWORD problem_data_size;
-const char* problem_data;
+INT scene;
 
 
 
