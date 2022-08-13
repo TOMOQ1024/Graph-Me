@@ -141,6 +141,7 @@
     <ClInclude Include="Include\Font.h" />
     <ClInclude Include="Include\framework.h" />
     <ClInclude Include="Include\Gradient.h" />
+    <ClInclude Include="Include\Graph.h" />
     <ClInclude Include="Include\Main.h" />
     <ClInclude Include="Include\Problem.h" />
     <ClInclude Include="Include\Resource.h" />
@@ -154,6 +155,7 @@
     <ClCompile Include="Source\Draw.c" />
     <ClCompile Include="Source\DrawCtrl.c" />
     <ClCompile Include="Source\DrawDebug.c" />
+    <ClCompile Include="Source\DrawMain.c" />
     <ClCompile Include="Source\Gradient.c" />
     <ClCompile Include="Source\Main.c" />
     <ClCompile Include="Source\Font.c" />

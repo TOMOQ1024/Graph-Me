@@ -12,8 +12,12 @@ INT scene;
 // ÉyÉCÉìç\ë¢ëÃ
 typedef struct tagPANE {
 	INT lWidth;
+	INT rWidth;
 	INT width;
 	INT height;
+	INT radius;
+	INT paddingX;
+	INT paddingY;
 	BOOL mHover;
 	BOOL mDrag;
 } PANE;

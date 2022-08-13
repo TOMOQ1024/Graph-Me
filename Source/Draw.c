@@ -9,13 +9,13 @@ void Draw(HDC hdc, HDC hMemDC, INT mx, INT my)
 	// 背景
 	SelectObject(hMemDC, GetStockObject(NULL_PEN));
 
-	SelectObject(hMemDC, CreateSolidBrush(0x00000000));
+	SelectObject(hMemDC, GetStockObject(BLACK_BRUSH));
 	Rectangle(hMemDC, 0, 0, pane.width, pane.height);
 
-	DeleteObject(SelectObject(
+	SelectObject(
 		hMemDC,
 		CreateGradientBrushH(0xA0A0A0, 0xD0D0D0, hMemDC, pane.lWidth, pane.height, 0, pane.lWidth * 3 / 4 + 1)
-	));
+	);
 	Rectangle(hMemDC, 0, 0, pane.lWidth * 3 / 4 + 1, pane.height);
 	DeleteObject(SelectObject(
 		hMemDC,
@@ -28,8 +28,11 @@ void Draw(HDC hdc, HDC hMemDC, INT mx, INT my)
 	// コントロール
 	DrawCtrl(hdc, hMemDC, mx, my);
 
+	// 軸,グラフ,数式
+	DrawMain(hdc, hMemDC);
+
 	// デバッグ情報
-	DrawDebug(hdc, hMemDC, mx, my);
+	//DrawDebug(hdc, hMemDC, mx, my);
 
 	BitBlt(hdc, 0, 0, pane.width, pane.height, hMemDC, 0, 0, SRCCOPY);
 }

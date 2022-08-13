@@ -6,6 +6,7 @@
 #include "Draw.h"
 #include "Controls.h"
 #include "Problem.h"
+#include "Graph.h"
 //#include <math.h>
 
 #define MAX_LOADSTRING 100
@@ -25,6 +26,7 @@ extern INT scene = SCENE_TITLE;
 extern SLIDER sliders[4];
 extern BUTTON buttons[3];
 extern PROBLEM problems[146];
+extern GRAPH graph;
 
 extern DWORD problem_data_size = 0;
 extern const char* problem_data = NULL;
@@ -184,6 +186,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         pane.mDrag = FALSE;
         pane.width = LOWORD(lParam);
         pane.height = HIWORD(lParam);
+        pane.rWidth = pane.width - pane.lWidth;
 
         InitSliders();
 
@@ -193,6 +196,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         pane.width = LOWORD(lParam);
         pane.height = HIWORD(lParam);
+        pane.rWidth = pane.width - pane.lWidth;
+        pane.radius = min(pane.rWidth, pane.height) / 2;
+        pane.paddingX = pane.rWidth / 2 - pane.radius;
+        pane.paddingY = pane.height / 2 - pane.radius;
         //GetClientRect(hWnd, &client);
         hBMP = CreateCompatibleBitmap(hdc, pane.width, pane.height);
         hOldBMP = SelectObject(hMemDC, hBMP);
@@ -248,6 +255,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         my = mousePos.y;
         if (pane.mDrag) {
             pane.lWidth = 300 < mx ? mx : 300;
+            pane.rWidth = pane.width - pane.lWidth;
+            pane.radius = min(pane.rWidth, pane.height) / 2;
+            pane.paddingX = pane.rWidth / 2 - pane.radius;
+            pane.paddingY = pane.height / 2 - pane.radius;
 
             for (INT i = 0; i < 4; i++) sliders[i].length = pane.lWidth - 120;
         }
