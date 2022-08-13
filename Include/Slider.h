@@ -7,8 +7,8 @@
 typedef struct tagSLIDER {
 	INT id;
 	BOOL active;
-	INT min;
-	INT max;
+	double min;
+	double max;
 	double value;
 	double scale;
 	BOOL mHover;
