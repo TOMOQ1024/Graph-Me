@@ -15,7 +15,7 @@ void DrawAxis(HDC hdc, HDC hMemDC)
 {
 	double x, y;
 	graph.x0 = 0.5;
-	graph.y0 = 0.5;
+	graph.y0 = 0.8;
 	graph.scale = 0.09;
 
 	// y é≤ éÂê¸
@@ -25,7 +25,7 @@ void DrawAxis(HDC hdc, HDC hMemDC)
 		x0++
 	) {
 		x = pane.lWidth + pane.paddingX + pane.radius * 2 * (graph.x0 + graph.scale * x0);
-		DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 3, 0x404040)));
+		DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 2, 0x404040)));
 		MoveToEx(hMemDC, x, 0, NULL);
 		LineTo(hMemDC, x, pane.height);
 	}
@@ -37,7 +37,7 @@ void DrawAxis(HDC hdc, HDC hMemDC)
 		y0++
 		) {
 		y = pane.paddingY + pane.radius * 2 * (graph.y0 + graph.scale * y0);
-		DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 3, 0x404040)));
+		DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 2, 0x404040)));
 		MoveToEx(hMemDC, pane.lWidth, y, NULL);
 		LineTo(hMemDC, pane.width, y);
 	}
@@ -49,7 +49,7 @@ void DrawAxis(HDC hdc, HDC hMemDC)
 		x0++
 		) {
 		x = pane.lWidth + pane.paddingX + pane.radius * 2 * (graph.x0 + graph.scale * 5 * x0);
-		DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 3, 0x808080)));
+		DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, x0 ? 2 : 4, 0x808080)));
 		MoveToEx(hMemDC, x, 0, NULL);
 		LineTo(hMemDC, x, pane.height);
 	}
@@ -61,7 +61,7 @@ void DrawAxis(HDC hdc, HDC hMemDC)
 		y0++
 		) {
 		y = pane.paddingY + pane.radius * 2 * (graph.y0 + graph.scale * 5 * y0);
-		DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 3, 0x808080)));
+		DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, y0 ? 2 : 4, 0x808080)));
 		MoveToEx(hMemDC, pane.lWidth, y, NULL);
 		LineTo(hMemDC, pane.width, y);
 	}
@@ -72,7 +72,18 @@ void DrawAxis(HDC hdc, HDC hMemDC)
 
 void DrawGraph(HDC hdc, HDC hMemDC)
 {
-	//
+	INT X, Y;
+	double x, y;
+	DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 4, 0x00FFFF)));
+	for (X = 0; X <= pane.rWidth; X++) {
+		x = (1.0 * (X - pane.paddingX) / pane.radius / 2 - graph.x0) / graph.scale;
+		y = x*x/4;
+		Y = (graph.y0 - y * graph.scale) * pane.radius * 2;
+		if (X == 0) MoveToEx(hMemDC, pane.lWidth + X, pane.paddingY + Y, NULL);
+		else LineTo(hMemDC, pane.lWidth + X, pane.paddingY + Y);
+	}
+
+	DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
 }
 
 
