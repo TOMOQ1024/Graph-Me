@@ -1,5 +1,6 @@
 #include "Draw.h"
 #include "Graph.h"
+#include "Font.h"
 #include <math.h>
 
 void DrawMain(HDC hdc, HDC hMemDC)
@@ -90,5 +91,15 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 
 void DrawExpression(HDC hdc, HDC hMemDC)
 {
-	//
+	lstrcpy(graph.ex, TEXT("y=x^2/4"));
+	// •\¦‚·‚é”®‚Ì•¶š—ñ‚©‚ç•`‰æ”ÍˆÍ‚ğæ“¾‚µC’·•ûŒ`‚ğ•`‰æ‚·‚é
+	DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 4, 0x00FFFF)));
+
+	// ”®‚ğ•`‰æ‚·‚é
+	SetTextAlign(hMemDC, TA_LEFT | TA_BOTTOM);
+	DeleteObject(SetFont(hMemDC, 20, 0x00FFFF, NULL));
+	TextOut(hMemDC, pane.lWidth + 10, 30, graph.ex, lstrlen(graph.ex));
+
+	DeleteObject(SelectObject(hMemDC, SYSTEM_FONT));
+	DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
 }
