@@ -207,6 +207,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         Draw(hdc, hMemDC, mx, my);
         break;
     }
+    case WM_GETMINMAXINFO:
+    {
+        // ウィンドウ最小サイズの設定
+        MINMAXINFO* pmmi;
+        pmmi = (MINMAXINFO*)lParam;
+        pmmi->ptMinTrackSize.x = 420;
+        pmmi->ptMinTrackSize.y = 420;
+        return 0;
+    }
     case WM_MOVE:
     {
         Draw(hdc, hMemDC, mx, my);
