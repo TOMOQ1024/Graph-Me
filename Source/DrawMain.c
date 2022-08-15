@@ -1,7 +1,24 @@
+#include "Main.h"
 #include "Draw.h"
 #include "Graph.h"
 #include "Font.h"
+#include "Scene.h"
+#include "Slider.h"
 #include <math.h>
+
+
+
+void Segment(HDC hdc, double x0, double y0, double x1, double y1) {
+	INT X0 = pane.lWidth + pane.paddingX + (graph.x0 + x0 * graph.scale) * pane.radius * 2;
+	INT Y0 = pane.paddingY + (graph.y0 - y0 * graph.scale) * pane.radius * 2;
+	INT X1 = pane.lWidth + pane.paddingX + (graph.x0 + x1 * graph.scale) * pane.radius * 2;
+	INT Y1 = pane.paddingY + (graph.y0 - y1 * graph.scale) * pane.radius * 2;
+
+	MoveToEx(hdc, X0, Y0, NULL);
+	LineTo(hdc, X1, Y1);
+}
+
+
 
 void DrawMain(HDC hdc, HDC hMemDC)
 {
@@ -15,9 +32,6 @@ void DrawMain(HDC hdc, HDC hMemDC)
 void DrawAxis(HDC hdc, HDC hMemDC)
 {
 	double x, y;
-	graph.x0 = 0.5;
-	graph.y0 = 0.8;
-	graph.scale = 0.09;
 
 	// y é≤ éÂê¸
 	for (
@@ -73,24 +87,39 @@ void DrawAxis(HDC hdc, HDC hMemDC)
 
 void DrawGraph(HDC hdc, HDC hMemDC)
 {
-	INT X, Y;
-	double x, y;
-	DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 4, 0x00FFFF)));
-	for (X = 0; X <= pane.rWidth; X++) {
-		x = (1.0 * (X - pane.paddingX) / pane.radius / 2 - graph.x0) / graph.scale;
-		y = x*x/4;
-		Y = (graph.y0 - y * graph.scale) * pane.radius * 2;
-		if (X == 0) MoveToEx(hMemDC, pane.lWidth + X, pane.paddingY + Y, NULL);
-		else LineTo(hMemDC, pane.lWidth + X, pane.paddingY + Y);
+	switch (scene) {
+	case SCENE_TITLE:
+	{
+		double t = sliders[2].value;
+		DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 4, 0x00FFFF)));
+		Segment(hMemDC, 0, 3, Ease(t, -1, 2, 4), -3);
+		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
+		break;
 	}
+	default:
+	{
+		INT X, Y;
+		double x, y;
+		DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 4, 0x00FFFF)));
+		for (X = 0; X <= pane.rWidth; X++) {
+			x = (1.0 * (X - pane.paddingX) / pane.radius / 2 - graph.x0) / graph.scale;
+			y = x * x / 4;
+			Y = (graph.y0 - y * graph.scale) * pane.radius * 2;
+			if (X == 0) MoveToEx(hMemDC, pane.lWidth + X, pane.paddingY + Y, NULL);
+			else LineTo(hMemDC, pane.lWidth + X, pane.paddingY + Y);
+		}
 
-	DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
+		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
+		break;
+	}
+	}
 }
 
 
 
 void DrawExpression(HDC hdc, HDC hMemDC)
 {
+	if (scene != SCENE_PROBLEM) return;
 	lstrcpy(graph.ex, TEXT("y=x^2/4"));
 	// ï\é¶Ç∑ÇÈêîéÆÇÃï∂éöóÒÇ©ÇÁï`âÊîÕàÕÇéÊìæÇµÅCí∑ï˚å`Çï`âÊÇ∑ÇÈ
 	DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 4, 0x00FFFF)));

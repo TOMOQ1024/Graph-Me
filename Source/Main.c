@@ -1,5 +1,4 @@
-﻿// Graph Me.cpp : アプリケーションのエントリ ポイントを定義します。
-//
+﻿#define _USE_MATH_DEFINES
 
 #include "Slider.h"
 #include "Button.h"
@@ -7,7 +6,8 @@
 #include "Controls.h"
 #include "Problem.h"
 #include "Graph.h"
-//#include <math.h>
+#include "Scene.h"
+#include <math.h>
 
 #define MAX_LOADSTRING 100
 
@@ -19,6 +19,13 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // メイン ウィンドウ ク
 double median(double x, double y, double z)
 {
     return x < y ? y < z ? y : z : z < x ? z : x;
+}
+
+double Ease(double t, double a, double b, double c)
+{
+    if (t < 0 || 2 < t) return 0;
+    if (t < 1) return a + (b - a) / 2 * (1 - cos(M_PI * t));
+    return b + (c - b) / 2 * (1 + cos(M_PI * t));
 }
 
 extern PANE pane;
@@ -191,6 +198,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         InitSliders();
 
         InitButtons();
+
+        SetScene(SCENE_TITLE);
     }
     case WM_SIZE:
     {

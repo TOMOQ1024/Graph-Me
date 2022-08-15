@@ -9,6 +9,7 @@ void Draw(HDC hdc, HDC hMemDC, INT mx, INT my);
 void DrawCtrl(HDC hdc, HDC hMemDC, INT mx, INT my);
 
 // é≤,ÉOÉâÉt,êîéÆÇÃï`âÊ
+void Segment(HDC hdc, double x0, double y0, double x1, double y1);
 void DrawMain(HDC hdc, HDC hMemDC);
 void DrawAxis(HDC hdc, HDC hMemDC);
 void DrawGraph(HDC hdc, HDC hMemDC);

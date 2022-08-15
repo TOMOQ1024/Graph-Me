@@ -145,6 +145,7 @@
     <ClInclude Include="Include\Main.h" />
     <ClInclude Include="Include\Problem.h" />
     <ClInclude Include="Include\Resource.h" />
+    <ClInclude Include="Include\Scene.h" />
     <ClInclude Include="Include\Slider.h" />
     <ClInclude Include="Include\targetver.h" />
     <ClInclude Include="Resource\resource.h" />
@@ -159,6 +160,7 @@
     <ClCompile Include="Source\Gradient.c" />
     <ClCompile Include="Source\Main.c" />
     <ClCompile Include="Source\Font.c" />
+    <ClCompile Include="Source\Scene.c" />
     <ClCompile Include="Source\Slider.c" />
   </ItemGroup>
   <ItemGroup>
