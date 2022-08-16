@@ -16,6 +16,6 @@ void SetScene(INT s)
 
 		graph.x0 = 0.5;
 		graph.y0 = 0.5;
-		graph.scale = 0.09;
+		graph.scale = 0.11;
 	}
 }
