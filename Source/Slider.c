@@ -5,9 +5,11 @@
 void InitSliders(void) {
 	for (int i = 0; i < 4; i++) {
 		sliders[i].id = i;
-		sliders[i].active = i < 3;////////////////////////////
+		sliders[i].active = TRUE;
 		sliders[i].min = 0;
 		sliders[i].max = 1;
+		lstrcpy(sliders[i].min_s, TEXT("0"));
+		lstrcpy(sliders[i].max_s, TEXT("1"));
 		sliders[i].value = 0.5;
 		sliders[i].scale = 0;
 		sliders[i].mHover = FALSE;
@@ -20,12 +22,57 @@ void InitSliders(void) {
 
 void SetSliders(const PROBLEM* p)
 {
+	INT d0, d;
+	TCHAR sgn = 0;
+	TCHAR cst = 0;
 	for (int i = 0; i < 4; i++) {
 		sliders[i].active = p->active[i];
-		sliders[i].max = p->max[i];
-		sliders[i].min = p->min[i];
 		sliders[i].value = p->value[i];
 		sliders[i].scale = p->scale[i];
+
+		// min
+		if (p->min[i] != 0) {
+			d0 = p->min[i];
+			if (p->min[i] < 0) {
+				sgn = L'-';
+				d0 *= -1;
+			}
+			if (d0 % 100) {
+				d = d0;
+			}
+			else {
+				d = d0 / 100;
+				cst = L'ƒÎ';
+			}
+		}
+		else {
+			d = 0;
+		}
+		sliders[i].min = d * (cst ? M_PI : 1);
+		wsprintf(sliders[i].min_s, L"%c%d%c", sgn, d, cst);
+
+		// max
+		sgn = 0;
+		cst = 0;
+		if (p->max[i] != 0) {
+			d0 = p->max[i];
+			if (p->max[i] < 0) {
+				sgn = L'-';
+				d0 *= -1;
+			}
+			if (d0 % 100) {
+				d = d0;
+			}
+			else {
+				d = d0 / 100;
+				cst = L'ƒÎ';
+			}
+		}
+		else {
+			d = 0;
+		}
+		sliders[i].max = d * (cst ? M_PI : 1);
+		wsprintf(sliders[i].max_s, L"%c%d%c", sgn, d, cst);
 	}
 }
 

@@ -9,6 +9,8 @@ typedef struct tagSLIDER {
 	BOOL active;
 	double min;
 	double max;
+	TCHAR min_s[8];
+	TCHAR max_s[8];
 	double value;
 	double scale;
 	BOOL mHover;

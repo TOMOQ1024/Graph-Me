@@ -1,13 +1,10 @@
-﻿#define _USE_MATH_DEFINES
-
-#include "Slider.h"
+﻿#include "Slider.h"
 #include "Button.h"
 #include "Draw.h"
 #include "Controls.h"
 #include "Problem.h"
 #include "Graph.h"
 #include "Scene.h"
-#include <math.h>
 
 #define MAX_LOADSTRING 100
 
@@ -32,11 +29,7 @@ extern PANE pane;
 extern INT scene = SCENE_TITLE;
 extern SLIDER sliders[4];
 extern BUTTON buttons[3];
-extern PROBLEM problems[146];
 extern GRAPH graph;
-
-extern DWORD problem_data_size = 0;
-extern const char* problem_data = NULL;
 
 // カーソルの描画(没)
 // http://nagoyacoder.web.fc2.com/win32api/mcursor.html
