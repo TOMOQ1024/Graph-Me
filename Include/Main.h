@@ -5,7 +5,6 @@
 
 
 
-INT scene;
 
 
 
@@ -28,6 +27,9 @@ PANE pane;
 
 // 3•Ï”‚Ì’†‰›’lŠÖ”
 double median(double x, double y, double z);
+
+// •âŠÔŠÖ”
+double Ease(double t, double a, double b, double c);
 
 // ‹éŒ`“à‚É (x,y) ‚ª‘¶İ‚·‚é‚©
 BOOL IsIn(INT x, INT y, const RECT rc);

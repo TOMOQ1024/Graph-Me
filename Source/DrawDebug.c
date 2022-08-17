@@ -2,10 +2,12 @@
 #include "Button.h"
 #include "Font.h"
 #include "Problem.h"
+#include <math.h>
 
 
 void DrawDebug(HDC hdc, HDC hMemDC, INT mx, INT my)
 {
+	static double t = 0;
 	TCHAR str[256];
 	TCHAR str2[128];
 	size_t converted;
@@ -23,6 +25,8 @@ void DrawDebug(HDC hdc, HDC hMemDC, INT mx, INT my)
 	mbstowcs_s(&converted, str2, sizeof(str2)/sizeof(str2[0]), problem_data, problem_data_size);
 	wsprintf(str, L"PROBLEM_DATA: %s", str2);
 	TextOut(hMemDC, pane.lWidth + 10, 90, str, lstrlen(str));
+	swprintf_s(str, sizeof(str)/sizeof(str[0]), L"PROBLEM_DATA: %8.6f", Ease(t = fmod(t + 0.1, 2), 0, 2, 1));
+	TextOut(hMemDC, pane.lWidth + 10, 110, str, lstrlen(str));
 
 	DeleteObject(SelectObject(hMemDC, GetStockObject(SYSTEM_FONT)));
 }
