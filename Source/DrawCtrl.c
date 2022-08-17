@@ -19,9 +19,9 @@ void DrawCtrl(HDC hdc, HDC hMemDC, INT mx, INT my)
     }
     SetFont(hMemDC, 30, 0x000000FF, 0x00000000);
     for (INT i = 0; i < 4; i++) {
-        wsprintf(str, L"%d", sliders[i].min);
+        wsprintf(str, L"%s", sliders[i].min_s);
         TextOut(hMemDC, 30, i * 80 + 50 + 10, str, lstrlen(str));
-        wsprintf(str, L"%d", sliders[i].max);
+        wsprintf(str, L"%s", sliders[i].max_s);
         TextOut(hMemDC, pane.lWidth - 30, i * 80 + 50 + 10, str, lstrlen(str));
     }
 

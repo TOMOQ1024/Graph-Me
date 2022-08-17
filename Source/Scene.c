@@ -12,6 +12,8 @@ void SetScene(INT s)
 		sliders[3].active = FALSE;
 		sliders[2].min = 0;
 		sliders[2].max = 2;
+		lstrcpy(sliders[2].min_s, TEXT("0"));
+		lstrcpy(sliders[2].max_s, TEXT("2"));
 		sliders[2].value = 0.5;
 
 		graph.x0 = 0.5;

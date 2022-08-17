@@ -160,6 +160,7 @@
     <ClCompile Include="Source\Gradient.c" />
     <ClCompile Include="Source\Main.c" />
     <ClCompile Include="Source\Font.c" />
+    <ClCompile Include="Source\Problem.c" />
     <ClCompile Include="Source\Scene.c" />
     <ClCompile Include="Source\Slider.c" />
   </ItemGroup>
