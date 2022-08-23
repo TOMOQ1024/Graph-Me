@@ -265,7 +265,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         mx = mousePos.x;
         my = mousePos.y;
         if (pane.mDrag) {
-            pane.lWidth = 300 < mx ? mx : 300;
+            pane.lWidth = median(300, mx, pane.width - 100);
             pane.rWidth = pane.width - pane.lWidth;
             pane.radius = min(pane.rWidth, pane.height) / 2;
             pane.paddingX = pane.rWidth / 2 - pane.radius;
