@@ -192,7 +192,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         InitButtons();
 
-        SetScene(SCENE_TITLE);
+        //SetScene(SCENE_TITLE);
+        SetScene(SCENE_STAGES);
     }
     case WM_SIZE:
     {

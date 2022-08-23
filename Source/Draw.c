@@ -1,5 +1,6 @@
 #include "Draw.h"
 #include "Gradient.h"
+#include "Graph.h"
 
 void Draw(HDC hdc, HDC hMemDC, INT mx, INT my)
 {
@@ -35,4 +36,14 @@ void Draw(HDC hdc, HDC hMemDC, INT mx, INT my)
 	//DrawDebug(hdc, hMemDC, mx, my);
 
 	BitBlt(hdc, 0, 0, pane.width, pane.height, hMemDC, 0, 0, SRCCOPY);
+}
+
+INT RtoI_x(double x)
+{
+	return (INT)(pane.lWidth + pane.paddingX + (graph.x0 + x * graph.scale) * pane.radius * 2);
+}
+
+INT RtoI_y(double y)
+{
+	return (INT)(pane.paddingY + (graph.y0 - y * graph.scale) * pane.radius * 2);
 }

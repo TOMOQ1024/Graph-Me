@@ -1,4 +1,5 @@
 #include "Button.h"
+#include "Scene.h"
 
 void InitButtons(void)
 {
@@ -46,6 +47,26 @@ void OnLButtonDown_Button(INT x, INT y)
 		GetButtonRect(&buttons[i], &rc);
 		if (buttons[i].mHover && IsIn(x, y, rc)) {
 			buttons[i].mLDown = TRUE;
+			switch (i) {
+			case 0:
+				switch (scene) {
+				case SCENE_TITLE:
+					break;
+				}
+				break;
+			case 1:
+				switch (scene) {
+				case SCENE_TITLE:
+					break;
+				}
+				break;
+			case 2:
+				switch (scene) {
+				case SCENE_TITLE: SetScene(SCENE_STAGES); break;
+				case SCENE_STAGES: SetScene(SCENE_LEVELS); break;
+				}
+				break;
+			}
 		}
 	}
 }
