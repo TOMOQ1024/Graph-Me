@@ -25,7 +25,7 @@ void mtSegment(
 // ステージ・レベル項目用矩形
 void sRectangle(HDC hdc, double xc, double yc, double w, double h);
 // ステージ項目用セグメント
-void sSegment(HDC hdc, double xo, double yo, INT x0, INT y0, INT x1, INT y1);
+void sSegment(HDC hdc, double xo, double yo, double d, INT x0, INT y0, INT x1, INT y1);
 
 // 軸,グラフ,数式の描画
 void DrawMain(HDC hdc, HDC hMemDC);

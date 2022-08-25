@@ -27,6 +27,24 @@ PANE pane;
 
 
 
+// ボタン構造体
+typedef struct tagBUTTON {
+	INT id;
+	BOOL active;
+	BOOL mHover;
+	BOOL mLDown;
+	INT width;
+	INT height;
+} BUTTON;
+// PREV, RESET, NEXT
+BUTTON buttons[3];
+
+
+INT problem_crnt;
+INT problem_temp;
+
+
+
 
 // 3変数の中央値関数
 double median(double x, double y, double z);

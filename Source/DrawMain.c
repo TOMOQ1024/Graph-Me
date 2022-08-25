@@ -12,8 +12,8 @@ void Segment(HDC hdc, double x0, double y0, double x1, double y1)
 {
 	INT X0 = RtoI_x(x0);
 	INT Y0 = RtoI_y(y0);
-	INT X1 = RtoI_x(x0);
-	INT Y1 = RtoI_y(y0);
+	INT X1 = RtoI_x(x1);
+	INT Y1 = RtoI_y(y1);
 
 	MoveToEx(hdc, X0, Y0, NULL);
 	LineTo(hdc, X1, Y1);
@@ -45,9 +45,9 @@ void sRectangle(HDC hdc, double xc, double yc, double w, double h)
 	);
 }
 
-void sSegment(HDC hdc, INT xo, INT yo, INT x0, INT y0, INT x1, INT y1)
+void sSegment(HDC hdc, double xo, double yo, double d, INT x0, INT y0, INT x1, INT y1)
 {
-	double s = 0.4;
+	double s = d * 0.3;
 	MoveToEx(hdc, RtoI_x((xo - 1.5) * 2 + (x0 - 1) * s), RtoI_y((yo - 1.0) * 2 + (y0 - 1) * s), NULL);
 	LineTo(hdc, RtoI_x((xo - 1.5) * 2 + (x1 - 1) * s), RtoI_y((yo - 1.0) * 2 + (y1 - 1) * s));
 }
@@ -414,77 +414,100 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 	}
 	case SCENE_STAGES:
 	{
+		//INT problem_tmp;
+		double a, b, s, d;
+		a = sliders[0].value + sin(M_PI * sliders[0].value) / M_PI;
+		b = sliders[1].value - sin(M_PI * sliders[1].value) / M_PI;
+		s = RtoI_x(1) - RtoI_x(0);
+		problem_temp = (6 + floor(a / 2) - round(b / 2) * 4) * 12;
+
+		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
+		DeleteObject(SelectObject(hMemDC, CreateSolidBrush(0x002020)));
+		
+		d = s * min(1 - cos(M_PI * a) / 5, 1 + cos(M_PI * b) / 5);
+		Ellipse(hMemDC,
+			RtoI_x(a) - d, RtoI_y(b) - d,
+			RtoI_x(a) + d, RtoI_y(b) + d
+		);
+
 		for (INT y = 0; y < 3; y++) {
 			for (INT x = 0; x < 4; x++) {
 				DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 4, 0x00FFFF)));
-				DeleteObject(SelectObject(hMemDC, CreateSolidBrush(0x004040)));
-				sRectangle(hMemDC, (x - 1.5) * 2, (y - 1.0) * 2, 1.6, 1.6);
+				DeleteObject(SelectObject(hMemDC, CreateSolidBrush(8 + x - y * 4 == problem_temp / 12 ? 0x004040 : 0x002020)));
+				d = pow(2,
+					1 / (
+						(x * 2 - 3 - a) * (x * 2 - 3 - a) +
+						(y * 2 - 2 - b) * (y * 2 - 2 - b) + 1
+					)
+				) * 0.8;
+				sRectangle(hMemDC, (x - 1.5) * 2, (y - 1.0) * 2, d, d);
 				switch (8 + x - y * 4) {
 				case 0:
-					sSegment(hMemDC, x, y, 0, 2, 1, 0);
-					sSegment(hMemDC, x, y, 2, 2, 1, 0);
+					sSegment(hMemDC, x, y, d, 0, 2, 1, 0);
+					sSegment(hMemDC, x, y, d, 2, 2, 1, 0);
 					break;
 				case 1:
-					sSegment(hMemDC, x, y, 0, 0, 2, 0);
-					sSegment(hMemDC, x, y, 2, 2, 2, 0);
-					sSegment(hMemDC, x, y, 2, 2, 0, 0);
+					sSegment(hMemDC, x, y, d, 0, 0, 2, 0);
+					sSegment(hMemDC, x, y, d, 2, 2, 2, 0);
+					sSegment(hMemDC, x, y, d, 2, 2, 0, 0);
 					break;
 				case 2:
-					sSegment(hMemDC, x, y, 0, 0, 0, 2);
-					sSegment(hMemDC, x, y, 2, 0, 2, 2);
+					sSegment(hMemDC, x, y, d, 0, 0, 0, 2);
+					sSegment(hMemDC, x, y, d, 2, 0, 2, 2);
 					break;
 				case 3:
-					sSegment(hMemDC, x, y, 0, 1, 1, 2);
-					sSegment(hMemDC, x, y, 2, 1, 1, 2);
+					sSegment(hMemDC, x, y, d, 0, 1, 1, 2);
+					sSegment(hMemDC, x, y, d, 2, 1, 1, 2);
 					break;
 				case 4:
-					sSegment(hMemDC, x, y, 0, 0, 0, 1);
-					sSegment(hMemDC, x, y, 2, 1, 0, 1);
-					sSegment(hMemDC, x, y, 2, 1, 2, 2);
+					sSegment(hMemDC, x, y, d, 0, 0, 0, 1);
+					sSegment(hMemDC, x, y, d, 2, 1, 0, 1);
+					sSegment(hMemDC, x, y, d, 2, 1, 2, 2);
 					break;
 				case 5:
-					sSegment(hMemDC, x, y, 0, 1, 1, 0);
-					sSegment(hMemDC, x, y, 1, 2, 2, 1);
+					sSegment(hMemDC, x, y, d, 0, 1, 1, 0);
+					sSegment(hMemDC, x, y, d, 1, 2, 2, 1);
 					break;
 				case 6:
-					sSegment(hMemDC, x, y, 0, 0, 1, 0);
-					sSegment(hMemDC, x, y, 1, 2, 2, 2);
+					sSegment(hMemDC, x, y, d, 0, 0, 1, 0);
+					sSegment(hMemDC, x, y, d, 1, 2, 2, 2);
 					break;
 				case 7:
-					sSegment(hMemDC, x, y, 0, 0, 1, 0);
-					sSegment(hMemDC, x, y, 2, 2, 1, 0);
-					sSegment(hMemDC, x, y, 2, 2, 1, 2);
-					sSegment(hMemDC, x, y, 0, 0, 1, 2);
+					sSegment(hMemDC, x, y, d, 0, 0, 1, 0);
+					sSegment(hMemDC, x, y, d, 2, 2, 1, 0);
+					sSegment(hMemDC, x, y, d, 2, 2, 1, 2);
+					sSegment(hMemDC, x, y, d, 0, 0, 1, 2);
 					break;
 				case 8:
-					sSegment(hMemDC, x, y, 0, 0, 2, 0);
-					sSegment(hMemDC, x, y, 0, 0, 1, 2);
+					sSegment(hMemDC, x, y, d, 0, 0, 2, 0);
+					sSegment(hMemDC, x, y, d, 0, 0, 1, 2);
 					break;
 				case 9:
-					sSegment(hMemDC, x, y, 0, 0, 2, 2);
-					sSegment(hMemDC, x, y, 2, 0, 2, 2);
-					sSegment(hMemDC, x, y, 2, 0, 0, 2);
-					sSegment(hMemDC, x, y, 0, 0, 0, 2);
+					sSegment(hMemDC, x, y, d, 0, 0, 2, 2);
+					sSegment(hMemDC, x, y, d, 2, 0, 2, 2);
+					sSegment(hMemDC, x, y, d, 2, 0, 0, 2);
+					sSegment(hMemDC, x, y, d, 0, 0, 0, 2);
 					break;
 				case 10:
-					sSegment(hMemDC, x, y, 0, 1, 1, 0);
-					sSegment(hMemDC, x, y, 2, 1, 1, 0);
-					sSegment(hMemDC, x, y, 2, 1, 1, 2);
-					sSegment(hMemDC, x, y, 0, 1, 1, 2);
+					sSegment(hMemDC, x, y, d, 0, 1, 1, 0);
+					sSegment(hMemDC, x, y, d, 2, 1, 1, 0);
+					sSegment(hMemDC, x, y, d, 2, 1, 1, 2);
+					sSegment(hMemDC, x, y, d, 0, 1, 1, 2);
 					break;
 				case 11:
-					sSegment(hMemDC, x, y, 0, 1, 1, 0);
-					sSegment(hMemDC, x, y, 2, 1, 1, 0);
-					sSegment(hMemDC, x, y, 2, 1, 1, 2);
-					sSegment(hMemDC, x, y, 0, 1, 1, 2);
-					sSegment(hMemDC, x, y, 0, 0, 2, 0);
-					sSegment(hMemDC, x, y, 2, 2, 2, 0);
-					sSegment(hMemDC, x, y, 2, 2, 0, 2);
-					sSegment(hMemDC, x, y, 0, 0, 0, 2);
+					sSegment(hMemDC, x, y, d, 0, 1, 1, 0);
+					sSegment(hMemDC, x, y, d, 2, 1, 1, 0);
+					sSegment(hMemDC, x, y, d, 2, 1, 1, 2);
+					sSegment(hMemDC, x, y, d, 0, 1, 1, 2);
+					sSegment(hMemDC, x, y, d, 0, 0, 2, 0);
+					sSegment(hMemDC, x, y, d, 2, 2, 2, 0);
+					sSegment(hMemDC, x, y, d, 2, 2, 0, 2);
+					sSegment(hMemDC, x, y, d, 0, 0, 0, 2);
 					break;
 				}
 			}
 		}
+
 		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_BRUSH)));
 		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
 		break;

@@ -48,22 +48,37 @@ void OnLButtonDown_Button(INT x, INT y)
 		if (buttons[i].mHover && IsIn(x, y, rc)) {
 			buttons[i].mLDown = TRUE;
 			switch (i) {
-			case 0:
+			case 0:// PREV
 				switch (scene) {
 				case SCENE_TITLE:
 					break;
-				}
-				break;
-			case 1:
-				switch (scene) {
-				case SCENE_TITLE:
+				case SCENE_STAGES:
+					SetScene(SCENE_TITLE);
+					break;
+				case SCENE_LEVELS:
+					SetScene(SCENE_STAGES);
 					break;
 				}
 				break;
-			case 2:
+			case 1:// RESET
+				switch (scene) {
+				case SCENE_TITLE:
+					break;
+				case SCENE_STAGES:
+					if (problem_crnt != problem_temp)problem_temp = problem_crnt;
+					else problem_crnt = 0;
+					SetScene(SCENE_STAGES);
+					break;
+				}
+				break;
+			case 2:// NEXT
 				switch (scene) {
 				case SCENE_TITLE: SetScene(SCENE_STAGES); break;
-				case SCENE_STAGES: SetScene(SCENE_LEVELS); break;
+				case SCENE_STAGES: {
+					if (problem_crnt / 12 != problem_temp / 12)problem_crnt = problem_temp;
+					SetScene(SCENE_LEVELS);
+					break;
+				}
 				}
 				break;
 			}
