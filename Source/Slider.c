@@ -78,7 +78,7 @@ void SetSliders(const PROBLEM* p)
 
 double GetProportion(const SLIDER *slider)
 {
-	return slider->value / (slider->max - slider->min);
+	return (slider->value - slider->min) / (slider->max - slider->min);
 }
 
 void GetSliderRect(const SLIDER* slider, RECT* rect)

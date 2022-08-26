@@ -1,5 +1,4 @@
 ﻿#include "Slider.h"
-#include "Button.h"
 #include "Draw.h"
 #include "Controls.h"
 #include "Problem.h"
@@ -26,10 +25,16 @@ double Ease(double t, double a, double b, double c)
 }
 
 extern PANE pane;
-extern INT scene = SCENE_TITLE;
+extern INT scene;
 extern SLIDER sliders[4];
 extern BUTTON buttons[3];
 extern GRAPH graph;
+
+extern PROBLEM problems[146];
+extern INT problem_crnt = 0;
+extern INT problem_temp = 0;
+extern DWORD problem_data_size = 0;
+extern const char* problem_data = NULL;
 
 // カーソルの描画(没)
 // http://nagoyacoder.web.fc2.com/win32api/mcursor.html
@@ -188,11 +193,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         pane.height = HIWORD(lParam);
         pane.rWidth = pane.width - pane.lWidth;
 
-        InitSliders();
-
-        InitButtons();
-
         SetScene(SCENE_TITLE);
+        //SetScene(SCENE_STAGES);
     }
     case WM_SIZE:
     {
@@ -265,7 +267,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         mx = mousePos.x;
         my = mousePos.y;
         if (pane.mDrag) {
-            pane.lWidth = median(300, mx, pane.width - 100);
+            pane.lWidth = (INT)median(300, mx, pane.width - 100);
             pane.rWidth = pane.width - pane.lWidth;
             pane.radius = min(pane.rWidth, pane.height) / 2;
             pane.paddingX = pane.rWidth / 2 - pane.radius;
