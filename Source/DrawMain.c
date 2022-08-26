@@ -512,6 +512,48 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
 		break;
 	}
+	case SCENE_LEVELS:
+	{
+		//INT problem_tmp;
+		WCHAR l[2];
+		double a, b, s, d;
+		a = sliders[0].value + sin(M_PI * sliders[0].value) / M_PI;
+		b = sliders[1].value - sin(M_PI * sliders[1].value) / M_PI;
+		s = RtoI_x(1) - RtoI_x(0);
+		problem_temp = problem_temp / 12 * 12 + (6 + floor(a / 2) - round(b / 2) * 4);
+
+		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
+		DeleteObject(SelectObject(hMemDC, CreateSolidBrush(0x002020)));
+
+		d = s * min(1 - cos(M_PI * a) / 5, 1 + cos(M_PI * b) / 5);
+		Ellipse(hMemDC,
+			RtoI_x(a) - d, RtoI_y(b) - d,
+			RtoI_x(a) + d, RtoI_y(b) + d
+		);
+
+		for (INT y = 0; y < 3; y++) {
+			for (INT x = 0; x < 4; x++) {
+				DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 4, 0x00FFFF)));
+				DeleteObject(SelectObject(hMemDC, CreateSolidBrush(8 + x - y * 4 == problem_temp % 12 ? 0x004040 : 0x002020)));
+				d = pow(2,
+					1 / (
+						(x * 2 - 3 - a) * (x * 2 - 3 - a) +
+						(y * 2 - 2 - b) * (y * 2 - 2 - b) + 1
+						)
+				) * 0.8;
+				sRectangle(hMemDC, (x - 1.5) * 2, (y - 1.0) * 2, d, d);
+
+				DeleteObject(SetFont(hMemDC, RtoI_x(d * 0.8) - RtoI_x(0), 0x00FFFF, 0));
+				wsprintf(l, L"%X", 9 + x - y * 4);
+				TextOut(hMemDC, RtoI_x((x - 1.5) * 2), RtoI_y((y - 1.0) * 2 - d * 0.4), l, lstrlen(l));
+			}
+		}
+
+		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_BRUSH)));
+		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
+		DeleteObject(SelectObject(hMemDC, GetStockObject(SYSTEM_FONT)));
+		break;
+	}
 	default:
 	{
 		INT X, Y;

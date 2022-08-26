@@ -89,5 +89,12 @@ void SetScene(INT s)
 		buttons[2].active = TRUE;
 		break;
 	}
+	case SCENE_PROBLEM:
+	{
+		buttons[0].active = TRUE;
+		buttons[1].active = TRUE;
+		buttons[2].active = TRUE;
+		break;
+	}
 	}
 }
