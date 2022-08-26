@@ -19,6 +19,32 @@
 #define SCENE_PROBLEM			4
 
 
+#define IDOP_X					-1
+#define IDOP_A					-2
+#define IDOP_B					-3
+#define IDOP_C					-4
+#define IDOP_D					-5
+#define IDOP_PI					-21
+
+#define IDOP_ERR				-100
+#define IDOP_ADD				-111
+#define IDOP_SUB				-112
+#define IDOP_MUL				-113
+#define IDOP_DIV				-114
+#define IDOP_POW				-115
+
+#define IDOP_COS				-211
+#define IDOP_SIN				-212
+#define IDOP_TAN				-213
+#define IDOP_FLOOR				-214
+#define IDOP_ROUND				-215
+#define IDOP_CEIL				-216
+#define IDOP_EXP				-217
+#define IDOP_LOG					-218
+#define IDOP_MOD				-221
+
+#define MAX_DATA_SIZE			64
+
 // 新しいオブジェクトの次の既定値
 //
 #ifdef APSTUDIO_INVOKED

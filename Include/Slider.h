@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Main.h"
-#include "Problem.h"
 
 // スライダー構造体
 typedef struct tagSLIDER {

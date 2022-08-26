@@ -1,7 +1,6 @@
 ﻿#include "Slider.h"
 #include "Draw.h"
 #include "Controls.h"
-#include "Problem.h"
 #include "Graph.h"
 #include "Scene.h"
 

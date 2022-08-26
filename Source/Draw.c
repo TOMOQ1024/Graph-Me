@@ -33,7 +33,7 @@ void Draw(HDC hdc, HDC hMemDC, INT mx, INT my)
 	DrawMain(hdc, hMemDC);
 
 	// デバッグ情報
-	DrawDebug(hdc, hMemDC, mx, my);
+	//DrawDebug(hdc, hMemDC, mx, my);
 
 	BitBlt(hdc, 0, 0, pane.width, pane.height, hMemDC, 0, 0, SRCCOPY);
 }

@@ -554,14 +554,18 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 		DeleteObject(SelectObject(hMemDC, GetStockObject(SYSTEM_FONT)));
 		break;
 	}
-	default:
+	case SCENE_PROBLEM:
 	{
 		INT X, Y;
-		double x, y;
+		double x, y, a, b, c, d;
+		a = sliders[0].value;
+		b = sliders[1].value;
+		c = sliders[2].value;
+		d = sliders[3].value;
 		DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 4, 0x00FFFF)));
 		for (X = 0; X <= pane.rWidth; X++) {
 			x = (1.0 * (X - pane.paddingX) / pane.radius / 2 - graph.x0) / graph.scale;
-			y = x * x / 4;
+			y = Calc(x, a, b, c, d);
 			Y = (INT)((graph.y0 - y * graph.scale) * pane.radius * 2);
 			if (X == 0) MoveToEx(hMemDC, pane.lWidth + X, pane.paddingY + Y, NULL);
 			else LineTo(hMemDC, pane.lWidth + X, pane.paddingY + Y);
@@ -577,16 +581,21 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 
 void DrawExpression(HDC hdc, HDC hMemDC)
 {
-	if (scene != SCENE_PROBLEM) return;
-	lstrcpy(graph.ex, TEXT("y=x^2/4"));
-	// •\Ž¦‚·‚é”Ž®‚Ì•¶Žš—ñ‚©‚ç•`‰æ”ÍˆÍ‚ðŽæ“¾‚µC’·•ûŒ`‚ð•`‰æ‚·‚é
-	DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 4, 0x00FFFF)));
+	switch (scene) {
+	case SCENE_PROBLEM:
+	{
+		lstrcpy(graph.ex, TEXT(""));
+		// •\Ž¦‚·‚é”Ž®‚Ì•¶Žš—ñ‚©‚ç•`‰æ”ÍˆÍ‚ðŽæ“¾‚µC’·•ûŒ`‚ð•`‰æ‚·‚é
+		DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 4, 0x00FFFF)));
 
-	// ”Ž®‚ð•`‰æ‚·‚é
-	SetTextAlign(hMemDC, TA_LEFT | TA_BOTTOM);
-	DeleteObject(SetFont(hMemDC, 20, 0x00FFFF, 0));
-	TextOut(hMemDC, pane.lWidth + 10, 30, graph.ex, lstrlen(graph.ex));
+		// ”Ž®‚ð•`‰æ‚·‚é
+		SetTextAlign(hMemDC, TA_LEFT | TA_BOTTOM);
+		DeleteObject(SetFont(hMemDC, 20, 0x00FFFF, 0));
+		TextOut(hMemDC, pane.lWidth + 10, 30, graph.ex, lstrlen(graph.ex));
 
-	DeleteObject(SelectObject(hMemDC, GetStockObject(SYSTEM_FONT)));
-	DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
+		DeleteObject(SelectObject(hMemDC, GetStockObject(SYSTEM_FONT)));
+		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
+		break;
+	}
+	}
 }
