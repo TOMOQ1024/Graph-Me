@@ -584,7 +584,6 @@ void DrawExpression(HDC hdc, HDC hMemDC)
 	switch (scene) {
 	case SCENE_PROBLEM:
 	{
-		lstrcpy(graph.ex, TEXT(""));
 		// •\¦‚·‚é”®‚Ì•¶š—ñ‚©‚ç•`‰æ”ÍˆÍ‚ğæ“¾‚µC’·•ûŒ`‚ğ•`‰æ‚·‚é
 		DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 4, 0x00FFFF)));
 

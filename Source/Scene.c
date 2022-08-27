@@ -3,6 +3,20 @@
 #include "Button.h"
 #include "Graph.h"
 
+double sItoR(INT i)
+{
+	if (i == 0)return 0;
+	return i % 100 ? i : i / 100.0 * M_PI;
+}
+
+WCHAR* sItoWS(INT i)
+{
+	if (i == 0)return L"0";
+	WCHAR str[3];
+	wsprintf(str, L"%d%s", i, i % 100 ? L"" : L"ƒÎ");
+	return str;
+}
+
 void SetScene(INT s)
 {
 
@@ -14,10 +28,7 @@ void SetScene(INT s)
 	switch (s) {
 	case SCENE_TITLE:
 	{
-		sliders[0].active = FALSE;
-		sliders[1].active = FALSE;
 		sliders[2].active = TRUE;
-		sliders[3].active = FALSE;
 		sliders[2].min = 0;
 		sliders[2].max = 2;
 		lstrcpy(sliders[2].min_s, TEXT("0"));
@@ -37,8 +48,6 @@ void SetScene(INT s)
 	{
 		sliders[0].active = TRUE;
 		sliders[1].active = TRUE;
-		sliders[2].active = FALSE;
-		sliders[3].active = FALSE;
 
 		sliders[0].min = -3;
 		sliders[0].max = 3;
@@ -65,8 +74,6 @@ void SetScene(INT s)
 	{
 		sliders[0].active = TRUE;
 		sliders[1].active = TRUE;
-		sliders[2].active = FALSE;
-		sliders[3].active = FALSE;
 
 		sliders[0].min = -3;
 		sliders[0].max = 3;
@@ -91,6 +98,28 @@ void SetScene(INT s)
 	}
 	case SCENE_PROBLEM:
 	{
+		PROBLEM* p = &problems[problem_crnt];
+		if (p->type == PTY_NULL) {
+			SetScene(SCENE_TITLE);
+			return;
+		}
+		LoadProblem(p);
+		for (INT i = 0; i < p->vcount; i++) {
+			// min value max vscale answer
+			sliders[i].active = TRUE;
+			sliders[i].min = sItoR(p->min[i]);
+			sliders[i].max = sItoR(p->max[i]);
+			lstrcpy(sliders[i].min_s, sItoWS(p->min[i]));
+			lstrcpy(sliders[i].max_s, sItoWS(p->max[i]));
+			sliders[i].value = p->value[i];
+		}
+
+		wsprintf(graph.ex, L"y=%s", p->fstr);
+
+		graph.x0 = p->x0;
+		graph.y0 = p->y0;
+		graph.scale = p->gscale;
+
 		buttons[0].active = TRUE;
 		buttons[1].active = TRUE;
 		buttons[2].active = TRUE;

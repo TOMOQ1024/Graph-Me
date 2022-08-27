@@ -62,11 +62,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     MyRegisterClass(hInstance);
 
     // 問題の読み込み
-    //HMODULE handle = GetModuleHandle(NULL);
-    HRSRC rc = FindResource(NULL, MAKEINTRESOURCE(IDR_PROBLEMTEXT), MAKEINTRESOURCE(TEXTFILE));
-    HGLOBAL hGlobal = LoadResource(NULL, rc);
-    problem_data = (char*)LockResource(hGlobal);
-    problem_data_size = (DWORD)strlen(problem_data);
+    LoadProblemData();
 
     // アプリケーション初期化の実行:
     if (!InitInstance (hInstance, nCmdShow))

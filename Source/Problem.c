@@ -345,10 +345,65 @@ double Calc(double x, double a, double b, double c, double d)
 
 
 
-void LoadProblem(void)
+void LoadProblemData(void)
 {
-	WCHAR str[64] = TEXT("ax+b");
+	//HMODULE handle = GetModuleHandle(NULL);
+	HRSRC rc = FindResource(NULL, MAKEINTRESOURCE(IDR_PROBLEMTEXT), MAKEINTRESOURCE(TEXTFILE));
+	HGLOBAL hGlobal = LoadResource(NULL, rc);
+	//char* problem_data = (char*)LockResource(hGlobal);
+	char problem_data[16384];
+	strcpy_s(problem_data, sizeof(problem_data), (char*)LockResource(hGlobal));
 
+	PROBLEM* p;
+	char* state;
+
+	WCHAR pd[128] = { 0 };
+	WCHAR* pd_ = NULL;
+	WCHAR p_type[10];
+	for (INT i = 0; i < sizeof(problems) / sizeof(problems[0]); i++) problems[i].type = PTY_NULL;
+	for (
+		char* tok = strtok_s(problem_data, "#", &state);
+		tok != NULL;
+		tok = strtok_s(NULL, "#", &state)
+	) {
+		if (!isdigit(tok[0]))continue;
+		p = &problems[strtol(tok, &tok, 12)];
+		if (tok[0] == ':')tok += 2;
+		mbstowcs_s(NULL, pd, sizeof(pd) / sizeof(pd[0]), tok, _TRUNCATE);
+		swscanf_s(
+			pd, L"%s %d %lf %lf %lf %s",
+			&p_type, (unsigned)(sizeof(p_type)/sizeof(p_type[0])), &p->vcount,
+			&p->x0, &p->y0, &p->gscale,
+			&p->fstr, (unsigned)(sizeof(p->fstr) / sizeof(p->fstr[0]))
+		);
+		if (lstrcmp(p_type, L"explicit") == 0)p->type = PTY_EXPLICIT;
+		for (INT i = 0; i < lstrlen(pd); i++) {
+			if (pd[i] == L'$') {
+				pd_ = pd + i + 1;
+				break;
+			}
+		}
+		if (pd_ == NULL)continue;
+		for (INT i = 0; i < p->vcount; i++) {
+			// min value max vscale answer
+			swscanf_s(
+				pd_, L"%d %lf %d %d %lf",
+				&(p->min[i]), &(p->value[i]), &(p->max[i]), &(p->vscale[i]), &(p->answer[i])
+			);
+			for (INT j = 0; j < lstrlen(pd_); j++) {
+				if (pd_[j] == L'\n') {
+					pd_ = pd_ + j + 1;
+					break;
+				}
+			}
+		}
+	}
+}
+
+void LoadProblem(PROBLEM* p)
+{
+	WCHAR str[30] = { 0 };
+	lstrcpy(str, p->fstr);
 	token = tokenize(str);
 	op_count = 0;
 	gen(expr());

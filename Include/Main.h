@@ -41,29 +41,35 @@ BUTTON buttons[3];
 
 
 
+// 問題型
+typedef enum {
+	PTY_NULL,
+	PTY_EXPLICIT,
+} ProblemType;
 // 問題構造体
 typedef struct tagPROBLEM {
-	INT id;
-	INT type;
+	ProblemType type;
 	double x0;
 	double y0;
-	BOOL active[4];
+	double gscale;
+	WCHAR fstr[30];
+	INT vcount;
 	INT min[4];
 	INT max[4];
 	double value[4];
-	double scale[4];
+	INT vscale[4];
 	double answer[4];
 } PROBLEM;
 // ファイルから読み取る問題のデータ
 PROBLEM problems[146];
 
-DWORD problem_data_size;
-const char* problem_data;
-
 INT problem_crnt;
 INT problem_temp;
 
-void LoadProblem(void);
+// リソースの読み込み
+void LoadProblemData(void);
+
+void LoadProblem(PROBLEM* p);
 
 double Calc(double x, double a, double b, double c, double d);
 

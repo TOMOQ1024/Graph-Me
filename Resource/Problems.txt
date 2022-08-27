@@ -1,7 +1,21 @@
-# problem data
-# hoge
-hoge
+----- PROBLEM DATA -----
+SYNTAX: type v_count
+	x0 y0 gscale
+	f(x)
+$	min value max vscale answer		|
+	min value max vscale answer		| v_count lines
+	min value max vscale answer		|
+	min value max vscale answer		|
 
-# 0-0          title
+--- STAGE 1: 0-11 ---
+#00	explicit 1
+	0.5 0.5 0.09
+	a
+$	-6 0 6 0 4
 
-# 0-1 to 0-C   explicit functions
+#01	explicit 2
+	0.5 0.5 0.09
+	ax+b
+$	-3 0 3 0 3
+	-5 0 5 0 -2
+
