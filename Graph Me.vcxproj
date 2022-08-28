@@ -141,7 +141,6 @@
     <ClInclude Include="Include\Font.h" />
     <ClInclude Include="Include\framework.h" />
     <ClInclude Include="Include\Gradient.h" />
-    <ClInclude Include="Include\Graph.h" />
     <ClInclude Include="Include\Main.h" />
     <ClInclude Include="Include\Problem.h" />
     <ClInclude Include="Include\Resource.h" />

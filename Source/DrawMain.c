@@ -1,6 +1,4 @@
-#include "Main.h"
 #include "Draw.h"
-#include "Graph.h"
 #include "Font.h"
 #include "Scene.h"
 #include "Slider.h"

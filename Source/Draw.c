@@ -1,6 +1,5 @@
 #include "Draw.h"
 #include "Gradient.h"
-#include "Graph.h"
 
 void Draw(HDC hdc, HDC hMemDC, INT mx, INT my)
 {

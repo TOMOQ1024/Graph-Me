@@ -1,7 +1,6 @@
 #include "Scene.h"
 #include "Slider.h"
 #include "Button.h"
-#include "Graph.h"
 
 double sItoR(INT i)
 {

@@ -41,6 +41,18 @@ BUTTON buttons[3];
 
 
 
+// ƒOƒ‰ƒt\‘¢‘Ì
+typedef struct tagGRAPH {
+	double x0;
+	double y0;
+	double scale;
+	WCHAR ex[100];
+} GRAPH;
+
+GRAPH graph;
+
+
+
 // –â‘èŒ^
 typedef enum {
 	PTY_NULL,
