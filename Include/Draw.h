@@ -8,10 +8,7 @@
 void DrawCtrl(HDC hdc, HDC hMemDC, INT mx, INT my);
 
 
-INT gRtoI_x(double x);
-INT gRtoI_y(double y);
-double gItoR_x(INT x);
-double gItoR_y(INT x);
+
 
 
 // 線分
@@ -27,6 +24,8 @@ void mtSegment(
 void sRectangle(HDC hdc, double xc, double yc, double w, double h);
 // ステージ項目用セグメント
 void sSegment(HDC hdc, double xo, double yo, double d, INT x0, INT y0, INT x1, INT y1);
+
+
 
 //
 void Curve(double p_arr[][2], INT* p_size, double a, double b, double c, double d, double x0, double y0, double x1, double y1);

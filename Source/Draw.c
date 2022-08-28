@@ -1,5 +1,6 @@
 #include "Draw.h"
 #include "Gradient.h"
+#include "Utils.h"
 
 void Draw(HDC hdc, HDC hMemDC, INT mx, INT my)
 {
@@ -37,22 +38,48 @@ void Draw(HDC hdc, HDC hMemDC, INT mx, INT my)
 	BitBlt(hdc, 0, 0, pane.width, pane.height, hMemDC, 0, 0, SRCCOPY);
 }
 
-INT gRtoI_x(double x)
+
+
+void Segment(HDC hdc, double x0, double y0, double x1, double y1)
 {
-	return (INT)(pane.lWidth + pane.paddingX + (graph.x0 + x * graph.scale) * pane.radius * 2);
+	INT X0 = gRtoI_x(x0);
+	INT Y0 = gRtoI_y(y0);
+	INT X1 = gRtoI_x(x1);
+	INT Y1 = gRtoI_y(y1);
+
+	MoveToEx(hdc, X0, Y0, NULL);
+	LineTo(hdc, X1, Y1);
 }
 
-INT gRtoI_y(double y)
+void tSegment(HDC hdc, double x0, double y0, double X0, double Y0, double X1, double Y1)
 {
-	return (INT)(pane.paddingY + (graph.y0 - y * graph.scale) * pane.radius * 2);
+	Segment(hdc, x0 + (X0 * 0.3 + 0.2), y0 + Y0, x0 + (X1 * 0.3 + 0.2), y0 + Y1);
 }
 
-double gItoR_x(INT x)
+void mtSegment(
+	HDC hdc, double t, double x0, double y0, INT xf0, INT yf0, INT xt0, INT yt0,
+	INT xf1, INT yf1, INT xt1, INT yt1, INT xf2, INT yf2, INT xt2, INT yt2
+)
 {
-	return ((x - pane.lWidth - pane.paddingX) / 2.0 / pane.radius - graph.x0) / graph.scale;
+	tSegment(
+		hdc, x0, y0,
+		Ease(t, xf0, xf1, xf2), Ease(t, yf0, yf1, yf2),
+		Ease(t, xt0, xt1, xt2), Ease(t, yt0, yt1, yt2)
+	);
 }
 
-double gItoR_y(INT y)
+void sRectangle(HDC hdc, double xc, double yc, double w, double h)
 {
-	return -((y - pane.paddingY) / 2.0 / pane.radius - graph.y0) / graph.scale;
+	Rectangle(
+		hdc,
+		gRtoI_x(xc - w / 2), gRtoI_y(yc - h / 2),
+		gRtoI_x(xc + w / 2), gRtoI_y(yc + h / 2)
+	);
+}
+
+void sSegment(HDC hdc, double xo, double yo, double d, INT x0, INT y0, INT x1, INT y1)
+{
+	double s = d * 0.3;
+	MoveToEx(hdc, gRtoI_x((xo - 1.5) * 2 + (x0 - 1) * s), gRtoI_y((yo - 1.0) * 2 + (y0 - 1) * s), NULL);
+	LineTo(hdc, gRtoI_x((xo - 1.5) * 2 + (x1 - 1) * s), gRtoI_y((yo - 1.0) * 2 + (y1 - 1) * s));
 }

@@ -1,7 +1,6 @@
 #include "Draw.h"
 #include "Button.h"
 #include "Font.h"
-#include <math.h>
 
 
 void DrawDebug(HDC hdc, HDC hMemDC, INT mx, INT my)

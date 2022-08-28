@@ -1,17 +1,8 @@
 #include "Slider.h"
 #include "Button.h"
+#include "Utils.h"
 
-double sItoR(INT i)
-{
-	if (i == 0)return 0;
-	return i % 100 ? i : i / 100.0 * M_PI;
-}
 
-void sItoWS(INT i, WCHAR* str)
-{
-	if (i == 0) wsprintf(str, L"0");
-	wsprintf(str, L"%d%s", i, i % 100 ? L"" : L"ƒÎ");
-}
 
 void SetScene(SCENE s)
 {

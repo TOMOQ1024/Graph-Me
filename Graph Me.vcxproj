@@ -146,6 +146,7 @@
     <ClInclude Include="Include\Resource.h" />
     <ClInclude Include="Include\Slider.h" />
     <ClInclude Include="Include\targetver.h" />
+    <ClInclude Include="Include\Utils.h" />
     <ClInclude Include="Resource\resource.h" />
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +162,7 @@
     <ClCompile Include="Source\Problem.c" />
     <ClCompile Include="Source\Scene.c" />
     <ClCompile Include="Source\Slider.c" />
+    <ClCompile Include="Source\Utils.c" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource\Graph Me.rc" />

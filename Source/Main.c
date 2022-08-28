@@ -1,4 +1,5 @@
 ﻿#include "Main.h"
+#include "Utils.h"
 #include "Controls.h"
 
 #define MAX_LOADSTRING 100
@@ -8,34 +9,14 @@ HINSTANCE hInst;                                // 現在のインターフェ�
 WCHAR szTitle[MAX_LOADSTRING];                  // タイトル バーのテキスト
 WCHAR szWindowClass[MAX_LOADSTRING];            // メイン ウィンドウ クラス名
 
-double median(double x, double y, double z)
-{
-    return x < y ? y < z ? y : z : z < x ? z : x;
-}
-
-double DistanceSq(double x0, double y0, double x1, double y1)
-{
-    return (x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0);
-}
-
-double Ease(double t, double a, double b, double c)
-{
-    if (t < 0 || 2 < t) return 0;
-    if (t < 1) return a + (b - a) / 2 * (1 - cos(M_PI * t));
-    return b + (c - b) / 2 * (1 + cos(M_PI * t));
-}
-
-extern PANE pane;
-extern INT scene;
-extern SLIDER sliders[4];
-extern BUTTON buttons[3];
-extern GRAPH graph;
-
-extern PROBLEM problems[146];
-extern INT problem_crnt = 0;
-extern INT problem_temp = 0;
-extern DWORD problem_data_size = 0;
-extern const char* problem_data = NULL;
+SCENE scene;
+PANE pane;
+GRAPH graph;
+SLIDER sliders[4];
+BUTTON buttons[3];
+PROBLEM problems[146];
+INT problem_crnt = 0;
+INT problem_temp = 0;
 
 // カーソルの描画(没)
 // http://nagoyacoder.web.fc2.com/win32api/mcursor.html
@@ -182,7 +163,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         hdc = GetDC(hWnd);
         hMemDC = CreateCompatibleDC(hdc);
-        
+
         pane.lWidth = 300;
         pane.mHover = FALSE;
         pane.mDrag = FALSE;
