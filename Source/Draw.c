@@ -2,7 +2,7 @@
 #include "Gradient.h"
 #include "Utils.h"
 
-void Draw(HDC hdc, HDC hMemDC, INT mx, INT my)
+void Draw(HDC hdc, HDC hMemDC)
 {
 	// テキストの背景色をなくす
 	SetBkMode(hMemDC, TRANSPARENT);
@@ -27,13 +27,13 @@ void Draw(HDC hdc, HDC hMemDC, INT mx, INT my)
 	DeleteObject(SelectObject(hMemDC, GetStockObject(BLACK_BRUSH)));
 
 	// コントロール
-	DrawCtrl(hdc, hMemDC, mx, my);
+	DrawCtrl(hdc, hMemDC);
 
 	// 軸,グラフ,数式
 	DrawMain(hdc, hMemDC);
 
 	// デバッグ情報
-	DrawDebug(hdc, hMemDC, mx, my);
+	DrawDebug(hdc, hMemDC);
 
 	BitBlt(hdc, 0, 0, pane.width, pane.height, hMemDC, 0, 0, SRCCOPY);
 }

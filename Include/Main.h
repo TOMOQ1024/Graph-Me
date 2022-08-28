@@ -106,7 +106,7 @@ double Calc(double x, double a, double b, double c, double d);
 void SetScene(SCENE s);
 
 // ‘S‚Ä‚Ì•`‰æ
-void Draw(HDC hdc, HDC hMemDC, INT mx, INT my);
+void Draw(HDC hdc, HDC hMemDC);
 
 
 

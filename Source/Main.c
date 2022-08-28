@@ -186,7 +186,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         hBMP = CreateCompatibleBitmap(hdc, pane.width, pane.height);
         hOldBMP = SelectObject(hMemDC, hBMP);
         if (hOldBMP) DeleteObject(hOldBMP);
-        Draw(hdc, hMemDC, mx, my);
+        Draw(hdc, hMemDC);
         break;
     }
     case WM_GETMINMAXINFO:
@@ -200,7 +200,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
     case WM_MOVE:
     {
-        Draw(hdc, hMemDC, mx, my);
+        Draw(hdc, hMemDC);
         break;
     }
     case WM_SETCURSOR:
@@ -228,14 +228,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             //InvalidateRect(hWnd, NULL, FALSE);
         }
         OnLButtonDown(LOWORD(lParam), HIWORD(lParam));
-        Draw(hdc, hMemDC, mx, my);
+        Draw(hdc, hMemDC);
         break;
     }
     case WM_LBUTTONUP:
     {
         pane.mDrag = FALSE;
         OnLButtonUp(LOWORD(lParam), HIWORD(lParam));
-        Draw(hdc, hMemDC, mx, my);
+        Draw(hdc, hMemDC);
         break;
     }
     case WM_MOUSEMOVE:
@@ -259,7 +259,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             pane.mHover = FALSE;
         }
         OnMouseMove(LOWORD(lParam), HIWORD(lParam));
-        Draw(hdc, hMemDC, mx, my);
+        Draw(hdc, hMemDC);
         break;
     }
     case WM_DESTROY:

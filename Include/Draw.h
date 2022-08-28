@@ -5,7 +5,7 @@
 
 
 // コントロールの描画
-void DrawCtrl(HDC hdc, HDC hMemDC, INT mx, INT my);
+void DrawCtrl(HDC hdc, HDC hMemDC);
 
 
 
@@ -36,4 +36,4 @@ void DrawGraph(HDC hdc, HDC hMemDC);
 void DrawExpression(HDC hdc, HDC hMemDC);
 
 // デバッグ情報の描画
-void DrawDebug(HDC hdc, HDC hMemDC, INT mx, INT my);
+void DrawDebug(HDC hdc, HDC hMemDC);

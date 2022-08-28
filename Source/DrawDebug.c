@@ -3,7 +3,7 @@
 #include "Font.h"
 
 
-void DrawDebug(HDC hdc, HDC hMemDC, INT mx, INT my)
+void DrawDebug(HDC hdc, HDC hMemDC)
 {
 	static double t = 0;
 	TCHAR str[256];
