@@ -8,9 +8,6 @@
 
 
 
-
-
-
 // ペイン構造体
 typedef struct tagPANE {
 	INT lWidth;
@@ -25,6 +22,25 @@ typedef struct tagPANE {
 } PANE;
 PANE pane;
 
+
+// スライダー構造体
+typedef struct tagSLIDER {
+	INT id;
+	BOOL active;
+	double min;
+	double max;
+	TCHAR min_s[8];
+	TCHAR max_s[8];
+	double value;
+	double scale;
+	BOOL mHover;
+	BOOL mDrag;
+	INT length;
+	INT width;
+	INT height;
+} SLIDER;
+// a, b, c, d のスライダー
+SLIDER sliders[4];
 
 
 // ボタン構造体
@@ -84,6 +100,17 @@ void LoadProblemData(void);
 void LoadProblem(PROBLEM* p);
 
 double Calc(double x, double a, double b, double c, double d);
+
+
+
+INT scene;
+
+void SetScene(INT s);
+
+
+// 全ての描画
+void Draw(HDC hdc, HDC hMemDC, INT mx, INT my);
+
 
 
 

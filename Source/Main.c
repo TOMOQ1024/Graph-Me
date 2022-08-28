@@ -1,7 +1,5 @@
-﻿#include "Slider.h"
-#include "Draw.h"
+﻿#include "Main.h"
 #include "Controls.h"
-#include "Scene.h"
 
 #define MAX_LOADSTRING 100
 
