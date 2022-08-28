@@ -8,7 +8,7 @@
 
 
 
-// スタックに対する命令
+// シーン
 typedef enum {
 	SCENE_TITLE,
 	SCENE_SETTINGS,

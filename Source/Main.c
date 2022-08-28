@@ -222,25 +222,24 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     //}
     case WM_LBUTTONDOWN:
     {
-        OnLButtonDown(LOWORD(lParam), HIWORD(lParam));
         pane.mDrag = FALSE;
         if (pane.mHover) {
             pane.mDrag = TRUE;
             //InvalidateRect(hWnd, NULL, FALSE);
         }
+        OnLButtonDown(LOWORD(lParam), HIWORD(lParam));
         Draw(hdc, hMemDC, mx, my);
         break;
     }
     case WM_LBUTTONUP:
     {
-        OnLButtonUp(LOWORD(lParam), HIWORD(lParam));
         pane.mDrag = FALSE;
+        OnLButtonUp(LOWORD(lParam), HIWORD(lParam));
         Draw(hdc, hMemDC, mx, my);
         break;
     }
     case WM_MOUSEMOVE:
     {
-        OnMouseMove(LOWORD(lParam), HIWORD(lParam));
         POINTS mousePos = MAKEPOINTS(lParam);
         mx = mousePos.x;
         my = mousePos.y;
@@ -251,7 +250,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             pane.paddingX = pane.rWidth / 2 - pane.radius;
             pane.paddingY = pane.height / 2 - pane.radius;
 
-            for (INT i = 0; i < 4; i++) sliders[i].length = pane.lWidth - 120;
+            for (INT i = 0; i < 4; i++) sliders[i].length = pane.lWidth - 140;
         }
         else if (abs((LONG)(mx - pane.lWidth)) < 3) {
             pane.mHover = TRUE;
@@ -259,6 +258,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         else {
             pane.mHover = FALSE;
         }
+        OnMouseMove(LOWORD(lParam), HIWORD(lParam));
         Draw(hdc, hMemDC, mx, my);
         break;
     }
