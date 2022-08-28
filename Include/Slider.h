@@ -2,25 +2,6 @@
 
 #include "Main.h"
 
-// スライダー構造体
-typedef struct tagSLIDER {
-	INT id;
-	BOOL active;
-	double min;
-	double max;
-	TCHAR min_s[8];
-	TCHAR max_s[8];
-	double value;
-	double scale;
-	BOOL mHover;
-	BOOL mDrag;
-	INT length;
-	INT width;
-	INT height;
-} SLIDER;
-// a, b, c, d のスライダー
-SLIDER sliders[4];
-
 
 
 // スライダー初期化

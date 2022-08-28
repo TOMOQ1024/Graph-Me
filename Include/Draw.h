@@ -2,17 +2,13 @@
 
 #include "Main.h"
 
-// 全ての描画
-void Draw(HDC hdc, HDC hMemDC, INT mx, INT my);
+
 
 // コントロールの描画
-void DrawCtrl(HDC hdc, HDC hMemDC, INT mx, INT my);
+void DrawCtrl(HDC hdc, HDC hMemDC);
 
 
-INT gRtoI_x(double x);
-INT gRtoI_y(double y);
-double gItoR_x(INT x);
-double gItoR_y(INT x);
+
 
 
 // 線分
@@ -29,6 +25,8 @@ void sRectangle(HDC hdc, double xc, double yc, double w, double h);
 // ステージ項目用セグメント
 void sSegment(HDC hdc, double xo, double yo, double d, INT x0, INT y0, INT x1, INT y1);
 
+
+
 //
 void Curve(double p_arr[][2], INT* p_size, double a, double b, double c, double d, double x0, double y0, double x1, double y1);
 // 軸,グラフ,数式の描画
@@ -38,4 +36,4 @@ void DrawGraph(HDC hdc, HDC hMemDC);
 void DrawExpression(HDC hdc, HDC hMemDC);
 
 // デバッグ情報の描画
-void DrawDebug(HDC hdc, HDC hMemDC, INT mx, INT my);
+void DrawDebug(HDC hdc, HDC hMemDC);

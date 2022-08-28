@@ -8,8 +8,14 @@
 
 
 
-
-
+// シーン
+typedef enum {
+	SCENE_TITLE,
+	SCENE_SETTINGS,
+	SCENE_STAGES,
+	SCENE_LEVELS,
+	SCENE_PROBLEM,
+} SCENE;
 
 // ペイン構造体
 typedef struct tagPANE {
@@ -23,8 +29,25 @@ typedef struct tagPANE {
 	BOOL mHover;
 	BOOL mDrag;
 } PANE;
-PANE pane;
 
+
+// スライダー構造体
+typedef struct tagSLIDER {
+	INT id;
+	BOOL active;
+	double min;
+	double max;
+	TCHAR min_s[8];
+	TCHAR max_s[8];
+	double value;
+	double scale;
+	BOOL mHover;
+	BOOL mDrag;
+	INT length;
+	INT width;
+	INT height;
+} SLIDER;
+// a, b, c, d のスライダー
 
 
 // ボタン構造体
@@ -37,9 +60,15 @@ typedef struct tagBUTTON {
 	INT height;
 } BUTTON;
 // PREV, RESET, NEXT
-BUTTON buttons[3];
 
 
+// グラフ構造体
+typedef struct tagGRAPH {
+	double x0;
+	double y0;
+	double scale;
+	WCHAR ex[100];
+} GRAPH;
 
 // 問題型
 typedef enum {
@@ -60,31 +89,37 @@ typedef struct tagPROBLEM {
 	INT vscale[4];
 	double answer[4];
 } PROBLEM;
-// ファイルから読み取る問題のデータ
-PROBLEM problems[146];
 
-INT problem_crnt;
-INT problem_temp;
+
 
 // リソースの読み込み
 void LoadProblemData(void);
 
+// 問題のロード
 void LoadProblem(PROBLEM* p);
-
+// 読み込んだ関数の実行
 double Calc(double x, double a, double b, double c, double d);
 
 
 
-// 3変数の中央値関数
-double median(double x, double y, double z);
+// シーン設定
+void SetScene(SCENE s);
 
-// 補間関数
-double Ease(double t, double a, double b, double c);
-
-// 2点間の距離
-double DistanceSq(double x0, double y0, double x1, double y1);
-
-// 矩形内に (x,y) が存在するか
-BOOL IsIn(INT x, INT y, const RECT rc);
+// 全ての描画
+void Draw(HDC hdc, HDC hMemDC);
 
 
+
+
+
+
+
+/*      グローバル変数       */
+extern SCENE scene;
+extern PANE pane;
+extern GRAPH graph;
+extern SLIDER sliders[4];
+extern BUTTON buttons[3];
+extern PROBLEM problems[146];// ファイルから読み取る問題のデータ
+extern INT problem_crnt;
+extern INT problem_temp;

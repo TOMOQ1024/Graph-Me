@@ -4,7 +4,7 @@
 #include "Font.h"
 #include "Gradient.h"
 
-void DrawCtrl(HDC hdc, HDC hMemDC, INT mx, INT my)
+void DrawCtrl(HDC hdc, HDC hMemDC)
 {
     TCHAR str[8];
     RECT rc;

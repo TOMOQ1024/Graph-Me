@@ -51,10 +51,7 @@
     <ClInclude Include="Include\Problem.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Graph.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Scene.h">
+    <ClInclude Include="Include\Utils.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
@@ -93,6 +90,9 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="Source\Problem.c">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utils.c">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>

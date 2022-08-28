@@ -351,7 +351,7 @@ void LoadProblemData(void)
 	HRSRC rc = FindResource(NULL, MAKEINTRESOURCE(IDR_PROBLEMTEXT), MAKEINTRESOURCE(TEXTFILE));
 	HGLOBAL hGlobal = LoadResource(NULL, rc);
 	//char* problem_data = (char*)LockResource(hGlobal);
-	char problem_data[16384];
+	static char problem_data[16384];
 	strcpy_s(problem_data, sizeof(problem_data), (char*)LockResource(hGlobal));
 
 	PROBLEM* p;

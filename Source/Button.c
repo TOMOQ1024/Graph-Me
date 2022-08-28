@@ -1,5 +1,5 @@
 #include "Button.h"
-#include "Scene.h"
+#include "Utils.h"
 
 void InitButtons(void)
 {
