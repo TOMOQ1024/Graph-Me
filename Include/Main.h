@@ -8,6 +8,15 @@
 
 
 
+// スタックに対する命令
+typedef enum {
+	SCENE_TITLE,
+	SCENE_SETTINGS,
+	SCENE_STAGES,
+	SCENE_LEVELS,
+	SCENE_PROBLEM,
+} SCENE;
+
 // ペイン構造体
 typedef struct tagPANE {
 	INT lWidth;
@@ -56,7 +65,6 @@ typedef struct tagBUTTON {
 BUTTON buttons[3];
 
 
-
 // グラフ構造体
 typedef struct tagGRAPH {
 	double x0;
@@ -103,9 +111,9 @@ double Calc(double x, double a, double b, double c, double d);
 
 
 
-INT scene;
+SCENE scene;
 
-void SetScene(INT s);
+void SetScene(SCENE s);
 
 
 // 全ての描画

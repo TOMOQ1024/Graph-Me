@@ -13,7 +13,7 @@ void sItoWS(INT i, WCHAR* str)
 	wsprintf(str, L"%d%s", i, i % 100 ? L"" : L"ƒÎ");
 }
 
-void SetScene(INT s)
+void SetScene(SCENE s)
 {
 
 	InitSliders();
