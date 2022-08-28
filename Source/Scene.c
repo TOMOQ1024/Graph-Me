@@ -7,12 +7,10 @@ double sItoR(INT i)
 	return i % 100 ? i : i / 100.0 * M_PI;
 }
 
-WCHAR* sItoWS(INT i)
+void sItoWS(INT i, WCHAR* str)
 {
-	if (i == 0)return L"0";
-	WCHAR str[3];
+	if (i == 0) wsprintf(str, L"0");
 	wsprintf(str, L"%d%s", i, i % 100 ? L"" : L"ƒÎ");
-	return str;
 }
 
 void SetScene(INT s)
@@ -107,8 +105,8 @@ void SetScene(INT s)
 			sliders[i].active = TRUE;
 			sliders[i].min = sItoR(p->min[i]);
 			sliders[i].max = sItoR(p->max[i]);
-			lstrcpy(sliders[i].min_s, sItoWS(p->min[i]));
-			lstrcpy(sliders[i].max_s, sItoWS(p->max[i]));
+			sItoWS(p->min[i], sliders[i].min_s);
+			sItoWS(p->max[i], sliders[i].max_s);
 			sliders[i].value = p->value[i];
 		}
 

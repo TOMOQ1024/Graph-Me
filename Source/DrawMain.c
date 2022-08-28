@@ -53,7 +53,7 @@ void Curve(double p_arr[][2], INT* p_size, double a, double b, double c, double 
 {
 	double hSq = 0.5 / graph.scale / pane.radius; hSq *= hSq;
 	double HSq = 5.0 / graph.scale / pane.radius; HSq *= HSq;
-	double x, y, tmp_x, tmp_y;
+	double x, y;
 	p_arr[*p_size][0] = x = (x0 + x1) / 2;
 	p_arr[*p_size][1] = y = Calc(x, a, b, c, d);
 	*p_size += 1;
@@ -426,20 +426,20 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 	}
 	case SCENE_STAGES:
 	{
-		//INT problem_tmp;
+		INT r;
 		double a, b, s, d;
 		a = sliders[0].value + sin(M_PI * sliders[0].value) / M_PI;
 		b = sliders[1].value - sin(M_PI * sliders[1].value) / M_PI;
 		s = gRtoI_x(1) - gRtoI_x(0);
-		problem_temp = (6 + floor(a / 2) - round(b / 2) * 4) * 12;
+		problem_temp = (INT)((6 + floor(a / 2) - round(b / 2) * 4) * 12);
 
 		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
 		DeleteObject(SelectObject(hMemDC, CreateSolidBrush(0x002020)));
 		
-		d = s * min(1 - cos(M_PI * a) / 5, 1 + cos(M_PI * b) / 5);
+		r = (INT)(s * min(1 - cos(M_PI * a) / 5, 1 + cos(M_PI * b) / 5));
 		Ellipse(hMemDC,
-			gRtoI_x(a) - d, gRtoI_y(b) - d,
-			gRtoI_x(a) + d, gRtoI_y(b) + d
+			gRtoI_x(a) - r, gRtoI_y(b) - r,
+			gRtoI_x(a) + r, gRtoI_y(b) + r
 		);
 
 		for (INT y = 0; y < 3; y++) {
@@ -526,21 +526,21 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 	}
 	case SCENE_LEVELS:
 	{
-		//INT problem_tmp;
+		INT r;
 		WCHAR l[2];
 		double a, b, s, d;
 		a = sliders[0].value + sin(M_PI * sliders[0].value) / M_PI;
 		b = sliders[1].value - sin(M_PI * sliders[1].value) / M_PI;
 		s = gRtoI_x(1) - gRtoI_x(0);
-		problem_temp = problem_temp / 12 * 12 + (6 + floor(a / 2) - round(b / 2) * 4);
+		problem_temp = problem_temp / 12 * 12 + (INT)(6 + floor(a / 2) - round(b / 2) * 4);
 
 		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
 		DeleteObject(SelectObject(hMemDC, CreateSolidBrush(0x002020)));
 
-		d = s * min(1 - cos(M_PI * a) / 5, 1 + cos(M_PI * b) / 5);
+		r = (INT)(s * min(1 - cos(M_PI * a) / 5, 1 + cos(M_PI * b) / 5));
 		Ellipse(hMemDC,
-			gRtoI_x(a) - d, gRtoI_y(b) - d,
-			gRtoI_x(a) + d, gRtoI_y(b) + d
+			gRtoI_x(a) - r, gRtoI_y(b) - r,
+			gRtoI_x(a) + r, gRtoI_y(b) + r
 		);
 
 		for (INT y = 0; y < 3; y++) {
