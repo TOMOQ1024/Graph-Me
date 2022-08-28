@@ -10,10 +10,10 @@
 
 void Segment(HDC hdc, double x0, double y0, double x1, double y1)
 {
-	INT X0 = RtoI_x(x0);
-	INT Y0 = RtoI_y(y0);
-	INT X1 = RtoI_x(x1);
-	INT Y1 = RtoI_y(y1);
+	INT X0 = gRtoI_x(x0);
+	INT Y0 = gRtoI_y(y0);
+	INT X1 = gRtoI_x(x1);
+	INT Y1 = gRtoI_y(y1);
 
 	MoveToEx(hdc, X0, Y0, NULL);
 	LineTo(hdc, X1, Y1);
@@ -40,17 +40,32 @@ void sRectangle(HDC hdc, double xc, double yc, double w, double h)
 {
 	Rectangle(
 		hdc,
-		RtoI_x(xc - w / 2), RtoI_y(yc - h / 2),
-		RtoI_x(xc + w / 2), RtoI_y(yc + h / 2)
+		gRtoI_x(xc - w / 2), gRtoI_y(yc - h / 2),
+		gRtoI_x(xc + w / 2), gRtoI_y(yc + h / 2)
 	);
 }
 
 void sSegment(HDC hdc, double xo, double yo, double d, INT x0, INT y0, INT x1, INT y1)
 {
 	double s = d * 0.3;
-	MoveToEx(hdc, RtoI_x((xo - 1.5) * 2 + (x0 - 1) * s), RtoI_y((yo - 1.0) * 2 + (y0 - 1) * s), NULL);
-	LineTo(hdc, RtoI_x((xo - 1.5) * 2 + (x1 - 1) * s), RtoI_y((yo - 1.0) * 2 + (y1 - 1) * s));
+	MoveToEx(hdc, gRtoI_x((xo - 1.5) * 2 + (x0 - 1) * s), gRtoI_y((yo - 1.0) * 2 + (y0 - 1) * s), NULL);
+	LineTo(hdc, gRtoI_x((xo - 1.5) * 2 + (x1 - 1) * s), gRtoI_y((yo - 1.0) * 2 + (y1 - 1) * s));
 }
+
+void Curve(double p_arr[][2], INT* p_size, double a, double b, double c, double d, double x0, double y0, double x1, double y1)
+{
+	double hSq = 0.5 / graph.scale / pane.radius; hSq *= hSq;
+	double HSq = 5.0 / graph.scale / pane.radius; HSq *= HSq;
+	double x, y, tmp_x, tmp_y;
+	p_arr[*p_size][0] = x = (x0 + x1) / 2;
+	p_arr[*p_size][1] = y = Calc(x, a, b, c, d);
+	*p_size += 1;
+	if (hSq < DistanceSq(x0, y0, x, y) && hSq < x - x0)
+		Curve(p_arr, p_size, a, b, c, d, x0, y0, x, y);
+	if (hSq < DistanceSq(x, y, x1, y1) && hSq < x1 - x)
+		Curve(p_arr, p_size, a, b, c, d, x, y, x1, y1);
+}
+
 
 
 void DrawMain(HDC hdc, HDC hMemDC)
@@ -418,7 +433,7 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 		double a, b, s, d;
 		a = sliders[0].value + sin(M_PI * sliders[0].value) / M_PI;
 		b = sliders[1].value - sin(M_PI * sliders[1].value) / M_PI;
-		s = RtoI_x(1) - RtoI_x(0);
+		s = gRtoI_x(1) - gRtoI_x(0);
 		problem_temp = (6 + floor(a / 2) - round(b / 2) * 4) * 12;
 
 		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
@@ -426,8 +441,8 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 		
 		d = s * min(1 - cos(M_PI * a) / 5, 1 + cos(M_PI * b) / 5);
 		Ellipse(hMemDC,
-			RtoI_x(a) - d, RtoI_y(b) - d,
-			RtoI_x(a) + d, RtoI_y(b) + d
+			gRtoI_x(a) - d, gRtoI_y(b) - d,
+			gRtoI_x(a) + d, gRtoI_y(b) + d
 		);
 
 		for (INT y = 0; y < 3; y++) {
@@ -519,7 +534,7 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 		double a, b, s, d;
 		a = sliders[0].value + sin(M_PI * sliders[0].value) / M_PI;
 		b = sliders[1].value - sin(M_PI * sliders[1].value) / M_PI;
-		s = RtoI_x(1) - RtoI_x(0);
+		s = gRtoI_x(1) - gRtoI_x(0);
 		problem_temp = problem_temp / 12 * 12 + (6 + floor(a / 2) - round(b / 2) * 4);
 
 		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
@@ -527,8 +542,8 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 
 		d = s * min(1 - cos(M_PI * a) / 5, 1 + cos(M_PI * b) / 5);
 		Ellipse(hMemDC,
-			RtoI_x(a) - d, RtoI_y(b) - d,
-			RtoI_x(a) + d, RtoI_y(b) + d
+			gRtoI_x(a) - d, gRtoI_y(b) - d,
+			gRtoI_x(a) + d, gRtoI_y(b) + d
 		);
 
 		for (INT y = 0; y < 3; y++) {
@@ -543,9 +558,9 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 				) * 0.8;
 				sRectangle(hMemDC, (x - 1.5) * 2, (y - 1.0) * 2, d, d);
 
-				DeleteObject(SetFont(hMemDC, RtoI_x(d * 0.8) - RtoI_x(0), 0x00FFFF, 0));
+				DeleteObject(SetFont(hMemDC, gRtoI_x(d * 0.8) - gRtoI_x(0), 0x00FFFF, 0));
 				wsprintf(l, L"%X", 9 + x - y * 4);
-				TextOut(hMemDC, RtoI_x((x - 1.5) * 2), RtoI_y((y - 1.0) * 2 - d * 0.4), l, lstrlen(l));
+				TextOut(hMemDC, gRtoI_x((x - 1.5) * 2), gRtoI_y((y - 1.0) * 2 - d * 0.4), l, lstrlen(l));
 			}
 		}
 
@@ -557,21 +572,83 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 	case SCENE_PROBLEM:
 	{
 		INT X, Y;
-		double x, y, a, b, c, d;
+		double* ans = problems[problem_crnt].answer;
+		double a, b, c, d, tmp;
+		double (*p_arr)[2] = malloc(sizeof(double) * 10000);
+		INT p_size;
+		if (p_arr == NULL) {
+			return;
+		}
 		a = sliders[0].value;
 		b = sliders[1].value;
 		c = sliders[2].value;
 		d = sliders[3].value;
-		DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 4, 0x00FFFF)));
-		for (X = 0; X <= pane.rWidth; X++) {
-			x = (1.0 * (X - pane.paddingX) / pane.radius / 2 - graph.x0) / graph.scale;
-			y = Calc(x, a, b, c, d);
-			Y = (INT)((graph.y0 - y * graph.scale) * pane.radius * 2);
-			if (X == 0) MoveToEx(hMemDC, pane.lWidth + X, pane.paddingY + Y, NULL);
-			else LineTo(hMemDC, pane.lWidth + X, pane.paddingY + Y);
+		
+		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
+		DeleteObject(SelectObject(hMemDC, CreateSolidBrush(0x00FFFF)));
+
+		p_size = 0;
+		tmp = Calc(gItoR_x(pane.width), ans[0], ans[1], ans[2], ans[3]);
+		Curve(
+			p_arr, &p_size, ans[0], ans[1], ans[2], ans[3],
+			gItoR_x(pane.lWidth), Calc(gItoR_x(pane.lWidth), ans[0], ans[1], ans[2], ans[3]),
+			gItoR_x(pane.width), Calc(gItoR_x(pane.width), ans[0], ans[1], ans[2], ans[3])
+		);
+		for (INT i = 0; i < p_size - 1; i++) {
+			for (INT j = i + 1; j < p_size; j++) {
+				if (p_arr[j][0] < p_arr[i][0]) {
+					tmp = p_arr[i][0];
+					p_arr[i][0] = p_arr[j][0];
+					p_arr[j][0] = tmp;
+					tmp = p_arr[i][1];
+					p_arr[i][1] = p_arr[j][1];
+					p_arr[j][1] = tmp;
+				}
+			}
+		}
+		for (INT i = 0; i < p_size; i++) {
+			X = gRtoI_x(p_arr[i][0]);
+			if (i % 50 < 20)continue;
+			Y = gRtoI_y(p_arr[i][1]);
+			Ellipse(
+				hMemDC, X - 2, Y - 2, X + 2, Y + 2
+			);
 		}
 
-		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
+		p_size = 0;
+		Curve(
+			p_arr, &p_size, a, b, c, d,
+			gItoR_x(pane.lWidth), Calc(gItoR_x(pane.lWidth), a, b, c, d),
+			gItoR_x(pane.width), Calc(gItoR_x(pane.width), a, b, c, d)
+		);
+		for (INT i = 0; i < p_size; i++) {
+			X = gRtoI_x(p_arr[i][0]);
+			Y = gRtoI_y(p_arr[i][1]);
+			Ellipse(
+				hMemDC, X - 3, Y - 3, X + 3, Y + 3
+			);
+		}
+		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_BRUSH)));
+
+		free(p_arr);
+
+		//for (X = 0; X <= pane.rWidth; X++) {
+		//	x = (1.0 * (X - pane.paddingX) / pane.radius / 2 - graph.x0) / graph.scale;
+		//	y = Calc(x, ans[0], ans[1], ans[2], ans[3]);
+		//	Y = (INT)((graph.y0 - y * graph.scale) * pane.radius * 2);
+		//	if (X == 0) MoveToEx(hMemDC, pane.lWidth + X, pane.paddingY + Y, NULL);
+		//	else LineTo(hMemDC, pane.lWidth + X, pane.paddingY + Y);
+		//}
+		//DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 4, 0x00FFFF)));
+		//for (X = 0; X <= pane.rWidth; X++) {
+		//	x = (1.0 * (X - pane.paddingX) / pane.radius / 2 - graph.x0) / graph.scale;
+		//	y = Calc(x, a, b, c, d);
+		//	Y = (INT)((graph.y0 - y * graph.scale) * pane.radius * 2);
+		//	if (X == 0) MoveToEx(hMemDC, pane.lWidth + X, pane.paddingY + Y, NULL);
+		//	else LineTo(hMemDC, pane.lWidth + X, pane.paddingY + Y);
+		//}
+
+		//DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
 		break;
 	}
 	}

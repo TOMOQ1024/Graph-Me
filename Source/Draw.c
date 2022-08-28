@@ -38,12 +38,22 @@ void Draw(HDC hdc, HDC hMemDC, INT mx, INT my)
 	BitBlt(hdc, 0, 0, pane.width, pane.height, hMemDC, 0, 0, SRCCOPY);
 }
 
-INT RtoI_x(double x)
+INT gRtoI_x(double x)
 {
 	return (INT)(pane.lWidth + pane.paddingX + (graph.x0 + x * graph.scale) * pane.radius * 2);
 }
 
-INT RtoI_y(double y)
+INT gRtoI_y(double y)
 {
 	return (INT)(pane.paddingY + (graph.y0 - y * graph.scale) * pane.radius * 2);
+}
+
+double gItoR_x(INT x)
+{
+	return ((x - pane.lWidth - pane.paddingX) / 2.0 / pane.radius - graph.x0) / graph.scale;
+}
+
+double gItoR_y(INT y)
+{
+	return -((y - pane.paddingY) / 2.0 / pane.radius - graph.y0) / graph.scale;
 }

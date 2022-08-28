@@ -16,6 +16,11 @@ double median(double x, double y, double z)
     return x < y ? y < z ? y : z : z < x ? z : x;
 }
 
+double DistanceSq(double x0, double y0, double x1, double y1)
+{
+    return (x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0);
+}
+
 double Ease(double t, double a, double b, double c)
 {
     if (t < 0 || 2 < t) return 0;

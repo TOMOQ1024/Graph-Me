@@ -308,8 +308,8 @@ void gen(Node* node)
 
 double Calc(double x, double a, double b, double c, double d)
 {
-	Stack stst;
-	Stack* st = &stst;
+	static Stack stst;
+	static Stack* st = &stst;
 	st->size = 0;
 
 	for (INT i = 0; i < op_count; i++) {
@@ -355,9 +355,9 @@ void LoadProblemData(void)
 	strcpy_s(problem_data, sizeof(problem_data), (char*)LockResource(hGlobal));
 
 	PROBLEM* p;
-	char* state;
+	char* state = NULL;
 
-	WCHAR pd[128] = { 0 };
+	static WCHAR pd[128] = { 0 };
 	WCHAR* pd_ = NULL;
 	WCHAR p_type[10];
 	for (INT i = 0; i < sizeof(problems) / sizeof(problems[0]); i++) problems[i].type = PTY_NULL;
