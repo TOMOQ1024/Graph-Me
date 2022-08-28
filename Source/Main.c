@@ -1,7 +1,6 @@
 ﻿#include "Slider.h"
 #include "Draw.h"
 #include "Controls.h"
-#include "Problem.h"
 #include "Graph.h"
 #include "Scene.h"
 
@@ -15,6 +14,11 @@ WCHAR szWindowClass[MAX_LOADSTRING];            // メイン ウィンドウ ク
 double median(double x, double y, double z)
 {
     return x < y ? y < z ? y : z : z < x ? z : x;
+}
+
+double DistanceSq(double x0, double y0, double x1, double y1)
+{
+    return (x1 - x0) * (x1 - x0) + (y1 - y0) * (y1 - y0);
 }
 
 double Ease(double t, double a, double b, double c)
@@ -63,11 +67,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     MyRegisterClass(hInstance);
 
     // 問題の読み込み
-    //HMODULE handle = GetModuleHandle(NULL);
-    HRSRC rc = FindResource(NULL, MAKEINTRESOURCE(IDR_PROBLEMTEXT), MAKEINTRESOURCE(TEXTFILE));
-    HGLOBAL hGlobal = LoadResource(NULL, rc);
-    problem_data = (char*)LockResource(hGlobal);
-    problem_data_size = (DWORD)strlen(problem_data);
+    LoadProblemData();
 
     // アプリケーション初期化の実行:
     if (!InitInstance (hInstance, nCmdShow))

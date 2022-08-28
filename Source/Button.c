@@ -90,6 +90,10 @@ void OnLButtonDown_Button(INT x, INT y)
 					problem_crnt = problem_temp;
 					SetScene(SCENE_PROBLEM);
 					break;
+				case SCENE_PROBLEM:
+					problem_crnt++;
+					SetScene(SCENE_PROBLEM);
+					break;
 				}
 				break;
 			}
