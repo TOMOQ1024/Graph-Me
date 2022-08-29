@@ -86,7 +86,7 @@ typedef struct tagPROBLEM {
 	INT min[4];
 	INT max[4];
 	double value[4];
-	INT vscale[4];
+	double vscale[4];
 	double answer[4];
 } PROBLEM;
 
@@ -123,3 +123,4 @@ extern BUTTON buttons[3];
 extern PROBLEM problems[146];// ファイルから読み取る問題のデータ
 extern INT problem_crnt;
 extern INT problem_temp;
+extern INT problem_latest;

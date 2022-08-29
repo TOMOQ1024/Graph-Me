@@ -17,6 +17,7 @@ BUTTON buttons[3];
 PROBLEM problems[146];
 INT problem_crnt = 0;
 INT problem_temp = 0;
+INT problem_latest = 0;
 
 // カーソルの描画(没)
 // http://nagoyacoder.web.fc2.com/win32api/mcursor.html
@@ -170,7 +171,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         //SetScene(SCENE_TITLE);
         //SetScene(SCENE_STAGES);
-        problem_crnt = 2;
+        problem_crnt = problem_latest;
         SetScene(SCENE_PROBLEM);
         break;
     }

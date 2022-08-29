@@ -10,9 +10,15 @@ void Curve(double p_arr[][2], INT* p_size, double a, double b, double c, double 
 	double hSq = 0.5 / graph.scale / pane.radius; hSq *= hSq;
 	double HSq = 5.0 / graph.scale / pane.radius; HSq *= HSq;
 	double x, y;
-	p_arr[*p_size][0] = x = (x0 + x1) / 2;
-	p_arr[*p_size][1] = y = Calc(x, a, b, c, d);
-	*p_size += 1;
+	INT Y;
+	x = (x0 + x1) / 2;
+	y = Calc(x, a, b, c, d);
+	Y = gRtoI_y(y);
+	if (0 < Y && Y < pane.height) {
+		p_arr[*p_size][0] = x;
+		p_arr[*p_size][1] = y;
+		*p_size += 1;
+	}
 	if (hSq < DistanceSq(x0, y0, x, y) && hSq < x - x0)
 		Curve(p_arr, p_size, a, b, c, d, x0, y0, x, y);
 	if (hSq < DistanceSq(x, y, x1, y1) && hSq < x1 - x)

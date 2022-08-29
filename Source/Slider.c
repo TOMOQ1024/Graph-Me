@@ -43,6 +43,7 @@ void OnMouseMove_Slider(INT x, INT y)
 		GetSliderRect(&sliders[i], &rc);
 		if (sliders[i].mDrag) {
 			sliders[i].value = (sliders[i].max - sliders[i].min) * (x - (pane.lWidth / 2.0 - sliders[i].length / 2.0)) / sliders[i].length + sliders[i].min;
+			if(sliders[i].scale != 0)sliders[i].value = round(sliders[i].value / sliders[i].scale) * sliders[i].scale;
 			sliders[i].value = median(sliders[i].min, sliders[i].value, sliders[i].max);
 		}
 		else {

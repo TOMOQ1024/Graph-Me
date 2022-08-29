@@ -360,6 +360,7 @@ void LoadProblemData(void)
 	static WCHAR pd[128] = { 0 };
 	WCHAR* pd_ = NULL;
 	WCHAR p_type[10];
+	INT id;
 	for (INT i = 0; i < sizeof(problems) / sizeof(problems[0]); i++) problems[i].type = PTY_NULL;
 	for (
 		char* tok = strtok_s(problem_data, "#", &state);
@@ -367,8 +368,9 @@ void LoadProblemData(void)
 		tok = strtok_s(NULL, "#", &state)
 	) {
 		if (!isdigit(tok[0]))continue;
-		p = &problems[strtol(tok, &tok, 12)];
-		if (tok[0] == ':')tok += 2;
+		id = strtol(tok, &tok, 12);
+		problem_latest = max(id, problem_latest);
+		p = &problems[id];
 		mbstowcs_s(NULL, pd, sizeof(pd) / sizeof(pd[0]), tok, _TRUNCATE);
 		swscanf_s(
 			pd, L"%s %d %lf %lf %lf %s",
@@ -387,7 +389,7 @@ void LoadProblemData(void)
 		for (INT i = 0; i < p->vcount; i++) {
 			// min max vscale answer
 			swscanf_s(
-				pd_, L"%d %d %d %lf",
+				pd_, L"%d %d %lf %lf",
 				&(p->min[i]), &(p->max[i]), &(p->vscale[i]), &(p->answer[i])
 			);
 			p->value[i] = (p->min[i] + p->max[i]) / 2.0;

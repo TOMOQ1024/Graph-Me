@@ -99,6 +99,7 @@ void SetScene(SCENE s)
 			sItoWS(p->min[i], sliders[i].min_s);
 			sItoWS(p->max[i], sliders[i].max_s);
 			sliders[i].value = p->value[i];
+			sliders[i].scale = p->vscale[i];
 		}
 
 		wsprintf(graph.ex, L"y=%s", p->fstr);
