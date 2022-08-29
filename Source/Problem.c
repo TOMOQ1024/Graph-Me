@@ -385,11 +385,12 @@ void LoadProblemData(void)
 		}
 		if (pd_ == NULL)continue;
 		for (INT i = 0; i < p->vcount; i++) {
-			// min value max vscale answer
+			// min max vscale answer
 			swscanf_s(
-				pd_, L"%d %lf %d %d %lf",
-				&(p->min[i]), &(p->value[i]), &(p->max[i]), &(p->vscale[i]), &(p->answer[i])
+				pd_, L"%d %d %d %lf",
+				&(p->min[i]), &(p->max[i]), &(p->vscale[i]), &(p->answer[i])
 			);
+			p->value[i] = (p->min[i] + p->max[i]) / 2.0;
 			for (INT j = 0; j < lstrlen(pd_); j++) {
 				if (pd_[j] == L'\n') {
 					pd_ = pd_ + j + 1;

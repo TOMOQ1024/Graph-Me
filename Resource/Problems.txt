@@ -2,20 +2,31 @@
 SYNTAX: type v_count
 	x0 y0 gscale
 	f(x)
-$	min value max vscale answer		|
-	min value max vscale answer		| v_count lines
-	min value max vscale answer		|
-	min value max vscale answer		|
+$	min max vscale answer		|
+	min max vscale answer		| v_count lines
+	min max vscale answer		|
+	min max vscale answer		|
 
 --- STAGE 1: 0-11 ---
 #00	explicit 1
 	0.5 0.5 0.09
 	a
-$	-6 0 6 0 4
+$	-6 6 0 4
 
 #01	explicit 2
 	0.5 0.5 0.09
 	ax+b
-$	-3 0 3 0 3
-	-5 0 5 0 -2
+$	-3 3 0 3
+	-5 5 0 -2
 
+#02 explicit 2
+	0.5 0.5 0.09
+	a+b(x-2)
+$	-4 4 0 2
+	-2 2 0 0.5
+
+#03	explicit 2
+	0.5 0.5 0.06
+	a(bx+1)
+$	-9 3 0 -6
+	-1 1 0 0.25
