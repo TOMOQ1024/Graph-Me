@@ -154,8 +154,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     static HDC hdc;
     static HDC hMemDC;
-    static HBITMAP hBMP;
-    static HBITMAP hOldBMP;
+    static HBITMAP hBMP = NULL;
+    static HBITMAP hOldBMP = NULL;
 
     switch (message)
     {
@@ -167,12 +167,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         pane.lWidth = 300;
         pane.mHover = FALSE;
         pane.mDrag = FALSE;
-        pane.width = LOWORD(lParam);
-        pane.height = HIWORD(lParam);
-        pane.rWidth = pane.width - pane.lWidth;
 
-        SetScene(SCENE_TITLE);
+        //SetScene(SCENE_TITLE);
         //SetScene(SCENE_STAGES);
+        problem_crnt = 2;
+        SetScene(SCENE_PROBLEM);
+        break;
     }
     case WM_SIZE:
     {
@@ -185,7 +185,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         //GetClientRect(hWnd, &client);
         hBMP = CreateCompatibleBitmap(hdc, pane.width, pane.height);
         hOldBMP = SelectObject(hMemDC, hBMP);
-        if (hOldBMP) DeleteObject(hOldBMP);
+        if (hOldBMP != NULL) DeleteObject(hOldBMP);
+
         Draw(hdc, hMemDC);
         break;
     }
