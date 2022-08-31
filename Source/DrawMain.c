@@ -535,9 +535,7 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 		double a, b, c, d, tmp;
 		double (*p_arr)[2] = malloc(sizeof(double) * 10000);
 		INT p_size;
-		if (p_arr == NULL) {
-			return;
-		}
+		if (p_arr == NULL) return;
 		a = sliders[0].value;
 		b = sliders[1].value;
 		c = sliders[2].value;
@@ -546,32 +544,39 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
 		DeleteObject(SelectObject(hMemDC, CreateSolidBrush(0x00FFFF)));
 
-		p_size = 0;
-		tmp = Calc(gItoR_x(pane.width), ans[0], ans[1], ans[2], ans[3]);
-		Curve(
-			p_arr, &p_size, ans[0], ans[1], ans[2], ans[3],
-			gItoR_x(pane.lWidth), Calc(gItoR_x(pane.lWidth), ans[0], ans[1], ans[2], ans[3]),
-			gItoR_x(pane.width), Calc(gItoR_x(pane.width), ans[0], ans[1], ans[2], ans[3])
-		);
-		for (INT i = 0; i < p_size - 1; i++) {
-			for (INT j = i + 1; j < p_size; j++) {
-				if (p_arr[j][0] < p_arr[i][0]) {
-					tmp = p_arr[i][0];
-					p_arr[i][0] = p_arr[j][0];
-					p_arr[j][0] = tmp;
-					tmp = p_arr[i][1];
-					p_arr[i][1] = p_arr[j][1];
-					p_arr[j][1] = tmp;
+		// 接線のグラフ
+		for (INT t = 0; t < problems[problem_crnt].tcount; t++) {
+			
+		}
+		// 目的のグラフ
+		if (!problems[problem_crnt].hide) {
+			p_size = 0;
+			tmp = Calc(gItoR_x(pane.width), ans[0], ans[1], ans[2], ans[3]);
+			Curve(
+				p_arr, &p_size, ans[0], ans[1], ans[2], ans[3],
+				gItoR_x(pane.lWidth), Calc(gItoR_x(pane.lWidth), ans[0], ans[1], ans[2], ans[3]),
+				gItoR_x(pane.width), Calc(gItoR_x(pane.width), ans[0], ans[1], ans[2], ans[3])
+			);
+			for (INT i = 0; i < p_size - 1; i++) {
+				for (INT j = i + 1; j < p_size; j++) {
+					if (p_arr[j][0] < p_arr[i][0]) {
+						tmp = p_arr[i][0];
+						p_arr[i][0] = p_arr[j][0];
+						p_arr[j][0] = tmp;
+						tmp = p_arr[i][1];
+						p_arr[i][1] = p_arr[j][1];
+						p_arr[j][1] = tmp;
+					}
 				}
 			}
-		}
-		for (INT i = 0; i < p_size; i++) {
-			X = gRtoI_x(p_arr[i][0]);
-			if (i % 50 < 20)continue;
-			Y = gRtoI_y(p_arr[i][1]);
-			Ellipse(
-				hMemDC, X - 2, Y - 2, X + 2, Y + 2
-			);
+			for (INT i = 0; i < p_size; i++) {
+				X = gRtoI_x(p_arr[i][0]);
+				if (i % 50 < 20)continue;
+				Y = gRtoI_y(p_arr[i][1]);
+				Ellipse(
+					hMemDC, X - 2, Y - 2, X + 2, Y + 2
+				);
+			}
 		}
 
 		p_size = 0;
@@ -587,6 +592,7 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 				hMemDC, X - 3, Y - 3, X + 3, Y + 3
 			);
 		}
+
 		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_BRUSH)));
 
 		free(p_arr);

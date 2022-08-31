@@ -360,6 +360,7 @@ void LoadProblemData(void)
 	static WCHAR pd[128] = { 0 };
 	WCHAR* pd_ = NULL;
 	WCHAR p_type[10];
+	WCHAR fstr[30] = { 0 };
 	INT id;
 	for (INT i = 0; i < sizeof(problems) / sizeof(problems[0]); i++) problems[i].type = PTY_NULL;
 	for (
@@ -376,28 +377,85 @@ void LoadProblemData(void)
 			pd, L"%s %d %lf %lf %lf %s",
 			&p_type, (unsigned)(sizeof(p_type)/sizeof(p_type[0])), &p->vcount,
 			&p->x0, &p->y0, &p->gscale,
-			&p->fstr, (unsigned)(sizeof(p->fstr) / sizeof(p->fstr[0]))
+			&fstr, (unsigned)(sizeof(fstr) / sizeof(fstr[0]))
 		);
 		if (lstrcmp(p_type, L"explicit") == 0)p->type = PTY_EXPLICIT;
+		if (fstr[0] == L'\\') {
+			p->hide = TRUE;
+			wcscpy_s(p->fstr, sizeof(p->fstr) / sizeof(p->fstr[0]), fstr + 1);
+		}
+		else {
+			p->hide = FALSE;
+			wcscpy_s(p->fstr, sizeof(p->fstr) / sizeof(p->fstr[0]), fstr);
+		}
 		for (INT i = 0; i < lstrlen(pd); i++) {
-			if (pd[i] == L'$') {
+			switch (pd[i]) {
+			case L'T':
+			{
 				pd_ = pd + i + 1;
+				swscanf_s(pd_, L"%d", &p->tcount);
+				for (INT j = 0; j < p->tcount; j++) {
+					swscanf_s(
+						pd_, L"%lf",
+						&(p->tangent[j])
+					);
+					for (INT k = 0; k < lstrlen(pd_); k++) {
+						if (pd_[k] == L' ' || pd_[k] == L'\n') {
+							pd_ = pd_ + k + 1;
+							break;
+						}
+						if (pd_[k] == L'P' && pd_[k + 1] == L'I') {
+							p->points[j] *= M_PI;
+							pd_ = pd_ + k + 3;
+							break;
+						}
+					}
+				}
 				break;
 			}
-		}
-		if (pd_ == NULL)continue;
-		for (INT i = 0; i < p->vcount; i++) {
-			// min max vscale answer
-			swscanf_s(
-				pd_, L"%d %d %lf %lf",
-				&(p->min[i]), &(p->max[i]), &(p->vscale[i]), &(p->answer[i])
-			);
-			p->value[i] = (p->min[i] + p->max[i]) / 2.0;
-			for (INT j = 0; j < lstrlen(pd_); j++) {
-				if (pd_[j] == L'\n') {
-					pd_ = pd_ + j + 1;
-					break;
+			case L'P':
+			{
+				for (INT j = 0; !iswdigit(pd_[j]); j++) pd_ += 1;
+				swscanf_s(pd_, L"%d", &p->pcount);
+				for (INT j = 0; iswdigit(pd_[j]); j++) pd_ += 1;
+				for (INT j = 0; j < p->pcount; j++) {
+					swscanf_s(
+						pd_, L"%lf",
+						&(p->points[j])
+					);
+					for (INT k = 0; k < lstrlen(pd_); k++) {
+						if (pd_[k] == L' ' || pd_[k] == L'\n') {
+							pd_ = pd_ + k + 1;
+							break;
+						}
+						if (pd_[k] == L'P' && pd_[k + 1] == L'I') {
+							p->points[j] *= M_PI;
+							pd_ = pd_ + k + 3;
+							break;
+						}
+					}
 				}
+				break;
+			}
+			case L'S':
+			{
+				pd_ = pd + i + 1;
+				for (INT j = 0; j < p->vcount; j++) {
+					// min max vscale answer
+					swscanf_s(
+						pd_, L"%d %d %lf %lf",
+						&(p->min[j]), &(p->max[j]), &(p->vscale[j]), &(p->answer[j])
+					);
+					p->value[j] = (p->min[j] + p->max[j]) / 2.0;
+					for (INT k = 0; k < lstrlen(pd_); k++) {
+						if (pd_[k] == L'\n') {
+							pd_ = pd_ + k + 1;
+							break;
+						}
+					}
+				}
+				break;
+			}
 			}
 		}
 	}

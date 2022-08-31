@@ -1,8 +1,10 @@
 ----- PROBLEM DATA -----
 SYNTAX: type v_count
 	x0 y0 gscale
-	f(x)
-$	min max vscale answer		|
+	\?f(x)
+T	x+
+P	x+
+S	min max vscale answer		|
 	min max vscale answer		| v_count lines
 	min max vscale answer		|
 	min max vscale answer		|
@@ -11,42 +13,56 @@ $	min max vscale answer		|
 #00	explicit 1
 	0.5 0.5 0.09
 	a
-$	-6 6 0 4
+S	-6 6 0 4
 
 #01	explicit 2
 	0.5 0.5 0.09
 	ax+b
-$	-3 3 0 3
+S	-3 3 0 3
 	-5 5 0 -2
 
 #02 explicit 2
 	0.5 0.5 0.09
 	a+b(x-2)
-$	-4 4 0 2
+S	-4 4 0 2
 	-2 2 0 0.5
 
 #03	explicit 2
 	0.5 0.3 0.07
 	a(bx+1)
-$	-8 3 0 -6
+S	-8 3 0 -6
 	-1 1 0 0.4
 
 #04	explicit 2
 	0.5 0.5 0.09
 	ax^2+b
-$	-1 1 0 -0.25
+S	-1 1 0 -0.25
 	-5 5 0 3
 
 #05	explicit 3
 	0.5 0.5 0.08
 	a(x-b)^2+c
-$	-3 3 0 0.5
+S	-3 3 0 0.5
 	-5 5 0 3
 	-6 6 0 -2
 
 #06	explicit 3
 	0.5 0.5 0.09
 	a(x-b)(x-c)
-$	-1 1 0.0625 0.125
+S	-1 1 0.0625 0.125
 	-5 5 0.2 3
 	-10 10 1 -6
+
+#07	explicit 3
+	0.5 0.5 0.09
+	ax(x-b)+c
+S	-1 1 0.05 -0.25
+	-10 10 0.2 4
+	-10 10 0.2 3
+
+#08	explicit 1
+	0.5 0.5 0.09
+	1/4x^2+a
+T	1 1
+S	-10 10 0 -4
+

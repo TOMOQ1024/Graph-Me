@@ -78,13 +78,18 @@ typedef enum {
 // ñ‚ëËç\ë¢ëÃ
 typedef struct tagPROBLEM {
 	ProblemType type;
+	BOOL hide;
 	double x0;
 	double y0;
 	double gscale;
 	WCHAR fstr[30];
+	INT tcount;
+	INT pcount;
 	INT vcount;
 	INT min[4];
 	INT max[4];
+	double tangent[8];
+	double points[8];
 	double value[4];
 	double vscale[4];
 	double answer[4];
