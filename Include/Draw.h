@@ -28,7 +28,7 @@ void sSegment(HDC hdc, double xo, double yo, double d, INT x0, INT y0, INT x1, I
 
 
 //
-void Curve(double p_arr[][2], INT* p_size, double a, double b, double c, double d, double x0, double y0, double x1, double y1);
+void Curve(double p_arr[][2], INT* p_size, double x0, double y0, double x1, double y1);
 // é≤,ÉOÉâÉt,êîéÆÇÃï`âÊ
 void DrawMain(HDC hdc, HDC hMemDC);
 void DrawAxis(HDC hdc, HDC hMemDC);

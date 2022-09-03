@@ -5,6 +5,7 @@
 // 現在着目しているトークン
 Token* token;
 // 
+double op_var[4];
 INT op_arr[MAX_DATA_SIZE];
 INT op_count;
 
@@ -273,6 +274,16 @@ Node* func(INT id)
 
 
 
+// a, b, c, dとして使用する数値の設定
+void SetVars(double a, double b, double c, double d)
+{
+	op_var[0] = a;
+	op_var[1] = b;
+	op_var[2] = c;
+	op_var[3] = d;
+}
+
+
 // 命令配列 op_arr の生成
 void gen(Node* node)
 {
@@ -306,7 +317,7 @@ void gen(Node* node)
 
 
 
-double Calc(double x, double a, double b, double c, double d)
+double Calc(double x, double y)
 {
 	static Stack stst;
 	static Stack* st = &stst;
@@ -315,10 +326,11 @@ double Calc(double x, double a, double b, double c, double d)
 	for (INT i = 0; i < op_count; i++) {
 		switch (op_arr[i]) {
 		case IDOP_X: Push(st, x); break;
-		case IDOP_A: Push(st, a); break;
-		case IDOP_B: Push(st, b); break;
-		case IDOP_C: Push(st, c); break;
-		case IDOP_D: Push(st, d); break;
+		case IDOP_Y: Push(st, y); break;
+		case IDOP_A: Push(st, op_var[0]); break;
+		case IDOP_B: Push(st, op_var[1]); break;
+		case IDOP_C: Push(st, op_var[2]); break;
+		case IDOP_D: Push(st, op_var[3]); break;
 		case IDOP_PI: Push(st, M_PI); break;
 		case IDOP_ADD: Push(st, Pop(st) + Pop(st)); break;
 		case IDOP_SUB: Push(st, Pop(st) - Pop(st)); break;
@@ -461,11 +473,41 @@ void LoadProblemData(void)
 	}
 }
 
-void LoadProblem(PROBLEM* p)
+void SetCalcMain(void)
 {
 	WCHAR str[30] = { 0 };
-	lstrcpy(str, p->fstr);
+	lstrcpy(str, problems[problem_crnt].fstr);
 	token = tokenize(str);
 	op_count = 0;
+	SetVars(sliders[0].value, sliders[1].value, sliders[2].value, sliders[3].value);
+	gen(expr());
+}
+
+void SetCalcGoal(void)
+{
+	PROBLEM p = problems[problem_crnt];
+	WCHAR str[30] = { 0 };
+	lstrcpy(str, p.fstr);
+	token = tokenize(str);
+	op_count = 0;
+	SetVars(p.answer[0], p.answer[1], p.answer[2], p.answer[3]);
+	gen(expr());
+}
+
+void SetCalcTang(INT id)
+{
+	PROBLEM p = problems[problem_crnt];
+	double e, a, b, c;
+	SetCalcGoal();
+	e = 0.0001;
+	b = p.tangent[id];
+	a = (Calc(b + e, 0) - Calc(b - e, 0)) / 2 / e;
+	c = Calc(b, 0);
+	// 接線の式: y = f'(t)(x-t) + f(t)
+	WCHAR str[30] = { 0 };
+	wsprintf(str, L"a(x-b)+c");
+	token = tokenize(str);
+	op_count = 0;
+	SetVars(a, b, c, 0);
 	gen(expr());
 }
