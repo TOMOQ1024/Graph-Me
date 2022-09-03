@@ -405,21 +405,22 @@ void LoadProblemData(void)
 			case L'T':
 			{
 				pd_ = pd + i + 1;
-				swscanf_s(pd_, L"%d", &p->tcount);
+				for (INT j = 0; !iswdigit(pd_[0]); j++) pd_ += 1;
+				swscanf_s(pd_, L"%d", &(p->tcount));
+				for (INT j = 0; iswdigit(pd_[0]); j++) pd_ += 1;
 				for (INT j = 0; j < p->tcount; j++) {
 					swscanf_s(
 						pd_, L"%lf",
 						&(p->tangent[j])
 					);
-					for (INT k = 0; k < lstrlen(pd_); k++) {
+					for (INT k = 1; k < lstrlen(pd_); k++) {
 						if (pd_[k] == L' ' || pd_[k] == L'\n') {
 							pd_ = pd_ + k + 1;
 							break;
 						}
 						if (pd_[k] == L'P' && pd_[k + 1] == L'I') {
 							p->points[j] *= M_PI;
-							pd_ = pd_ + k + 3;
-							break;
+							k++;
 						}
 					}
 				}
@@ -427,9 +428,10 @@ void LoadProblemData(void)
 			}
 			case L'P':
 			{
-				for (INT j = 0; !iswdigit(pd_[j]); j++) pd_ += 1;
+				pd_ = pd + i + 1;
+				for (INT j = 0; !iswdigit(pd_[0]); j++) pd_ += 1;
 				swscanf_s(pd_, L"%d", &p->pcount);
-				for (INT j = 0; iswdigit(pd_[j]); j++) pd_ += 1;
+				for (INT j = 0; iswdigit(pd_[0]); j++) pd_ += 1;
 				for (INT j = 0; j < p->pcount; j++) {
 					swscanf_s(
 						pd_, L"%lf",
@@ -442,8 +444,7 @@ void LoadProblemData(void)
 						}
 						if (pd_[k] == L'P' && pd_[k + 1] == L'I') {
 							p->points[j] *= M_PI;
-							pd_ = pd_ + k + 3;
-							break;
+							k++;
 						}
 					}
 				}
