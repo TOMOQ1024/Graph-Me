@@ -101,9 +101,12 @@ typedef struct tagPROBLEM {
 void LoadProblemData(void);
 
 // –â‘è‚Ìƒ[ƒh
-void LoadProblem(PROBLEM* p);
+void SetCalcMain(void);
+void SetCalcGoal(void);
+void SetCalcTang(INT id);
+
 // “Ç‚İ‚ñ‚¾ŠÖ”‚ÌÀs
-double Calc(double x, double a, double b, double c, double d);
+double Calc(double x, double y);
 
 
 

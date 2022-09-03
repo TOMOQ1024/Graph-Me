@@ -82,3 +82,4 @@ Node* func(INT id);
 
 // ñΩóﬂîzóÒ op_arr ÇÃê∂ê¨
 void gen(Node* node);
+void SetVars(double a, double b, double c, double d);

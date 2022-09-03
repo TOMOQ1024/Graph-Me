@@ -90,7 +90,6 @@ void SetScene(SCENE s)
 			SetScene(SCENE_TITLE);
 			return;
 		}
-		LoadProblem(p);
 		for (INT i = 0; i < p->vcount; i++) {
 			// min value max vscale answer
 			sliders[i].active = TRUE;

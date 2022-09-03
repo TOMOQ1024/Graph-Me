@@ -5,14 +5,14 @@
 
 
 
-void Curve(double p_arr[][2], INT* p_size, double a, double b, double c, double d, double x0, double y0, double x1, double y1)
+void Curve(double p_arr[][2], INT* p_size, double x0, double y0, double x1, double y1)
 {
 	double hSq = 0.5 / graph.scale / pane.radius; hSq *= hSq;
 	double HSq = 5.0 / graph.scale / pane.radius; HSq *= HSq;
 	double x, y;
 	INT Y;
 	x = (x0 + x1) / 2;
-	y = Calc(x, a, b, c, d);
+	y = Calc(x, 0);
 	Y = gRtoI_y(y);
 	if (0 < Y && Y < pane.height) {
 		p_arr[*p_size][0] = x;
@@ -20,9 +20,9 @@ void Curve(double p_arr[][2], INT* p_size, double a, double b, double c, double 
 		*p_size += 1;
 	}
 	if (hSq < DistanceSq(x0, y0, x, y) && hSq < x - x0)
-		Curve(p_arr, p_size, a, b, c, d, x0, y0, x, y);
+		Curve(p_arr, p_size, x0, y0, x, y);
 	if (hSq < DistanceSq(x, y, x1, y1) && hSq < x1 - x)
-		Curve(p_arr, p_size, a, b, c, d, x, y, x1, y1);
+		Curve(p_arr, p_size, x, y, x1, y1);
 }
 
 
@@ -532,30 +532,52 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 	{
 		INT X, Y;
 		double* ans = problems[problem_crnt].answer;
-		double a, b, c, d, tmp;
 		double (*p_arr)[2] = malloc(sizeof(double) * 10000);
+		double tmp;
 		INT p_size;
 		if (p_arr == NULL) return;
-		a = sliders[0].value;
-		b = sliders[1].value;
-		c = sliders[2].value;
-		d = sliders[3].value;
 		
 		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
 		DeleteObject(SelectObject(hMemDC, CreateSolidBrush(0x00FFFF)));
 
 		// 接線のグラフ
 		for (INT t = 0; t < problems[problem_crnt].tcount; t++) {
-			
+			SetCalcTang(t);
+			p_size = 0;
+			Curve(
+				p_arr, &p_size,
+				gItoR_x(pane.lWidth), Calc(gItoR_x(pane.lWidth), 0),
+				gItoR_x(pane.width), Calc(gItoR_x(pane.width), 0)
+			);
+			for (INT i = 0; i < p_size - 1; i++) {
+				for (INT j = i + 1; j < p_size; j++) {
+					if (p_arr[j][0] < p_arr[i][0]) {
+						tmp = p_arr[i][0];
+						p_arr[i][0] = p_arr[j][0];
+						p_arr[j][0] = tmp;
+						tmp = p_arr[i][1];
+						p_arr[i][1] = p_arr[j][1];
+						p_arr[j][1] = tmp;
+					}
+				}
+			}
+			for (INT i = 0; i < p_size; i++) {
+				X = gRtoI_x(p_arr[i][0]);
+				if (i % 50 < 20)continue;
+				Y = gRtoI_y(p_arr[i][1]);
+				Ellipse(
+					hMemDC, X - 2, Y - 2, X + 2, Y + 2
+				);
+			}
 		}
 		// 目的のグラフ
+		SetCalcGoal();
 		if (!problems[problem_crnt].hide) {
 			p_size = 0;
-			tmp = Calc(gItoR_x(pane.width), ans[0], ans[1], ans[2], ans[3]);
 			Curve(
-				p_arr, &p_size, ans[0], ans[1], ans[2], ans[3],
-				gItoR_x(pane.lWidth), Calc(gItoR_x(pane.lWidth), ans[0], ans[1], ans[2], ans[3]),
-				gItoR_x(pane.width), Calc(gItoR_x(pane.width), ans[0], ans[1], ans[2], ans[3])
+				p_arr, &p_size,
+				gItoR_x(pane.lWidth), Calc(gItoR_x(pane.lWidth), 0),
+				gItoR_x(pane.width), Calc(gItoR_x(pane.width), 0)
 			);
 			for (INT i = 0; i < p_size - 1; i++) {
 				for (INT j = i + 1; j < p_size; j++) {
@@ -579,11 +601,13 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 			}
 		}
 
+		// 操作するグラフ
+		SetCalcMain();
 		p_size = 0;
 		Curve(
-			p_arr, &p_size, a, b, c, d,
-			gItoR_x(pane.lWidth), Calc(gItoR_x(pane.lWidth), a, b, c, d),
-			gItoR_x(pane.width), Calc(gItoR_x(pane.width), a, b, c, d)
+			p_arr, &p_size,
+			gItoR_x(pane.lWidth), Calc(gItoR_x(pane.lWidth), 0),
+			gItoR_x(pane.width), Calc(gItoR_x(pane.width), 0)
 		);
 		for (INT i = 0; i < p_size; i++) {
 			X = gRtoI_x(p_arr[i][0]);
