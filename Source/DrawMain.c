@@ -531,7 +531,8 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 	case SCENE_PROBLEM:
 	{
 		INT X, Y;
-		double* ans = problems[problem_crnt].answer;
+		PROBLEM* p = &problems[problem_crnt];
+		double* ans = p->answer;
 		double (*p_arr)[2] = malloc(sizeof(double) * 10000);
 		double tmp;
 		INT p_size;
@@ -541,7 +542,7 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 		DeleteObject(SelectObject(hMemDC, CreateSolidBrush(0x00FFFF)));
 
 		// 接線のグラフ
-		for (INT t = 0; t < problems[problem_crnt].tcount; t++) {
+		for (INT t = 0; t < p->tcount; t++) {
 			SetCalcTang(t);
 			p_size = 0;
 			Curve(
@@ -572,7 +573,7 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 		}
 		// 目的のグラフ
 		SetCalcGoal();
-		if (!problems[problem_crnt].hide) {
+		if (!p->hide) {
 			p_size = 0;
 			Curve(
 				p_arr, &p_size,
@@ -601,7 +602,20 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 			}
 		}
 
+		// 点
+		DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 4, 0x00FFFF)));
+		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_BRUSH)));
+		for (INT pt = 0; pt < p->pcount; pt++) {
+			X = gRtoI_x(p->points[pt]);
+			Y = gRtoI_y(Calc(p->points[pt], 0));
+			Ellipse(
+				hMemDC, X - 5, Y - 5, X + 5, Y + 5
+			);
+		}
+
 		// 操作するグラフ
+		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
+		DeleteObject(SelectObject(hMemDC, CreateSolidBrush(0x00FFFF)));
 		SetCalcMain();
 		p_size = 0;
 		Curve(

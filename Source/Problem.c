@@ -452,7 +452,7 @@ void LoadProblemData(void)
 						pd_, L"%lf",
 						&(p->points[j])
 					);
-					for (INT k = 0; k < lstrlen(pd_); k++) {
+					for (INT k = 1; k < lstrlen(pd_); k++) {
 						if (pd_[k] == L' ' || pd_[k] == L'\n') {
 							pd_ = pd_ + k + 1;
 							break;
