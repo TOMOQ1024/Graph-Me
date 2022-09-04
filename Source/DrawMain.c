@@ -8,7 +8,6 @@
 void Curve(double p_arr[][2], INT* p_size, double x0, double y0, double x1, double y1)
 {
 	double hSq = 0.5 / graph.scale / pane.radius; hSq *= hSq;
-	double HSq = 5.0 / graph.scale / pane.radius; HSq *= HSq;
 	double x, y;
 	INT Y;
 	x = (x0 + x1) / 2;
@@ -19,9 +18,9 @@ void Curve(double p_arr[][2], INT* p_size, double x0, double y0, double x1, doub
 		p_arr[*p_size][1] = y;
 		*p_size += 1;
 	}
-	if (hSq < DistanceSq(x0, y0, x, y) && hSq < x - x0)
+	if (hSq < DistanceSq(x0, y0, x, y) && hSq * hSq < x - x0)
 		Curve(p_arr, p_size, x0, y0, x, y);
-	if (hSq < DistanceSq(x, y, x1, y1) && hSq < x1 - x)
+	if (hSq < DistanceSq(x, y, x1, y1) && hSq * hSq < x1 - x)
 		Curve(p_arr, p_size, x, y, x1, y1);
 }
 
@@ -29,9 +28,17 @@ void Curve(double p_arr[][2], INT* p_size, double x0, double y0, double x1, doub
 
 void DrawMain(HDC hdc, HDC hMemDC)
 {
+	WCHAR p_name[10];
 	DrawAxis(hdc, hMemDC);
 	DrawGraph(hdc, hMemDC);
 	DrawExpression(hdc, hMemDC);
+
+	SetTextAlign(hMemDC, TA_LEFT | TA_BOTTOM);
+	SetBkMode(hMemDC, OPAQUE);
+	DeleteObject(SetFont(hMemDC, 20, 0x00FFFF, 0x000000));
+	wsprintf(p_name, L"%x - %x", problem_crnt / 12 + 1, problem_crnt % 12 + 1);
+	TextOut(hMemDC, pane.lWidth + 10, pane.height - 10, p_name, lstrlen(p_name));
+	DeleteObject(SelectObject(hMemDC, GetStockObject(SYSTEM_FONT)));
 }
 
 
@@ -533,7 +540,7 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 		INT X, Y;
 		PROBLEM* p = &problems[problem_crnt];
 		double* ans = p->answer;
-		double (*p_arr)[2] = malloc(sizeof(double) * 10000);
+		double (*p_arr)[2] = malloc(sizeof(double) * 2 * ((SIZE_T)pane.rWidth + 20) * pane.height);
 		double tmp;
 		INT p_size;
 		if (p_arr == NULL) return;
@@ -577,8 +584,8 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 			p_size = 0;
 			Curve(
 				p_arr, &p_size,
-				gItoR_x(pane.lWidth), Calc(gItoR_x(pane.lWidth), 0),
-				gItoR_x(pane.width), Calc(gItoR_x(pane.width), 0)
+				gItoR_x(pane.lWidth - 5), Calc(gItoR_x(pane.lWidth - 5), 0),
+				gItoR_x(pane.width + 5), Calc(gItoR_x(pane.width + 5), 0)
 			);
 			for (INT i = 0; i < p_size - 1; i++) {
 				for (INT j = i + 1; j < p_size; j++) {
@@ -620,8 +627,8 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 		p_size = 0;
 		Curve(
 			p_arr, &p_size,
-			gItoR_x(pane.lWidth), Calc(gItoR_x(pane.lWidth), 0),
-			gItoR_x(pane.width), Calc(gItoR_x(pane.width), 0)
+			gItoR_x(pane.lWidth - 5), Calc(gItoR_x(pane.lWidth - 5), 0),
+			gItoR_x(pane.width + 5), Calc(gItoR_x(pane.width + 5), 0)
 		);
 		for (INT i = 0; i < p_size; i++) {
 			X = gRtoI_x(p_arr[i][0]);
