@@ -208,6 +208,21 @@ Node* new_node_fnc(INT id, Node* lhs, Node* rhs)
 	return NULL;
 }
 
+
+void FreeTokens(Token* head)
+{
+	if (head->next != NULL)FreeTokens(head->next);
+	free(head);
+}
+
+void FreeNodes(Node* head)
+{
+	if (head->lhs != NULL)FreeNodes(head->lhs);
+	if (head->rhs != NULL)FreeNodes(head->rhs);
+	free(head);
+}
+
+
 // ç\ï∂ñÿÇÃê∂ê¨
 Node* expr(void)
 {
@@ -477,38 +492,53 @@ void LoadProblemData(void)
 void SetCalcMain(void)
 {
 	WCHAR str[30] = { 0 };
+	Node* head;
+	Token* headToken;
 	lstrcpy(str, problems[problem_crnt].fstr);
-	token = tokenize(str);
+	headToken = token = tokenize(str);
 	op_count = 0;
 	SetVars(sliders[0].value, sliders[1].value, sliders[2].value, sliders[3].value);
-	gen(expr());
+	head = expr();
+	gen(head);
+	FreeTokens(headToken);
+	FreeNodes(head);
 }
 
 void SetCalcGoal(void)
 {
 	PROBLEM p = problems[problem_crnt];
 	WCHAR str[30] = { 0 };
+	Node* head;
+	Token* headToken;
 	lstrcpy(str, p.fstr);
-	token = tokenize(str);
+	headToken = token = tokenize(str);
 	op_count = 0;
 	SetVars(p.answer[0], p.answer[1], p.answer[2], p.answer[3]);
-	gen(expr());
+	head = expr();
+	gen(head);
+	FreeTokens(headToken);
+	FreeNodes(head);
 }
 
 void SetCalcTang(INT id)
 {
 	PROBLEM p = problems[problem_crnt];
+	Node* head;
+	Token* headToken;
 	double e, a, b, c;
 	SetCalcGoal();
-	e = 0.0001;
+	e = 0.00001;
 	b = p.tangent[id];
 	a = (Calc(b + e, 0) - Calc(b - e, 0)) / 2 / e;
 	c = Calc(b, 0);
 	// ê⁄ê¸ÇÃéÆ: y = f'(t)(x-t) + f(t)
 	WCHAR str[30] = { 0 };
 	wsprintf(str, L"a(x-b)+c");
-	token = tokenize(str);
+	headToken = token = tokenize(str);
 	op_count = 0;
 	SetVars(a, b, c, 0);
-	gen(expr());
+	head = expr();
+	gen(head);
+	FreeTokens(headToken);
+	FreeNodes(head);
 }

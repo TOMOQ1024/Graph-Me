@@ -71,6 +71,10 @@ Node* new_node_num(INT val);
 Node* new_node_var(INT id);
 Node* new_node_fnc(INT id, Node* lhs, Node* rhs);
 
+// ƒƒ‚ƒŠ‚Ì‰ğ•ú
+void FreeTokens(Token* head);
+void FreeNodes(Node* head);
+
 // \•¶–Ø‚Ì¶¬
 Node* expr(void);
 Node* mult(void);
