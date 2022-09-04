@@ -41,7 +41,7 @@ double sItoR(INT i)
 void sItoWS(INT i, WCHAR* str)
 {
 	if (i == 0) wsprintf(str, L"0");
-	wsprintf(str, L"%d%s", i, i % 100 ? L"" : L"ƒÎ");
+	wsprintf(str, L"%d%s", i, !i || i % 100 ? L"" : L"ƒÎ");
 }
 
 INT gRtoI_x(double x)
