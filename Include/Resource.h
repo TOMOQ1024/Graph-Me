@@ -20,6 +20,7 @@
 #define IDOP_B					-1011
 #define IDOP_C					-1012
 #define IDOP_D					-1013
+#define IDOP_E					-1020
 #define IDOP_PI					-1021
 
 #define IDOP_ERR				-1100

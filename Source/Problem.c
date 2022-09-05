@@ -38,6 +38,7 @@ WCHAR* GetOpName(INT id)
 	case IDOP_B: return L"b";
 	case IDOP_C: return L"c";
 	case IDOP_D: return L"d";
+	case IDOP_E: return L"e";
 	case IDOP_PI: return L"PI";
 	case IDOP_SQRT: return L"sqrt";
 	case IDOP_ABS: return L"abs";
@@ -81,6 +82,7 @@ BOOL consume_var(INT* id)
 	else if (wcsncmp(token->str, L"d", 1) == 0) *id = IDOP_D;
 	else if (wcsncmp(token->str, L"t", 1) == 0) *id = IDOP_X;
 	else if (wcsncmp(token->str, L"h", 1) == 0) *id = IDOP_X;
+	else if (wcsncmp(token->str, L"e", 1) == 0) *id = IDOP_E;
 	else if (wcsncmp(token->str, L"PI", 2) == 0) *id = IDOP_PI;
 	else return FALSE;
 
@@ -350,6 +352,7 @@ double Calc(double x, double y)
 		case IDOP_B: Push(st, op_var[1]); break;
 		case IDOP_C: Push(st, op_var[2]); break;
 		case IDOP_D: Push(st, op_var[3]); break;
+		case IDOP_E: Push(st, M_E); break;
 		case IDOP_PI: Push(st, M_PI); break;
 		case IDOP_ADD: Push(st, Pop(st) + Pop(st)); break;
 		case IDOP_SUB: Push(st, Pop(st) - Pop(st)); break;
