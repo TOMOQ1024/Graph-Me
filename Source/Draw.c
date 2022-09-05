@@ -13,24 +13,27 @@ void Draw(HDC hdc, HDC hMemDC)
 	SelectObject(hMemDC, GetStockObject(BLACK_BRUSH));
 	Rectangle(hMemDC, 0, 0, pane.width + 1, pane.height + 1);
 
-	SelectObject(
+
+	DeleteObject(SelectObject(hMemDC, GetStockObject(BLACK_BRUSH)));
+
+	// 軸,グラフ,数式
+	DrawMain(hdc, hMemDC);
+
+	// コントロール
+	SelectObject(hMemDC, GetStockObject(NULL_PEN));
+	DeleteObject(SelectObject(
 		hMemDC,
 		CreateGradientBrushH(0xA0A0A0, 0xD0D0D0, hMemDC, pane.lWidth, pane.height, 0, pane.lWidth * 3 / 4 + 1)
-	);
+	));
 	Rectangle(hMemDC, 0, 0, pane.lWidth * 3 / 4 + 1, pane.height + 1);
 	DeleteObject(SelectObject(
 		hMemDC,
 		CreateGradientBrushH(0xD0D0D0, 0xB0B0B0, hMemDC, pane.lWidth, pane.height, pane.lWidth * 3 / 4, pane.lWidth / 4)
 	));
 	Rectangle(hMemDC, pane.lWidth * 3 / 4, 0, pane.lWidth, pane.height + 1);
-
 	DeleteObject(SelectObject(hMemDC, GetStockObject(BLACK_BRUSH)));
-
-	// コントロール
+	SetBkMode(hMemDC, TRANSPARENT);
 	DrawCtrl(hdc, hMemDC);
-
-	// 軸,グラフ,数式
-	DrawMain(hdc, hMemDC);
 
 	// デバッグ情報
 	DrawDebug(hdc, hMemDC);

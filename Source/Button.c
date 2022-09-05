@@ -77,6 +77,9 @@ void OnLButtonDown_Button(INT x, INT y)
 					else problem_crnt = problem_crnt / 12 * 12;
 					SetScene(SCENE_LEVELS);
 					break;
+				case SCENE_PROBLEM:
+					SetScene(SCENE_PROBLEM);
+					break;
 				}
 				break;
 			case 2:// NEXT

@@ -1,21 +1,271 @@
 ----- PROBLEM DATA -----
 SYNTAX: type v_count
 	x0 y0 gscale
-	f(x)
-$	min value max vscale answer		|
-	min value max vscale answer		| v_count lines
-	min value max vscale answer		|
-	min value max vscale answer		|
+	\?f(x)
+T	x+
+P	x+
+S	min max vscale answer		|
+	min max vscale answer		| v_count lines
+	min max vscale answer		|
+	min max vscale answer		|
 
 --- STAGE 1: 0-11 ---
 #00	explicit 1
 	0.5 0.5 0.09
 	a
-$	-6 0 6 0 4
+S	-6 6 0 4
 
 #01	explicit 2
 	0.5 0.5 0.09
 	ax+b
-$	-3 0 3 0 3
-	-5 0 5 0 -2
+S	-3 3 0 3
+	-5 5 0 -2
 
+#02 explicit 2
+	0.5 0.5 0.09
+	a+b(x-2)
+S	-4 4 0 2
+	-2 2 0 0.5
+
+#03	explicit 2
+	0.5 0.3 0.07
+	a(bx+1)
+S	-8 3 0 -6
+	-1 1 0 0.4
+
+#04	explicit 2
+	0.5 0.5 0.09
+	ax^2+b
+S	-1 1 0 -0.25
+	-5 5 0 3
+
+#05	explicit 3
+	0.5 0.5 0.08
+	a(x-b)^2+c
+S	-3 3 0 0.5
+	-5 5 0 3
+	-6 6 0 -2
+
+#06	explicit 3
+	0.5 0.5 0.09
+	a(x-b)(x-c)
+S	-1 1 0.0625 0.125
+	-5 5 0.2 3
+	-10 10 1 -6
+
+#07	explicit 3
+	0.5 0.5 0.09
+	ax(x-b)+c
+S	-1 1 0.05 -0.25
+	-10 10 0.2 4
+	-10 10 0.2 3
+
+#08	explicit 1
+	0.5 0.5 0.09
+	\1/4x^2+a
+T	1 1
+S	-10 10 0 -4
+
+#09	explicit 2
+	0.5 0.5 0.09
+	ax^2+abx
+T	1 4
+P	1 4
+S	-1 1 0 0.25
+	-5 5 0 -4
+
+#0A	explicit 2
+	0.5 0.5 0.09
+	\a(x^2-b)
+T	1 0
+P	2 0 4
+S	-1 1 0.0625 0.25
+	-2 10 0 10
+
+#0B	explicit 3
+	0.5 0.5 0.07
+	\x^2/a+x/b+c
+P	3 -3 1 5
+S	-5 5 0.5 4
+	-2 2 0 -2
+	-5 5 0 -3.75
+
+#10	explicit 2
+	0.5 0.5 0.07
+	asinx+b
+S	-5 5 0 3
+	-5 5 0 -2
+
+#11	explicit 3
+	0.5 0.5 0.09
+	acosbx+c
+S	-5 5 0 2
+	0 5 0 5
+	-5 5 0 1
+
+#12	explicit 3
+	0.5 0.5 0.09
+	atanbx+c
+S	-2 2 0 -1
+	0 3 0.125 0.5
+	-5 5 0 -1
+
+#13	explicit 2
+	0.5 0.5 0.11
+	\asin(x-b)
+T	1 -2.57079632679
+P	1 -0.2
+S	0 5 0 3
+	-2 2 0 -1
+
+#14	explicit 3
+	0.5 0.4 0.07
+	\asin(x-b)+c
+T	2 2.42920367321 5.57079632679
+P	1 0
+S	0 5 0 3
+	0 5 0 4
+	-5 5 0 -4
+
+#15	explicit 2
+	0.5 0.5 0.07
+	\axsin(2x-b)
+T	2 1.7853981634 3.35619449019
+P	1 5
+S	0 2 0 0.5
+	-2 2 0 2
+
+#16	explicit 4
+	0.5 0.7 0.07
+	acos(bx-c)+d
+S	-5 5 0 -3
+	0 5 0 3
+	-1 1 0 1
+	-5 5 0 3
+
+#17	explicit 3
+	0.5 0.5 0.09
+	asinbx+cx
+S	0 5 0 4
+	-10 10 0 -5
+	-3 3 0 0.75
+
+#18	explicit 3
+	0.5 0.5 0.09
+	asinbx+tancx
+S	0 5 0 2
+	-9 9 0.5 7
+	-3 3 0 1
+
+#19	explicit 2
+	0.5 0.5 0.09
+	2sinax+sinbx
+S	0 5 0 2
+	0 10 0 10
+
+#1A	explicit 3
+	0.3 0.6 0.06
+	\(ax-b)cos3x+c
+T	2 0 1.0471975512
+S	-3 3 0 1
+	-4 6 0 5
+	-3 3 0 2
+
+#1B	explicit 3
+	0.5 0.5 0.12
+	asin(bx)sin(cx)
+S	0 5 0 3
+	0 5 0.1 3
+	0 10 0.2 8
+
+#20	explicit 3
+	0.5 0.5 0.08
+	aabs(x-b)+c
+S	-5 5 0 2
+	-5 5 0 3
+	-5 5 0 -3
+
+#21	explicit 4
+	0.4 0.6 0.08
+	aabs(abs(x-b)-c)-d
+S	-5 5 0 2
+	-5 5 0 3
+	-5 5 0 2
+	-5 5 0 3
+
+#22	explicit 4
+	0.3 0.5 0.11
+	aabs(abs(x-b)-c)+x-d
+S	-2 2 0 1
+	-5 5 0 4
+	-5 5 0 1
+	-5 5 0 5
+
+#23	explicit 3
+	0.6 0.8 0.11
+	aabs(x^2+bx)+cx
+S	-3 3 0 1
+	-5 5 0 3
+	-2 2 0 -1
+
+#24	explicit 3
+	0.5 0.6 0.07
+	abs(x-a)-abs(x-b)+c
+S	-3 3 0 -1
+	-3 3 0 2
+	-3 3 0 1
+
+#25	explicit 4
+	0.5 0.6 0.07
+	abs(x-a)-abs(x-b)+cx+d
+S	-3 3 0 -2
+	-3 3 0 0
+	-3 3 0 -1
+	-3 3 0 -2
+
+#26	explicit 3
+	0.5 0.85 0.14
+	abs(asinbx+c)
+S	-2 6 0 4
+	0 6 0 2
+	-5 5 0 1
+
+#27	explicit 4
+	0.6 0.5 0.07
+	abs(x^2-a)-abs(x^2-b)+cx+d
+S	-3 3 0 1
+	-3 3 0 3
+	-3 3 0 1
+	-3 3 0 -1
+
+#28	explicit 4
+	0.5 0.4 0.06
+	abs(x^2-a)-abs(x-b)+cx^2+d
+S	-3 3 0 2
+	-3 3 0 3
+	-2 2 0 -1
+	-3 3 0 2
+
+#29	explicit 4
+	0.5 0.4 0.11
+	(x-a)abs(x-b)+cx+d
+S	-3 3 0 -1
+	-3 3 0 1
+	-3 3 0 -2
+	-3 3 0 -1
+
+#2A	explicit 4
+	0.5 0.5 0.05
+	aabs(sin3x+b)-csinx+d
+S	-5 5 0.5 4
+	-1 1 0.1 -0.6
+	-5 5 0.5 3
+	-5 5 0 -5
+
+#2B	explicit 4
+	0.5 0.5 0.08
+	asin(abs(abs(bx-c)-d))
+S	-5 5 0 4
+	-3 3 0 2
+	0 6 0 2
+	-10 10 0 7

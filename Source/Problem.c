@@ -5,6 +5,7 @@
 // 現在着目しているトークン
 Token* token;
 // 
+double op_var[4];
 INT op_arr[MAX_DATA_SIZE];
 INT op_count;
 
@@ -38,15 +39,17 @@ WCHAR* GetOpName(INT id)
 	case IDOP_C: return L"c";
 	case IDOP_D: return L"d";
 	case IDOP_PI: return L"PI";
+	case IDOP_SQRT: return L"sqrt";
+	case IDOP_ABS: return L"abs";
 	case IDOP_COS: return L"cos";
 	case IDOP_SIN: return L"sin";
 	case IDOP_TAN: return L"tan";
+	case IDOP_MOD: return L"mod";
 	case IDOP_FLOOR: return L"floor";
 	case IDOP_ROUND: return L"round";
 	case IDOP_CEIL: return L"ceil";
 	case IDOP_EXP: return L"exp";
 	case IDOP_LOG: return L"log";
-	case IDOP_MOD: return L"mod";
 	default: return L"?";
 	}
 }
@@ -88,15 +91,17 @@ BOOL consume_var(INT* id)
 BOOL consume_fnc(INT* id)
 {
 	if (token->kind != TK_RESERVED)return FALSE;
-		 if (wcsncmp(token->str, L"cos",   3) == 0) *id = IDOP_COS;
+		 if (wcsncmp(token->str, L"sqrt",  4) == 0) *id = IDOP_SQRT;
+	else if (wcsncmp(token->str, L"abs",   3) == 0) *id = IDOP_ABS;
+	else if (wcsncmp(token->str, L"cos",   3) == 0) *id = IDOP_COS;
 	else if (wcsncmp(token->str, L"sin",   3) == 0) *id = IDOP_SIN;
 	else if (wcsncmp(token->str, L"tan",   3) == 0) *id = IDOP_TAN;
+	else if (wcsncmp(token->str, L"mod",   3) == 0) *id = IDOP_MOD;
 	else if (wcsncmp(token->str, L"floor", 5) == 0) *id = IDOP_FLOOR;
 	else if (wcsncmp(token->str, L"round", 5) == 0) *id = IDOP_ROUND;
 	else if (wcsncmp(token->str, L"ceil",  4) == 0) *id = IDOP_CEIL;
 	else if (wcsncmp(token->str, L"exp",   3) == 0) *id = IDOP_EXP;
 	else if (wcsncmp(token->str, L"log",   3) == 0) *id = IDOP_LOG;
-	else if (wcsncmp(token->str, L"mod",   3) == 0) *id = IDOP_MOD;
 	else return FALSE;
 
 	for (INT i = 0; i < lstrlen(GetOpName(*id)); i++) token = token->next;
@@ -207,6 +212,21 @@ Node* new_node_fnc(INT id, Node* lhs, Node* rhs)
 	return NULL;
 }
 
+
+void FreeTokens(Token* head)
+{
+	if (head->next != NULL)FreeTokens(head->next);
+	free(head);
+}
+
+void FreeNodes(Node* head)
+{
+	if (head->lhs != NULL)FreeNodes(head->lhs);
+	if (head->rhs != NULL)FreeNodes(head->rhs);
+	free(head);
+}
+
+
 // 構文木の生成
 Node* expr(void)
 {
@@ -266,11 +286,21 @@ Node* func(INT id)
 		node = expr();
 		while (consume(L",")) node = new_node_fnc(id, node, expr());
 		expect(L")");
-		return node->kind == ND_FNC ? node : new_node_fnc(id, node, NULL);
+		return node->kind == ND_FNC && node->val == id ? node : new_node_fnc(id, node, NULL);
 	}
 	return new_node_fnc(id, mult(), NULL);
 }
 
+
+
+// a, b, c, dとして使用する数値の設定
+void SetVars(double a, double b, double c, double d)
+{
+	op_var[0] = a;
+	op_var[1] = b;
+	op_var[2] = c;
+	op_var[3] = d;
+}
 
 
 // 命令配列 op_arr の生成
@@ -306,7 +336,7 @@ void gen(Node* node)
 
 
 
-double Calc(double x, double a, double b, double c, double d)
+double Calc(double x, double y)
 {
 	static Stack stst;
 	static Stack* st = &stst;
@@ -315,25 +345,28 @@ double Calc(double x, double a, double b, double c, double d)
 	for (INT i = 0; i < op_count; i++) {
 		switch (op_arr[i]) {
 		case IDOP_X: Push(st, x); break;
-		case IDOP_A: Push(st, a); break;
-		case IDOP_B: Push(st, b); break;
-		case IDOP_C: Push(st, c); break;
-		case IDOP_D: Push(st, d); break;
+		case IDOP_Y: Push(st, y); break;
+		case IDOP_A: Push(st, op_var[0]); break;
+		case IDOP_B: Push(st, op_var[1]); break;
+		case IDOP_C: Push(st, op_var[2]); break;
+		case IDOP_D: Push(st, op_var[3]); break;
 		case IDOP_PI: Push(st, M_PI); break;
 		case IDOP_ADD: Push(st, Pop(st) + Pop(st)); break;
 		case IDOP_SUB: Push(st, Pop(st) - Pop(st)); break;
 		case IDOP_MUL: Push(st, Pop(st) * Pop(st)); break;
 		case IDOP_DIV: Push(st, Pop(st) / Pop(st)); break;
 		case IDOP_POW: Push(st, pow(Pop(st), Pop(st))); break;
+		case IDOP_SQRT: Push(st, sqrt(Pop(st))); break;
+		case IDOP_ABS: Push(st, fabs(Pop(st))); break;
 		case IDOP_COS: Push(st, cos(Pop(st))); break;
 		case IDOP_SIN: Push(st, sin(Pop(st))); break;
 		case IDOP_TAN: Push(st, tan(Pop(st))); break;
+		case IDOP_MOD: Push(st, fmod(Pop(st), Pop(st))); break;
 		case IDOP_FLOOR: Push(st, floor(Pop(st))); break;
 		case IDOP_ROUND: Push(st, round(Pop(st))); break;
 		case IDOP_CEIL: Push(st, ceil(Pop(st))); break;
 		case IDOP_EXP: Push(st, exp(Pop(st))); break;
 		case IDOP_LOG: Push(st, log(Pop(st))); break;
-		case IDOP_MOD: Push(st, fmod(Pop(st), Pop(st))); break;
 		default: Push(st, op_arr[i]); break;
 		}
 	}
@@ -360,6 +393,8 @@ void LoadProblemData(void)
 	static WCHAR pd[128] = { 0 };
 	WCHAR* pd_ = NULL;
 	WCHAR p_type[10];
+	WCHAR fstr[30] = { 0 };
+	INT id;
 	for (INT i = 0; i < sizeof(problems) / sizeof(problems[0]); i++) problems[i].type = PTY_NULL;
 	for (
 		char* tok = strtok_s(problem_data, "#", &state);
@@ -367,44 +402,149 @@ void LoadProblemData(void)
 		tok = strtok_s(NULL, "#", &state)
 	) {
 		if (!isdigit(tok[0]))continue;
-		p = &problems[strtol(tok, &tok, 12)];
-		if (tok[0] == ':')tok += 2;
+		id = strtol(tok, &tok, 12);
+		problem_latest = max(id, problem_latest);
+		p = &problems[id];
 		mbstowcs_s(NULL, pd, sizeof(pd) / sizeof(pd[0]), tok, _TRUNCATE);
 		swscanf_s(
 			pd, L"%s %d %lf %lf %lf %s",
 			&p_type, (unsigned)(sizeof(p_type)/sizeof(p_type[0])), &p->vcount,
 			&p->x0, &p->y0, &p->gscale,
-			&p->fstr, (unsigned)(sizeof(p->fstr) / sizeof(p->fstr[0]))
+			&fstr, (unsigned)(sizeof(fstr) / sizeof(fstr[0]))
 		);
 		if (lstrcmp(p_type, L"explicit") == 0)p->type = PTY_EXPLICIT;
+		if (fstr[0] == L'\\') {
+			p->hide = TRUE;
+			wcscpy_s(p->fstr, sizeof(p->fstr) / sizeof(p->fstr[0]), fstr + 1);
+		}
+		else {
+			p->hide = FALSE;
+			wcscpy_s(p->fstr, sizeof(p->fstr) / sizeof(p->fstr[0]), fstr);
+		}
 		for (INT i = 0; i < lstrlen(pd); i++) {
-			if (pd[i] == L'$') {
+			switch (pd[i]) {
+			case L'T':
+			{
 				pd_ = pd + i + 1;
+				for (INT j = 0; !iswdigit(pd_[0]); j++) pd_ += 1;
+				swscanf_s(pd_, L"%d", &(p->tcount));
+				for (INT j = 0; iswdigit(pd_[0]); j++) pd_ += 1;
+				for (INT j = 0; j < p->tcount; j++) {
+					swscanf_s(
+						pd_, L"%lf",
+						&(p->tangent[j])
+					);
+					for (INT k = 1; k < lstrlen(pd_); k++) {
+						if (pd_[k] == L' ' || pd_[k] == L'\n') {
+							pd_ = pd_ + k + 1;
+							break;
+						}
+						if (pd_[k] == L'P' && pd_[k + 1] == L'I') {
+							p->points[j] *= M_PI;
+							k++;
+						}
+					}
+				}
 				break;
 			}
-		}
-		if (pd_ == NULL)continue;
-		for (INT i = 0; i < p->vcount; i++) {
-			// min value max vscale answer
-			swscanf_s(
-				pd_, L"%d %lf %d %d %lf",
-				&(p->min[i]), &(p->value[i]), &(p->max[i]), &(p->vscale[i]), &(p->answer[i])
-			);
-			for (INT j = 0; j < lstrlen(pd_); j++) {
-				if (pd_[j] == L'\n') {
-					pd_ = pd_ + j + 1;
-					break;
+			case L'P':
+			{
+				pd_ = pd + i + 1;
+				for (INT j = 0; !iswdigit(pd_[0]); j++) pd_ += 1;
+				swscanf_s(pd_, L"%d", &p->pcount);
+				for (INT j = 0; iswdigit(pd_[0]); j++) pd_ += 1;
+				for (INT j = 0; j < p->pcount; j++) {
+					swscanf_s(
+						pd_, L"%lf",
+						&(p->points[j])
+					);
+					for (INT k = 1; k < lstrlen(pd_); k++) {
+						if (pd_[k] == L' ' || pd_[k] == L'\n') {
+							pd_ = pd_ + k + 1;
+							break;
+						}
+						if (pd_[k] == L'P' && pd_[k + 1] == L'I') {
+							p->points[j] *= M_PI;
+							k++;
+						}
+					}
 				}
+				break;
+			}
+			case L'S':
+			{
+				pd_ = pd + i + 1;
+				for (INT j = 0; j < p->vcount; j++) {
+					// min max vscale answer
+					swscanf_s(
+						pd_, L"%d %d %lf %lf",
+						&(p->min[j]), &(p->max[j]), &(p->vscale[j]), &(p->answer[j])
+					);
+					p->value[j] = (p->min[j] + p->max[j]) / 2.0;
+					for (INT k = 0; k < lstrlen(pd_); k++) {
+						if (pd_[k] == L'\n') {
+							pd_ = pd_ + k + 1;
+							break;
+						}
+					}
+				}
+				break;
+			}
 			}
 		}
 	}
 }
 
-void LoadProblem(PROBLEM* p)
+void SetCalcMain(void)
 {
 	WCHAR str[30] = { 0 };
-	lstrcpy(str, p->fstr);
-	token = tokenize(str);
+	Node* head;
+	Token* headToken;
+	lstrcpy(str, problems[problem_crnt].fstr);
+	headToken = token = tokenize(str);
 	op_count = 0;
-	gen(expr());
+	SetVars(sliders[0].value, sliders[1].value, sliders[2].value, sliders[3].value);
+	head = expr();
+	gen(head);
+	FreeTokens(headToken);
+	FreeNodes(head);
+}
+
+void SetCalcGoal(void)
+{
+	PROBLEM p = problems[problem_crnt];
+	WCHAR str[30] = { 0 };
+	Node* head;
+	Token* headToken;
+	lstrcpy(str, p.fstr);
+	headToken = token = tokenize(str);
+	op_count = 0;
+	SetVars(p.answer[0], p.answer[1], p.answer[2], p.answer[3]);
+	head = expr();
+	gen(head);
+	FreeTokens(headToken);
+	FreeNodes(head);
+}
+
+void SetCalcTang(INT id)
+{
+	PROBLEM p = problems[problem_crnt];
+	Node* head;
+	Token* headToken;
+	double e, a, b, c;
+	SetCalcGoal();
+	e = 0.00001;
+	b = p.tangent[id];
+	a = (Calc(b + e, 0) - Calc(b - e, 0)) / 2 / e;
+	c = Calc(b, 0);
+	// 接線の式: y = f'(t)(x-t) + f(t)
+	WCHAR str[30] = { 0 };
+	wsprintf(str, L"a(x-b)+c");
+	headToken = token = tokenize(str);
+	op_count = 0;
+	SetVars(a, b, c, 0);
+	head = expr();
+	gen(head);
+	FreeTokens(headToken);
+	FreeNodes(head);
 }

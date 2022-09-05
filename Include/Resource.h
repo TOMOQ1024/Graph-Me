@@ -14,29 +14,33 @@
 
 
 
-#define IDOP_X					-1
-#define IDOP_A					-2
-#define IDOP_B					-3
-#define IDOP_C					-4
-#define IDOP_D					-5
-#define IDOP_PI					-21
+#define IDOP_X					-1000
+#define IDOP_Y					-1001
+#define IDOP_A					-1010
+#define IDOP_B					-1011
+#define IDOP_C					-1012
+#define IDOP_D					-1013
+#define IDOP_PI					-1021
 
-#define IDOP_ERR				-100
-#define IDOP_ADD				-111
-#define IDOP_SUB				-112
-#define IDOP_MUL				-113
-#define IDOP_DIV				-114
-#define IDOP_POW				-115
+#define IDOP_ERR				-1100
+#define IDOP_ADD				-1111
+#define IDOP_SUB				-1112
+#define IDOP_MUL				-1113
+#define IDOP_DIV				-1114
+#define IDOP_POW				-1115
 
-#define IDOP_COS				-211
-#define IDOP_SIN				-212
-#define IDOP_TAN				-213
-#define IDOP_FLOOR				-214
-#define IDOP_ROUND				-215
-#define IDOP_CEIL				-216
-#define IDOP_EXP				-217
-#define IDOP_LOG					-218
-#define IDOP_MOD				-221
+#define IDOP_SQRT				-1210
+#define IDOP_ABS				-1211
+#define IDOP_COS				-1212
+#define IDOP_SIN				-1213
+#define IDOP_TAN				-1214
+#define IDOP_MOD				-1215
+
+#define IDOP_FLOOR				-1220
+#define IDOP_ROUND				-1221
+#define IDOP_CEIL				-1222
+#define IDOP_EXP				-1223
+#define IDOP_LOG				-1224
 
 #define MAX_DATA_SIZE			64
 

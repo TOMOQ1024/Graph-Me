@@ -90,7 +90,6 @@ void SetScene(SCENE s)
 			SetScene(SCENE_TITLE);
 			return;
 		}
-		LoadProblem(p);
 		for (INT i = 0; i < p->vcount; i++) {
 			// min value max vscale answer
 			sliders[i].active = TRUE;
@@ -99,6 +98,7 @@ void SetScene(SCENE s)
 			sItoWS(p->min[i], sliders[i].min_s);
 			sItoWS(p->max[i], sliders[i].max_s);
 			sliders[i].value = p->value[i];
+			sliders[i].scale = p->vscale[i];
 		}
 
 		wsprintf(graph.ex, L"y=%s", p->fstr);

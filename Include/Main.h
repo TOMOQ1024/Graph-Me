@@ -78,15 +78,20 @@ typedef enum {
 // 問題構造体
 typedef struct tagPROBLEM {
 	ProblemType type;
+	BOOL hide;
 	double x0;
 	double y0;
 	double gscale;
 	WCHAR fstr[30];
+	INT tcount;
+	INT pcount;
 	INT vcount;
 	INT min[4];
 	INT max[4];
+	double tangent[8];
+	double points[8];
 	double value[4];
-	INT vscale[4];
+	double vscale[4];
 	double answer[4];
 } PROBLEM;
 
@@ -96,9 +101,12 @@ typedef struct tagPROBLEM {
 void LoadProblemData(void);
 
 // 問題のロード
-void LoadProblem(PROBLEM* p);
+void SetCalcMain(void);
+void SetCalcGoal(void);
+void SetCalcTang(INT id);
+
 // 読み込んだ関数の実行
-double Calc(double x, double a, double b, double c, double d);
+double Calc(double x, double y);
 
 
 
@@ -123,3 +131,4 @@ extern BUTTON buttons[3];
 extern PROBLEM problems[146];// ファイルから読み取る問題のデータ
 extern INT problem_crnt;
 extern INT problem_temp;
+extern INT problem_latest;
