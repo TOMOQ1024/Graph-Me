@@ -36,7 +36,7 @@ void DrawMain(HDC hdc, HDC hMemDC)
 	SetTextAlign(hMemDC, TA_LEFT | TA_BOTTOM);
 	SetBkMode(hMemDC, OPAQUE);
 	DeleteObject(SetFont(hMemDC, 20, 0x00FFFF, 0x000000));
-	wsprintf(p_name, L"%X - %X", problem_crnt / 12 + 1, problem_crnt % 12 + 1);
+	wsprintf(p_name, L"%x - %x", problem_crnt / 12 + 1, problem_crnt % 12 + 1);
 	TextOut(hMemDC, pane.lWidth + 10, pane.height - 10, p_name, lstrlen(p_name));
 	DeleteObject(SelectObject(hMemDC, GetStockObject(SYSTEM_FONT)));
 }
@@ -579,7 +579,6 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 			}
 		}
 		// –Ú“I‚ÌƒOƒ‰ƒt
-		DeleteObject(SelectObject(hMemDC, CreateSolidBrush(0x006060)));
 		SetCalcGoal();
 		if (!p->hide) {
 			p_size = 0;

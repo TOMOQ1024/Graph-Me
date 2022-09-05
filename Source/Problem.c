@@ -39,17 +39,15 @@ WCHAR* GetOpName(INT id)
 	case IDOP_C: return L"c";
 	case IDOP_D: return L"d";
 	case IDOP_PI: return L"PI";
-	case IDOP_SQRT: return L"sqrt";
-	case IDOP_ABS: return L"abs";
 	case IDOP_COS: return L"cos";
 	case IDOP_SIN: return L"sin";
 	case IDOP_TAN: return L"tan";
-	case IDOP_MOD: return L"mod";
 	case IDOP_FLOOR: return L"floor";
 	case IDOP_ROUND: return L"round";
 	case IDOP_CEIL: return L"ceil";
 	case IDOP_EXP: return L"exp";
 	case IDOP_LOG: return L"log";
+	case IDOP_MOD: return L"mod";
 	default: return L"?";
 	}
 }
@@ -91,17 +89,15 @@ BOOL consume_var(INT* id)
 BOOL consume_fnc(INT* id)
 {
 	if (token->kind != TK_RESERVED)return FALSE;
-		 if (wcsncmp(token->str, L"sqrt",  4) == 0) *id = IDOP_SQRT;
-	else if (wcsncmp(token->str, L"abs",   3) == 0) *id = IDOP_ABS;
-	else if (wcsncmp(token->str, L"cos",   3) == 0) *id = IDOP_COS;
+		 if (wcsncmp(token->str, L"cos",   3) == 0) *id = IDOP_COS;
 	else if (wcsncmp(token->str, L"sin",   3) == 0) *id = IDOP_SIN;
 	else if (wcsncmp(token->str, L"tan",   3) == 0) *id = IDOP_TAN;
-	else if (wcsncmp(token->str, L"mod",   3) == 0) *id = IDOP_MOD;
 	else if (wcsncmp(token->str, L"floor", 5) == 0) *id = IDOP_FLOOR;
 	else if (wcsncmp(token->str, L"round", 5) == 0) *id = IDOP_ROUND;
 	else if (wcsncmp(token->str, L"ceil",  4) == 0) *id = IDOP_CEIL;
 	else if (wcsncmp(token->str, L"exp",   3) == 0) *id = IDOP_EXP;
 	else if (wcsncmp(token->str, L"log",   3) == 0) *id = IDOP_LOG;
+	else if (wcsncmp(token->str, L"mod",   3) == 0) *id = IDOP_MOD;
 	else return FALSE;
 
 	for (INT i = 0; i < lstrlen(GetOpName(*id)); i++) token = token->next;
@@ -286,7 +282,7 @@ Node* func(INT id)
 		node = expr();
 		while (consume(L",")) node = new_node_fnc(id, node, expr());
 		expect(L")");
-		return node->kind == ND_FNC && node->val == id ? node : new_node_fnc(id, node, NULL);
+		return node->kind == ND_FNC ? node : new_node_fnc(id, node, NULL);
 	}
 	return new_node_fnc(id, mult(), NULL);
 }
@@ -356,17 +352,15 @@ double Calc(double x, double y)
 		case IDOP_MUL: Push(st, Pop(st) * Pop(st)); break;
 		case IDOP_DIV: Push(st, Pop(st) / Pop(st)); break;
 		case IDOP_POW: Push(st, pow(Pop(st), Pop(st))); break;
-		case IDOP_SQRT: Push(st, sqrt(Pop(st))); break;
-		case IDOP_ABS: Push(st, fabs(Pop(st))); break;
 		case IDOP_COS: Push(st, cos(Pop(st))); break;
 		case IDOP_SIN: Push(st, sin(Pop(st))); break;
 		case IDOP_TAN: Push(st, tan(Pop(st))); break;
-		case IDOP_MOD: Push(st, fmod(Pop(st), Pop(st))); break;
 		case IDOP_FLOOR: Push(st, floor(Pop(st))); break;
 		case IDOP_ROUND: Push(st, round(Pop(st))); break;
 		case IDOP_CEIL: Push(st, ceil(Pop(st))); break;
 		case IDOP_EXP: Push(st, exp(Pop(st))); break;
 		case IDOP_LOG: Push(st, log(Pop(st))); break;
+		case IDOP_MOD: Push(st, fmod(Pop(st), Pop(st))); break;
 		default: Push(st, op_arr[i]); break;
 		}
 	}
