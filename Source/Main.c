@@ -18,6 +18,8 @@ PROBLEM problems[146];
 INT problem_crnt = 0;
 INT problem_temp = 0;
 INT problem_latest = 0;
+double(*points_arr)[2];
+INT points_count;
 
 // カーソルの描画(没)
 // http://nagoyacoder.web.fc2.com/win32api/mcursor.html
@@ -171,6 +173,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         //SetScene(SCENE_TITLE);
         //SetScene(SCENE_STAGES);
+        //problem_crnt = 12 * 1 + 2;
         problem_crnt = problem_latest;
         SetScene(SCENE_PROBLEM);
         break;
@@ -183,6 +186,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         pane.radius = min(pane.rWidth, pane.height) / 2;
         pane.paddingX = pane.rWidth / 2 - pane.radius;
         pane.paddingY = pane.height / 2 - pane.radius;
+        if (points_arr != NULL)free(points_arr);
+        points_arr = malloc(sizeof(double) * 2 * ((SIZE_T)pane.rWidth + 20) * pane.height);
         //GetClientRect(hWnd, &client);
         hBMP = CreateCompatibleBitmap(hdc, pane.width, pane.height);
         hOldBMP = SelectObject(hMemDC, hBMP);
