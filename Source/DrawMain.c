@@ -15,15 +15,20 @@ void Curve(double (*Calc)(INT, double, double), INT id, double x0, double y0, do
 	x = (x0 + x1) / 2;
 	y = Calc(id, x, 0);
 	Y = gRtoI_y(y);
-	if (0 < Y && Y < pane.height) {
+	if (-10 < Y && Y < pane.height + 10) {
 		points_arr[points_count][0] = x;
 		points_arr[points_count][1] = y;
 		points_count++;
 	}
-	if (hSq < DistanceSq(x0, y0, x, y) && hSq * hSq < x - x0)
-		Curve(Calc, id, x0, y0, x, y);
-	if (hSq < DistanceSq(x, y, x1, y1) && hSq * hSq < x1 - x)
-		Curve(Calc, id, x, y, x1, y1);
+	else {
+		y = 0 < Y ? gItoR_y(pane.height + 10) : gItoR_y(-10);
+	}
+	if (hSq < DistanceSq(x0, y0, x, y))
+		if(hSq < x - x0 || hSq * hSq < fabs(atan2(y1 - y0, x1 - x0) - atan2(y - y0, x - x0)))
+			Curve(Calc, id, x0, y0, x, y);
+	if (hSq < DistanceSq(x, y, x1, y1))
+		if(hSq < x1 - x || hSq * hSq < fabs(atan2(y1 - y0, x1 - x0) - atan2(y1 - y, x1 - x)))
+			Curve(Calc, id, x, y, x1, y1);
 }
 
 
@@ -514,6 +519,7 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 			gRtoI_x(a) + r, gRtoI_y(b) + r
 		);
 
+		SetTextAlign(hMemDC, TA_CENTER | TA_BOTTOM);
 		for (INT y = 0; y < 3; y++) {
 			for (INT x = 0; x < 4; x++) {
 				DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 4, 0x00FFFF)));
