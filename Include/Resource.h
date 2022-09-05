@@ -29,15 +29,18 @@
 #define IDOP_DIV				-1114
 #define IDOP_POW				-1115
 
-#define IDOP_COS				-1211
-#define IDOP_SIN				-1212
-#define IDOP_TAN				-1213
-#define IDOP_FLOOR				-1214
-#define IDOP_ROUND				-1215
-#define IDOP_CEIL				-1216
-#define IDOP_EXP				-1217
-#define IDOP_LOG				-1218
-#define IDOP_MOD				-1220
+#define IDOP_SQRT				-1210
+#define IDOP_ABS				-1211
+#define IDOP_COS				-1212
+#define IDOP_SIN				-1213
+#define IDOP_TAN				-1214
+#define IDOP_MOD				-1215
+
+#define IDOP_FLOOR				-1220
+#define IDOP_ROUND				-1221
+#define IDOP_CEIL				-1222
+#define IDOP_EXP				-1223
+#define IDOP_LOG				-1224
 
 #define MAX_DATA_SIZE			64
 
