@@ -5,23 +5,25 @@
 
 
 
-void Curve(double p_arr[][2], INT* p_size, double x0, double y0, double x1, double y1)
+
+
+void Curve(double (*Calc)(INT, double, double), INT id, double x0, double y0, double x1, double y1)
 {
 	double hSq = 0.5 / graph.scale / pane.radius; hSq *= hSq;
 	double x, y;
 	INT Y;
 	x = (x0 + x1) / 2;
-	y = Calc(x, 0);
+	y = Calc(id, x, 0);
 	Y = gRtoI_y(y);
 	if (0 < Y && Y < pane.height) {
-		p_arr[*p_size][0] = x;
-		p_arr[*p_size][1] = y;
-		*p_size += 1;
+		points_arr[points_count][0] = x;
+		points_arr[points_count][1] = y;
+		points_count++;
 	}
 	if (hSq < DistanceSq(x0, y0, x, y) && hSq * hSq < x - x0)
-		Curve(p_arr, p_size, x0, y0, x, y);
+		Curve(Calc, id, x0, y0, x, y);
 	if (hSq < DistanceSq(x, y, x1, y1) && hSq * hSq < x1 - x)
-		Curve(p_arr, p_size, x, y, x1, y1);
+		Curve(Calc, id, x, y, x1, y1);
 }
 
 
@@ -539,40 +541,36 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 	{
 		INT X, Y;
 		PROBLEM* p = &problems[problem_crnt];
-		double* ans = p->answer;
-		double (*p_arr)[2] = malloc(sizeof(double) * 2 * ((SIZE_T)pane.rWidth + 20) * pane.height);
 		double tmp;
-		INT p_size;
-		if (p_arr == NULL) return;
+		if (points_arr == NULL) return;
 		
 		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
 		DeleteObject(SelectObject(hMemDC, CreateSolidBrush(0x00FFFF)));
 
 		// 接線のグラフ
 		for (INT t = 0; t < p->tcount; t++) {
-			SetCalcTang(t);
-			p_size = 0;
+			points_count = 0;
 			Curve(
-				p_arr, &p_size,
-				gItoR_x(pane.lWidth), Calc(gItoR_x(pane.lWidth), 0),
-				gItoR_x(pane.width), Calc(gItoR_x(pane.width), 0)
+				CalcTang, t,
+				gItoR_x(pane.lWidth), CalcTang(t, gItoR_x(pane.lWidth), 0),
+				gItoR_x(pane.width), CalcTang(t, gItoR_x(pane.width), 0)
 			);
-			for (INT i = 0; i < p_size - 1; i++) {
-				for (INT j = i + 1; j < p_size; j++) {
-					if (p_arr[j][0] < p_arr[i][0]) {
-						tmp = p_arr[i][0];
-						p_arr[i][0] = p_arr[j][0];
-						p_arr[j][0] = tmp;
-						tmp = p_arr[i][1];
-						p_arr[i][1] = p_arr[j][1];
-						p_arr[j][1] = tmp;
+			for (INT i = 0; i < points_count - 1; i++) {
+				for (INT j = i + 1; j < points_count; j++) {
+					if (points_arr[j][0] < points_arr[i][0]) {
+						tmp = points_arr[i][0];
+						points_arr[i][0] = points_arr[j][0];
+						points_arr[j][0] = tmp;
+						tmp = points_arr[i][1];
+						points_arr[i][1] = points_arr[j][1];
+						points_arr[j][1] = tmp;
 					}
 				}
 			}
-			for (INT i = 0; i < p_size; i++) {
-				X = gRtoI_x(p_arr[i][0]);
+			for (INT i = 0; i < points_count; i++) {
+				X = gRtoI_x(points_arr[i][0]);
 				if (i % 50 < 20)continue;
-				Y = gRtoI_y(p_arr[i][1]);
+				Y = gRtoI_y(points_arr[i][1]);
 				Ellipse(
 					hMemDC, X - 2, Y - 2, X + 2, Y + 2
 				);
@@ -580,30 +578,29 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 		}
 		// 目的のグラフ
 		DeleteObject(SelectObject(hMemDC, CreateSolidBrush(0x006060)));
-		SetCalcGoal();
 		if (!p->hide) {
-			p_size = 0;
+			points_count = 0;
 			Curve(
-				p_arr, &p_size,
-				gItoR_x(pane.lWidth - 5), Calc(gItoR_x(pane.lWidth - 5), 0),
-				gItoR_x(pane.width + 5), Calc(gItoR_x(pane.width + 5), 0)
+				CalcGoal, 0,
+				gItoR_x(pane.lWidth - 5), CalcGoal(0, gItoR_x(pane.lWidth - 5), 0),
+				gItoR_x(pane.width + 5), CalcGoal(0, gItoR_x(pane.width + 5), 0)
 			);
-			for (INT i = 0; i < p_size - 1; i++) {
-				for (INT j = i + 1; j < p_size; j++) {
-					if (p_arr[j][0] < p_arr[i][0]) {
-						tmp = p_arr[i][0];
-						p_arr[i][0] = p_arr[j][0];
-						p_arr[j][0] = tmp;
-						tmp = p_arr[i][1];
-						p_arr[i][1] = p_arr[j][1];
-						p_arr[j][1] = tmp;
+			for (INT i = 0; i < points_count - 1; i++) {
+				for (INT j = i + 1; j < points_count; j++) {
+					if (points_arr[j][0] < points_arr[i][0]) {
+						tmp = points_arr[i][0];
+						points_arr[i][0] = points_arr[j][0];
+						points_arr[j][0] = tmp;
+						tmp = points_arr[i][1];
+						points_arr[i][1] = points_arr[j][1];
+						points_arr[j][1] = tmp;
 					}
 				}
 			}
-			for (INT i = 0; i < p_size; i++) {
-				X = gRtoI_x(p_arr[i][0]);
+			for (INT i = 0; i < points_count; i++) {
+				X = gRtoI_x(points_arr[i][0]);
 				if (i % 50 < 20)continue;
-				Y = gRtoI_y(p_arr[i][1]);
+				Y = gRtoI_y(points_arr[i][1]);
 				Ellipse(
 					hMemDC, X - 2, Y - 2, X + 2, Y + 2
 				);
@@ -615,7 +612,7 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_BRUSH)));
 		for (INT pt = 0; pt < p->pcount; pt++) {
 			X = gRtoI_x(p->points[pt]);
-			Y = gRtoI_y(Calc(p->points[pt], 0));
+			Y = gRtoI_y(CalcMain(0, p->points[pt], 0));
 			Ellipse(
 				hMemDC, X - 5, Y - 5, X + 5, Y + 5
 			);
@@ -624,41 +621,21 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 		// 操作するグラフ
 		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
 		DeleteObject(SelectObject(hMemDC, CreateSolidBrush(0x00FFFF)));
-		SetCalcMain();
-		p_size = 0;
+		points_count = 0;
 		Curve(
-			p_arr, &p_size,
-			gItoR_x(pane.lWidth - 5), Calc(gItoR_x(pane.lWidth - 5), 0),
-			gItoR_x(pane.width + 5), Calc(gItoR_x(pane.width + 5), 0)
+			CalcMain, 0,
+			gItoR_x(pane.lWidth - 5), CalcMain(0, gItoR_x(pane.lWidth - 5), 0),
+			gItoR_x(pane.width + 5), CalcMain(0, gItoR_x(pane.width + 5), 0)
 		);
-		for (INT i = 0; i < p_size; i++) {
-			X = gRtoI_x(p_arr[i][0]);
-			Y = gRtoI_y(p_arr[i][1]);
+		for (INT i = 0; i < points_count; i++) {
+			X = gRtoI_x(points_arr[i][0]);
+			Y = gRtoI_y(points_arr[i][1]);
 			Ellipse(
 				hMemDC, X - 3, Y - 3, X + 3, Y + 3
 			);
 		}
 
 		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_BRUSH)));
-
-		free(p_arr);
-
-		//for (X = 0; X <= pane.rWidth; X++) {
-		//	x = (1.0 * (X - pane.paddingX) / pane.radius / 2 - graph.x0) / graph.scale;
-		//	y = Calc(x, ans[0], ans[1], ans[2], ans[3]);
-		//	Y = (INT)((graph.y0 - y * graph.scale) * pane.radius * 2);
-		//	if (X == 0) MoveToEx(hMemDC, pane.lWidth + X, pane.paddingY + Y, NULL);
-		//	else LineTo(hMemDC, pane.lWidth + X, pane.paddingY + Y);
-		//}
-		//DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 4, 0x00FFFF)));
-		//for (X = 0; X <= pane.rWidth; X++) {
-		//	x = (1.0 * (X - pane.paddingX) / pane.radius / 2 - graph.x0) / graph.scale;
-		//	y = Calc(x, a, b, c, d);
-		//	Y = (INT)((graph.y0 - y * graph.scale) * pane.radius * 2);
-		//	if (X == 0) MoveToEx(hMemDC, pane.lWidth + X, pane.paddingY + Y, NULL);
-		//	else LineTo(hMemDC, pane.lWidth + X, pane.paddingY + Y);
-		//}
-
 		//DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
 		break;
 	}

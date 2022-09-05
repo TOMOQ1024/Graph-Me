@@ -6,9 +6,12 @@
 Token* token;
 // 
 double op_var[4];
-INT op_arr[MAX_DATA_SIZE];
-INT op_count;
-
+INT op_arr_tang[MAX_DATA_SIZE];
+INT op_arr_goal[MAX_DATA_SIZE];
+INT op_arr_main[MAX_DATA_SIZE];
+INT op_count_tang;
+INT op_count_goal;
+INT op_count_main;
 
 
 void Push(Stack* stk, double input)
@@ -306,31 +309,31 @@ void SetVars(double a, double b, double c, double d)
 
 
 // ñΩóﬂîzóÒ op_arr ÇÃê∂ê¨
-void gen(Node* node)
+void gen(INT op_arr[], INT* op_count, Node* node)
 {
 	if (node == NULL) return;
 	INT v = node->val;
 
 	if (node->kind == ND_NUM) {
-		op_arr[op_count++] = v;
+		op_arr[(*op_count)++] = v;
 		return;
 	}
 	if (node->kind == ND_VAR) {
-		op_arr[op_count++] = v;
+		op_arr[(*op_count)++] = v;
 		return;
 	}
 
-	gen(node->lhs);
-	gen(node->rhs);
+	gen(op_arr, op_count, node->lhs);
+	gen(op_arr, op_count, node->rhs);
 
 	switch (node->kind) {
-	case ND_ADD: op_arr[op_count++] = IDOP_ADD; break;
-	case ND_SUB: op_arr[op_count++] = IDOP_SUB; break;
-	case ND_MUL: op_arr[op_count++] = IDOP_MUL; break;
-	case ND_DIV: op_arr[op_count++] = IDOP_DIV; break;
-	case ND_POW: op_arr[op_count++] = IDOP_POW; break;
-	case ND_FNC: op_arr[op_count++] = v;        break;
-	default    : op_arr[op_count++] = IDOP_ERR; break;
+	case ND_ADD: op_arr[(*op_count)++] = IDOP_ADD; break;
+	case ND_SUB: op_arr[(*op_count)++] = IDOP_SUB; break;
+	case ND_MUL: op_arr[(*op_count)++] = IDOP_MUL; break;
+	case ND_DIV: op_arr[(*op_count)++] = IDOP_DIV; break;
+	case ND_POW: op_arr[(*op_count)++] = IDOP_POW; break;
+	case ND_FNC: op_arr[(*op_count)++] = v;        break;
+	default    : op_arr[(*op_count)++] = IDOP_ERR; break;
 	}
 }
 
@@ -338,7 +341,7 @@ void gen(Node* node)
 
 
 
-double Calc(double x, double y)
+double Calc0(INT op_arr[], INT op_count, double x, double y)
 {
 	static Stack stst;
 	static Stack* st = &stst;
@@ -377,6 +380,30 @@ double Calc(double x, double y)
 	return st->arr[0];
 }
 
+double CalcMain(INT id, double x, double y)
+{
+	SetVars(sliders[0].value, sliders[1].value, sliders[2].value, sliders[3].value);
+	return Calc0(op_arr_main, op_count_main, x, y);
+}
+
+double CalcGoal(INT id, double x, double y)
+{
+	PROBLEM p = problems[problem_crnt];
+	SetVars(p.answer[0], p.answer[1], p.answer[2], p.answer[3]);
+	return Calc0(op_arr_goal, op_count_goal, x, y);
+}
+
+double CalcTang(INT id, double x, double y)
+{
+	PROBLEM p = problems[problem_crnt];
+	double e, a, b, c;
+	e = 0.00001;
+	b = p.tangent[id];
+	a = (CalcGoal(id, b + e, 0) - CalcGoal(id, b - e, 0)) / 2 / e;
+	c = CalcGoal(id, b, 0);
+	SetVars(a, b, c, 0);
+	return Calc0(op_arr_tang, op_count_tang, x, y);
+}
 
 
 
@@ -498,56 +525,38 @@ void LoadProblemData(void)
 	}
 }
 
-void SetCalcMain(void)
-{
-	WCHAR str[30] = { 0 };
-	Node* head;
-	Token* headToken;
-	lstrcpy(str, problems[problem_crnt].fstr);
-	headToken = token = tokenize(str);
-	op_count = 0;
-	SetVars(sliders[0].value, sliders[1].value, sliders[2].value, sliders[3].value);
-	head = expr();
-	gen(head);
-	FreeTokens(headToken);
-	FreeNodes(head);
-}
-
-void SetCalcGoal(void)
+void SetCalcs(void)
 {
 	PROBLEM p = problems[problem_crnt];
 	WCHAR str[30] = { 0 };
 	Node* head;
 	Token* headToken;
+
+	// main
 	lstrcpy(str, p.fstr);
 	headToken = token = tokenize(str);
-	op_count = 0;
-	SetVars(p.answer[0], p.answer[1], p.answer[2], p.answer[3]);
+	op_count_main = 0;
 	head = expr();
-	gen(head);
+	gen(op_arr_main, &op_count_main, head);
+	FreeTokens(headToken);
+	FreeNodes(head);
+
+	// goal
+	lstrcpy(str, p.fstr);
+	headToken = token = tokenize(str);
+	op_count_goal = 0;
+	head = expr();
+	gen(op_arr_goal, &op_count_goal, head);
+	FreeTokens(headToken);
+	FreeNodes(head);
+
+	// tang
+	wsprintf(str, L"a(x-b)+c");// ê⁄ê¸ÇÃéÆ: y = f'(t)(x-t) + f(t)
+	headToken = token = tokenize(str);
+	op_count_tang = 0;
+	head = expr();
+	gen(op_arr_tang, &op_count_tang, head);
 	FreeTokens(headToken);
 	FreeNodes(head);
 }
 
-void SetCalcTang(INT id)
-{
-	PROBLEM p = problems[problem_crnt];
-	Node* head;
-	Token* headToken;
-	double e, a, b, c;
-	SetCalcGoal();
-	e = 0.00001;
-	b = p.tangent[id];
-	a = (Calc(b + e, 0) - Calc(b - e, 0)) / 2 / e;
-	c = Calc(b, 0);
-	// ê⁄ê¸ÇÃéÆ: y = f'(t)(x-t) + f(t)
-	WCHAR str[30] = { 0 };
-	wsprintf(str, L"a(x-b)+c");
-	headToken = token = tokenize(str);
-	op_count = 0;
-	SetVars(a, b, c, 0);
-	head = expr();
-	gen(head);
-	FreeTokens(headToken);
-	FreeNodes(head);
-}
