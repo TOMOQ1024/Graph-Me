@@ -17,6 +17,7 @@ void SetButtons(void)
 {
 	switch (scene) {
 	case SCENE_TITLE:
+		buttons[1].active = problem_reached;
 		buttons[2].active = fabs(sliders[2].value - round(sliders[2].value)) < 0.2;
 		break;
 	case SCENE_STAGES:
@@ -88,6 +89,9 @@ void OnLButtonDown_Button(INT x, INT y)
 				break;
 			case 1:// RESET
 				switch (scene) {
+				case SCENE_TITLE:
+					problem_reached = 0;
+					break;
 				case SCENE_STAGES:
 					if (problem_crnt != problem_temp)problem_temp = problem_crnt;
 					else problem_crnt = 0;
