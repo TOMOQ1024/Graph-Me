@@ -131,6 +131,7 @@ extern BUTTON buttons[3];
 extern PROBLEM problems[146];// ファイルから読み取る問題のデータ
 extern INT problem_crnt;
 extern INT problem_temp;
+extern INT problem_reached;
 extern INT problem_latest;
 extern double(*points_arr)[2];
 extern INT points_count;

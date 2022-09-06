@@ -17,7 +17,7 @@ void Draw(HDC hdc, HDC hMemDC)
 	DeleteObject(SelectObject(hMemDC, GetStockObject(BLACK_BRUSH)));
 
 	// 軸,グラフ,数式
-	DrawMain(hdc, hMemDC);
+	DrawMain(hMemDC);
 
 	// コントロール
 	SelectObject(hMemDC, GetStockObject(NULL_PEN));

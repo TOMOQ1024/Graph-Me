@@ -6,6 +6,7 @@
 
 // ボタン初期化
 void InitButtons(void);
+void SetButtons(void);
 
 // ボタンの存在する矩形の取得
 void GetButtonRect(const BUTTON* button, RECT* rect);
