@@ -1,6 +1,5 @@
 #include "Problem.h"
-
-
+#include <errno.h>
 
 // Œ»Ý’…–Ú‚µ‚Ä‚¢‚éƒg[ƒNƒ“
 Token* token;
@@ -345,6 +344,7 @@ double Calc0(INT op_arr[], INT op_count, double x, double y)
 {
 	static Stack stst;
 	static Stack* st = &stst;
+	double tmp;
 	st->size = 0;
 
 	for (INT i = 0; i < op_count; i++) {
@@ -372,7 +372,16 @@ double Calc0(INT op_arr[], INT op_count, double x, double y)
 		case IDOP_ROUND: Push(st, round(Pop(st))); break;
 		case IDOP_CEIL: Push(st, ceil(Pop(st))); break;
 		case IDOP_EXP: Push(st, exp(Pop(st))); break;
-		case IDOP_LOG: Push(st, log(Pop(st))); break;
+		case IDOP_LOG:
+			errno = 0;
+			tmp = log(Pop(st));
+			if (errno != 0) {
+				Push(st, INFINITY);
+			}
+			else {
+				Push(st, tmp);
+			}
+			break;
 		default: Push(st, op_arr[i]); break;
 		}
 	}
