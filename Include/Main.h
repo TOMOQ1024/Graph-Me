@@ -101,12 +101,12 @@ typedef struct tagPROBLEM {
 void LoadProblemData(void);
 
 // 問題のロード
-void SetCalcMain(void);
-void SetCalcGoal(void);
-void SetCalcTang(INT id);
+void SetCalcs(void);
 
 // 読み込んだ関数の実行
-double Calc(double x, double y);
+double CalcMain(INT id, double x, double y);
+double CalcGoal(INT id, double x, double y);
+double CalcTang(INT id, double x, double y);
 
 
 
@@ -132,3 +132,5 @@ extern PROBLEM problems[146];// ファイルから読み取る問題のデータ
 extern INT problem_crnt;
 extern INT problem_temp;
 extern INT problem_latest;
+extern double(*points_arr)[2];
+extern INT points_count;

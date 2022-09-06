@@ -1,14 +1,16 @@
 #include "Problem.h"
-
-
+#include <errno.h>
 
 // 現在着目しているトークン
 Token* token;
 // 
 double op_var[4];
-INT op_arr[MAX_DATA_SIZE];
-INT op_count;
-
+INT op_arr_tang[MAX_DATA_SIZE];
+INT op_arr_goal[MAX_DATA_SIZE];
+INT op_arr_main[MAX_DATA_SIZE];
+INT op_count_tang;
+INT op_count_goal;
+INT op_count_main;
 
 
 void Push(Stack* stk, double input)
@@ -38,6 +40,7 @@ WCHAR* GetOpName(INT id)
 	case IDOP_B: return L"b";
 	case IDOP_C: return L"c";
 	case IDOP_D: return L"d";
+	case IDOP_E: return L"e";
 	case IDOP_PI: return L"PI";
 	case IDOP_SQRT: return L"sqrt";
 	case IDOP_ABS: return L"abs";
@@ -81,6 +84,7 @@ BOOL consume_var(INT* id)
 	else if (wcsncmp(token->str, L"d", 1) == 0) *id = IDOP_D;
 	else if (wcsncmp(token->str, L"t", 1) == 0) *id = IDOP_X;
 	else if (wcsncmp(token->str, L"h", 1) == 0) *id = IDOP_X;
+	else if (wcsncmp(token->str, L"e", 1) == 0) *id = IDOP_E;
 	else if (wcsncmp(token->str, L"PI", 2) == 0) *id = IDOP_PI;
 	else return FALSE;
 
@@ -304,31 +308,31 @@ void SetVars(double a, double b, double c, double d)
 
 
 // 命令配列 op_arr の生成
-void gen(Node* node)
+void gen(INT op_arr[], INT* op_count, Node* node)
 {
 	if (node == NULL) return;
 	INT v = node->val;
 
 	if (node->kind == ND_NUM) {
-		op_arr[op_count++] = v;
+		op_arr[(*op_count)++] = v;
 		return;
 	}
 	if (node->kind == ND_VAR) {
-		op_arr[op_count++] = v;
+		op_arr[(*op_count)++] = v;
 		return;
 	}
 
-	gen(node->lhs);
-	gen(node->rhs);
+	gen(op_arr, op_count, node->lhs);
+	gen(op_arr, op_count, node->rhs);
 
 	switch (node->kind) {
-	case ND_ADD: op_arr[op_count++] = IDOP_ADD; break;
-	case ND_SUB: op_arr[op_count++] = IDOP_SUB; break;
-	case ND_MUL: op_arr[op_count++] = IDOP_MUL; break;
-	case ND_DIV: op_arr[op_count++] = IDOP_DIV; break;
-	case ND_POW: op_arr[op_count++] = IDOP_POW; break;
-	case ND_FNC: op_arr[op_count++] = v;        break;
-	default    : op_arr[op_count++] = IDOP_ERR; break;
+	case ND_ADD: op_arr[(*op_count)++] = IDOP_ADD; break;
+	case ND_SUB: op_arr[(*op_count)++] = IDOP_SUB; break;
+	case ND_MUL: op_arr[(*op_count)++] = IDOP_MUL; break;
+	case ND_DIV: op_arr[(*op_count)++] = IDOP_DIV; break;
+	case ND_POW: op_arr[(*op_count)++] = IDOP_POW; break;
+	case ND_FNC: op_arr[(*op_count)++] = v;        break;
+	default    : op_arr[(*op_count)++] = IDOP_ERR; break;
 	}
 }
 
@@ -336,10 +340,11 @@ void gen(Node* node)
 
 
 
-double Calc(double x, double y)
+double Calc0(INT op_arr[], INT op_count, double x, double y)
 {
 	static Stack stst;
 	static Stack* st = &stst;
+	double tmp;
 	st->size = 0;
 
 	for (INT i = 0; i < op_count; i++) {
@@ -350,6 +355,7 @@ double Calc(double x, double y)
 		case IDOP_B: Push(st, op_var[1]); break;
 		case IDOP_C: Push(st, op_var[2]); break;
 		case IDOP_D: Push(st, op_var[3]); break;
+		case IDOP_E: Push(st, M_E); break;
 		case IDOP_PI: Push(st, M_PI); break;
 		case IDOP_ADD: Push(st, Pop(st) + Pop(st)); break;
 		case IDOP_SUB: Push(st, Pop(st) - Pop(st)); break;
@@ -366,7 +372,16 @@ double Calc(double x, double y)
 		case IDOP_ROUND: Push(st, round(Pop(st))); break;
 		case IDOP_CEIL: Push(st, ceil(Pop(st))); break;
 		case IDOP_EXP: Push(st, exp(Pop(st))); break;
-		case IDOP_LOG: Push(st, log(Pop(st))); break;
+		case IDOP_LOG:
+			errno = 0;
+			tmp = log(Pop(st));
+			if (errno != 0) {
+				Push(st, INFINITY);
+			}
+			else {
+				Push(st, tmp);
+			}
+			break;
 		default: Push(st, op_arr[i]); break;
 		}
 	}
@@ -374,6 +389,30 @@ double Calc(double x, double y)
 	return st->arr[0];
 }
 
+double CalcMain(INT id, double x, double y)
+{
+	SetVars(sliders[0].value, sliders[1].value, sliders[2].value, sliders[3].value);
+	return Calc0(op_arr_main, op_count_main, x, y);
+}
+
+double CalcGoal(INT id, double x, double y)
+{
+	PROBLEM p = problems[problem_crnt];
+	SetVars(p.answer[0], p.answer[1], p.answer[2], p.answer[3]);
+	return Calc0(op_arr_goal, op_count_goal, x, y);
+}
+
+double CalcTang(INT id, double x, double y)
+{
+	PROBLEM p = problems[problem_crnt];
+	double e, a, b, c;
+	e = 0.00001;
+	b = p.tangent[id];
+	a = (CalcGoal(id, b + e, 0) - CalcGoal(id, b - e, 0)) / 2 / e;
+	c = CalcGoal(id, b, 0);
+	SetVars(a, b, c, 0);
+	return Calc0(op_arr_tang, op_count_tang, x, y);
+}
 
 
 
@@ -495,56 +534,38 @@ void LoadProblemData(void)
 	}
 }
 
-void SetCalcMain(void)
-{
-	WCHAR str[30] = { 0 };
-	Node* head;
-	Token* headToken;
-	lstrcpy(str, problems[problem_crnt].fstr);
-	headToken = token = tokenize(str);
-	op_count = 0;
-	SetVars(sliders[0].value, sliders[1].value, sliders[2].value, sliders[3].value);
-	head = expr();
-	gen(head);
-	FreeTokens(headToken);
-	FreeNodes(head);
-}
-
-void SetCalcGoal(void)
+void SetCalcs(void)
 {
 	PROBLEM p = problems[problem_crnt];
 	WCHAR str[30] = { 0 };
 	Node* head;
 	Token* headToken;
+
+	// main
 	lstrcpy(str, p.fstr);
 	headToken = token = tokenize(str);
-	op_count = 0;
-	SetVars(p.answer[0], p.answer[1], p.answer[2], p.answer[3]);
+	op_count_main = 0;
 	head = expr();
-	gen(head);
+	gen(op_arr_main, &op_count_main, head);
+	FreeTokens(headToken);
+	FreeNodes(head);
+
+	// goal
+	lstrcpy(str, p.fstr);
+	headToken = token = tokenize(str);
+	op_count_goal = 0;
+	head = expr();
+	gen(op_arr_goal, &op_count_goal, head);
+	FreeTokens(headToken);
+	FreeNodes(head);
+
+	// tang
+	wsprintf(str, L"a(x-b)+c");// 接線の式: y = f'(t)(x-t) + f(t)
+	headToken = token = tokenize(str);
+	op_count_tang = 0;
+	head = expr();
+	gen(op_arr_tang, &op_count_tang, head);
 	FreeTokens(headToken);
 	FreeNodes(head);
 }
 
-void SetCalcTang(INT id)
-{
-	PROBLEM p = problems[problem_crnt];
-	Node* head;
-	Token* headToken;
-	double e, a, b, c;
-	SetCalcGoal();
-	e = 0.00001;
-	b = p.tangent[id];
-	a = (Calc(b + e, 0) - Calc(b - e, 0)) / 2 / e;
-	c = Calc(b, 0);
-	// 接線の式: y = f'(t)(x-t) + f(t)
-	WCHAR str[30] = { 0 };
-	wsprintf(str, L"a(x-b)+c");
-	headToken = token = tokenize(str);
-	op_count = 0;
-	SetVars(a, b, c, 0);
-	head = expr();
-	gen(head);
-	FreeTokens(headToken);
-	FreeNodes(head);
-}

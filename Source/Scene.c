@@ -101,6 +101,8 @@ void SetScene(SCENE s)
 			sliders[i].scale = p->vscale[i];
 		}
 
+		SetCalcs();
+
 		wsprintf(graph.ex, L"y=%s", p->fstr);
 
 		graph.x0 = p->x0;

@@ -85,5 +85,5 @@ Node* func(INT id);
 
 
 // ñΩóﬂîzóÒ op_arr ÇÃê∂ê¨
-void gen(Node* node);
+void gen(INT op_arr[], INT* op_count, Node* node);
 void SetVars(double a, double b, double c, double d);
