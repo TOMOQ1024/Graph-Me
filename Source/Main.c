@@ -177,7 +177,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         //SetScene(SCENE_STAGES);
         //problem_crnt = 12 * 1 + 3;
         // problem_reached = 12 * 1 + 3;
-        //problem_reached = problem_latest;
+        problem_reached = problem_latest;
         //problem_crnt = problem_latest;
         //SetScene(SCENE_PROBLEM);
         break;
