@@ -30,10 +30,11 @@ void sSegment(HDC hdc, double xo, double yo, double d, INT x0, INT y0, INT x1, I
 //
 void Curve(double (*Calc)(INT, double, double), INT id, double x0, double y0, double x1, double y1);
 // 軸,グラフ,数式の描画
-void DrawMain(HDC hdc, HDC hMemDC);
-void DrawAxis(HDC hdc, HDC hMemDC);
-void DrawGraph(HDC hdc, HDC hMemDC);
-void DrawExpression(HDC hdc, HDC hMemDC);
+void DrawMain(HDC hMemDC);
+void DrawAxis(HDC hMemDC);
+void DrawGraph(HDC hMemDC);
+void DrawExpression(HDC hMemDC);
+void DrawLocation(HDC hMemDC);
 
 // デバッグ情報の描画
 void DrawDebug(HDC hdc, HDC hMemDC);

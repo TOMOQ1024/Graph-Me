@@ -43,24 +43,17 @@ void Curve(double (*Calc)(INT, double, double), INT id, double x0, double y0, do
 
 
 
-void DrawMain(HDC hdc, HDC hMemDC)
+void DrawMain(HDC hMemDC)
 {
-	WCHAR p_name[10];
-	DrawAxis(hdc, hMemDC);
-	DrawGraph(hdc, hMemDC);
-	DrawExpression(hdc, hMemDC);
-
-	SetTextAlign(hMemDC, TA_LEFT | TA_BOTTOM);
-	SetBkMode(hMemDC, OPAQUE);
-	DeleteObject(SetFont(hMemDC, 20, 0x00FFFF, 0x000000));
-	wsprintf(p_name, L"%X - %X", problem_crnt / 12 + 1, problem_crnt % 12 + 1);
-	TextOut(hMemDC, pane.lWidth + 10, pane.height - 10, p_name, lstrlen(p_name));
-	DeleteObject(SelectObject(hMemDC, GetStockObject(SYSTEM_FONT)));
+	DrawAxis(hMemDC);
+	DrawGraph(hMemDC);
+	DrawExpression(hMemDC);
+	DrawLocation(hMemDC);
 }
 
 
 
-void DrawAxis(HDC hdc, HDC hMemDC)
+void DrawAxis(HDC hMemDC)
 {
 	double x, y;
 
@@ -116,7 +109,7 @@ void DrawAxis(HDC hdc, HDC hMemDC)
 }
 
 
-void DrawGraph(HDC hdc, HDC hMemDC)
+void DrawGraph(HDC hMemDC)
 {
 	switch (scene) {
 	case SCENE_TITLE:
@@ -659,7 +652,7 @@ void DrawGraph(HDC hdc, HDC hMemDC)
 }
 
 
-void DrawExpression(HDC hdc, HDC hMemDC)
+void DrawExpression(HDC hMemDC)
 {
 	switch (scene) {
 	case SCENE_PROBLEM:
@@ -676,5 +669,37 @@ void DrawExpression(HDC hdc, HDC hMemDC)
 		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_PEN)));
 		break;
 	}
+	}
+}
+
+void DrawLocation(HDC hMemDC)
+{
+	SetTextAlign(hMemDC, TA_LEFT | TA_BOTTOM);
+	SetBkMode(hMemDC, OPAQUE);
+	DeleteObject(SetFont(hMemDC, 20, 0x00FFFF, 0x000000));
+	switch (scene) {
+	case SCENE_TITLE:
+	{
+		TextOut(hMemDC, pane.lWidth + 10, pane.height - 10, L"TITLE", 5);
+		break;
+	}
+	case SCENE_STAGES:
+	{
+		TextOut(hMemDC, pane.lWidth + 10, pane.height - 10, L"STAGE SELECT", 12);
+		break;
+	}
+	case SCENE_LEVELS:
+	{
+		TextOut(hMemDC, pane.lWidth + 10, pane.height - 10, L"LEVEL SELECT", 12);
+		break;
+	}
+	case SCENE_PROBLEM:
+	{
+		WCHAR p_name[10];
+		wsprintf(p_name, L"%X - %X", problem_crnt / 12 + 1, problem_crnt % 12 + 1);
+		TextOut(hMemDC, pane.lWidth + 10, pane.height - 10, p_name, lstrlen(p_name));
+		break;
+	}
+	DeleteObject(SelectObject(hMemDC, GetStockObject(SYSTEM_FONT)));
 	}
 }

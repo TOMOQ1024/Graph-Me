@@ -171,11 +171,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         pane.mHover = FALSE;
         pane.mDrag = FALSE;
 
-        //SetScene(SCENE_TITLE);
+        SetScene(SCENE_TITLE);
         //SetScene(SCENE_STAGES);
         //problem_crnt = 12 * 1 + 2;
-        problem_crnt = problem_latest;
-        SetScene(SCENE_PROBLEM);
+        //problem_crnt = problem_latest;
+        //SetScene(SCENE_PROBLEM);
         break;
     }
     case WM_SIZE:
