@@ -49,6 +49,7 @@ void DrawMain(HDC hMemDC)
 	DrawGraph(hMemDC);
 	DrawExpression(hMemDC);
 	DrawLocation(hMemDC);
+	DrawClearMessage(hMemDC);
 }
 
 
@@ -647,7 +648,7 @@ void DrawGraph(HDC hMemDC)
 		DeleteObject(SelectObject(hMemDC, GetStockObject(NULL_BRUSH)));
 		for (INT pt = 0; pt < p->pcount; pt++) {
 			X = gRtoI_x(p->points[pt]);
-			Y = gRtoI_y(CalcMain(0, p->points[pt], 0));
+			Y = gRtoI_y(CalcGoal(0, p->points[pt], 0));
 			Ellipse(
 				hMemDC, X - 5, Y - 5, X + 5, Y + 5
 			);
@@ -698,6 +699,7 @@ void DrawExpression(HDC hMemDC)
 	}
 }
 
+
 void DrawLocation(HDC hMemDC)
 {
 	SetTextAlign(hMemDC, TA_LEFT | TA_BOTTOM);
@@ -729,3 +731,23 @@ void DrawLocation(HDC hMemDC)
 	DeleteObject(SelectObject(hMemDC, GetStockObject(SYSTEM_FONT)));
 	}
 }
+
+
+void DrawMessage(HDC hMemDC, WCHAR str[])
+{
+
+	SetTextAlign(hMemDC, TA_CENTER | TA_BOTTOM);
+	SetBkMode(hMemDC, TRANSPARENT);
+	DeleteObject(SetFont(hMemDC, 100, 0xE0E0E0, 0x000000));
+	TextOut(hMemDC, pane.lWidth + pane.rWidth / 2, pane.height / 2 + 50, str, lstrlen(str));
+	DeleteObject(SelectObject(hMemDC, GetStockObject(SYSTEM_FONT)));
+}
+
+
+void DrawClearMessage(HDC hMemDC)
+{
+	if (clear == 1) {
+		DrawMessage(hMemDC, L"CLEAR");
+	}
+}
+

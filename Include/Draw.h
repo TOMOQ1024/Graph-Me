@@ -35,6 +35,8 @@ void DrawAxis(HDC hMemDC);
 void DrawGraph(HDC hMemDC);
 void DrawExpression(HDC hMemDC);
 void DrawLocation(HDC hMemDC);
+void DrawMessage(HDC hMemDC, WCHAR str[]);
+void DrawClearMessage(HDC hMemDC);
 
 // デバッグ情報の描画
 void DrawDebug(HDC hdc, HDC hMemDC);
