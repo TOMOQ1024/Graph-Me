@@ -19,6 +19,21 @@ void SetButtons(void)
 	case SCENE_TITLE:
 		buttons[2].active = fabs(sliders[2].value - round(sliders[2].value)) < 0.2;
 		break;
+	case SCENE_STAGES:
+		buttons[0].active = TRUE;
+		buttons[1].active = problem_temp != problem_crnt;
+		buttons[2].active = problem_temp / 12 <= problem_reached / 12;
+		break;
+	case SCENE_LEVELS:
+		buttons[0].active = TRUE;
+		buttons[1].active = problem_crnt % 12;
+		buttons[2].active = problem_temp <= problem_reached;
+		break;
+	case SCENE_PROBLEM:
+		buttons[0].active = TRUE;
+		buttons[1].active = TRUE;
+		buttons[2].active = problem_crnt < problem_reached;
+		break;
 	}
 }
 
@@ -38,6 +53,7 @@ void GetButtonRect(const BUTTON* button, RECT* rect)
 void OnMouseMove_Button(INT x, INT y)
 {
 	RECT rc;
+	SetButtons();
 	for (INT i = 0; i < 3; i++) {
 		GetButtonRect(&buttons[i], &rc);
 		if (buttons[i].active && IsIn(x, y, rc)) {
@@ -47,7 +63,6 @@ void OnMouseMove_Button(INT x, INT y)
 			buttons[i].mHover = FALSE;
 		}
 	}
-	SetButtons();
 }
 
 void OnLButtonDown_Button(INT x, INT y)

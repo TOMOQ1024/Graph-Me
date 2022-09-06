@@ -47,10 +47,6 @@ void SetScene(SCENE s)
 		graph.x0 = 0.5;
 		graph.y0 = 0.5;
 		graph.scale = 0.11;
-
-		buttons[0].active = TRUE;
-		buttons[1].active = TRUE;
-		buttons[2].active = TRUE;
 		break;
 	}
 	case SCENE_LEVELS:
@@ -73,10 +69,6 @@ void SetScene(SCENE s)
 		graph.x0 = 0.5;
 		graph.y0 = 0.5;
 		graph.scale = 0.11;
-
-		buttons[0].active = TRUE;
-		buttons[1].active = TRUE;
-		buttons[2].active = TRUE;
 		break;
 	}
 	case SCENE_PROBLEM:
@@ -104,10 +96,6 @@ void SetScene(SCENE s)
 		graph.x0 = p->x0;
 		graph.y0 = p->y0;
 		graph.scale = p->gscale;
-
-		buttons[0].active = TRUE;
-		buttons[1].active = TRUE;
-		buttons[2].active = TRUE;
 		break;
 	}
 	}

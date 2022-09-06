@@ -405,6 +405,7 @@ void DrawGraph(HDC hMemDC)
 	}
 	case SCENE_STAGES:
 	{
+		INT id;
 		INT r;
 		double a, b, s, d;
 		a = sliders[0].value + sin(M_PI * sliders[0].value) / M_PI;
@@ -423,8 +424,16 @@ void DrawGraph(HDC hMemDC)
 
 		for (INT y = 0; y < 3; y++) {
 			for (INT x = 0; x < 4; x++) {
-				DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 4, 0x00FFFF)));
-				DeleteObject(SelectObject(hMemDC, CreateSolidBrush(8 + x - y * 4 == problem_temp / 12 ? 0x004040 : 0x002020)));
+				id = 8 + x - y * 4;
+				DeleteObject(SelectObject(hMemDC,
+					CreatePen(PS_SOLID, 4,
+						id <= problem_reached / 12 ? 0x00FFFF : 0x808080
+					)
+				));
+				DeleteObject(SelectObject(hMemDC, CreateSolidBrush(
+					(8 + x - y * 4 == problem_temp / 12 ? 0x40 : 0x20)
+					* (id <= problem_reached / 12 ? 0x000101 : 0x010101)
+				)));
 				d = pow(2,
 					1 / (
 						(x * 2 - 3 - a) * (x * 2 - 3 - a) +
@@ -432,7 +441,13 @@ void DrawGraph(HDC hMemDC)
 					)
 				) * 0.8;
 				sRectangle(hMemDC, (x - 1.5) * 2, (y - 1.0) * 2, d, d);
-				switch (8 + x - y * 4) {
+				switch (id <= problem_latest / 12 ? id : -1) {
+				case -1:
+					sSegment(hMemDC, x, y, d, 0, 2, 2, 2);
+					sSegment(hMemDC, x, y, d, 2, 1, 2, 2);
+					sSegment(hMemDC, x, y, d, 2, 1, 1, 1);
+					sSegment(hMemDC, x, y, d, 1, 0, 2, 0);
+					break;
 				case 0:
 					sSegment(hMemDC, x, y, d, 0, 2, 1, 0);
 					sSegment(hMemDC, x, y, d, 2, 2, 1, 0);
@@ -505,6 +520,7 @@ void DrawGraph(HDC hMemDC)
 	}
 	case SCENE_LEVELS:
 	{
+		INT id;
 		INT r;
 		WCHAR l[2];
 		double a, b, s, d;
@@ -525,8 +541,16 @@ void DrawGraph(HDC hMemDC)
 		SetTextAlign(hMemDC, TA_CENTER | TA_BOTTOM);
 		for (INT y = 0; y < 3; y++) {
 			for (INT x = 0; x < 4; x++) {
-				DeleteObject(SelectObject(hMemDC, CreatePen(PS_SOLID, 4, 0x00FFFF)));
-				DeleteObject(SelectObject(hMemDC, CreateSolidBrush(8 + x - y * 4 == problem_temp % 12 ? 0x004040 : 0x002020)));
+				id = 8 + x - y * 4;
+				DeleteObject(SelectObject(hMemDC,
+					CreatePen(PS_SOLID, 4,
+						problem_temp / 12 < problem_reached / 12 || id <= problem_reached % 12 ? 0x00FFFF : 0x808080
+					)
+				));
+				DeleteObject(SelectObject(hMemDC, CreateSolidBrush(
+					(id == problem_temp % 12 ? 0x40 : 0x20)
+					* (problem_temp / 12 * 12 + id <= problem_reached ? 0x000101 : 0x010101)
+				)));
 				d = pow(2,
 					1 / (
 						(x * 2 - 3 - a) * (x * 2 - 3 - a) +
@@ -535,7 +559,9 @@ void DrawGraph(HDC hMemDC)
 				) * 0.8;
 				sRectangle(hMemDC, (x - 1.5) * 2, (y - 1.0) * 2, d, d);
 
-				DeleteObject(SetFont(hMemDC, gRtoI_x(d * 0.8) - gRtoI_x(0), 0x00FFFF, 0));
+				DeleteObject(SetFont(hMemDC, gRtoI_x(d * 0.8) - gRtoI_x(0),
+					problem_temp / 12 < problem_reached / 12 || id <= problem_reached % 12 ? 0x00FFFF : 0x808080,
+				0));
 				wsprintf(l, L"%X", 9 + x - y * 4);
 				TextOut(hMemDC, gRtoI_x((x - 1.5) * 2), gRtoI_y((y - 1.0) * 2 - d * 0.4), l, lstrlen(l));
 			}

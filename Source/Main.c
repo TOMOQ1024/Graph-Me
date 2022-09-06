@@ -17,6 +17,7 @@ BUTTON buttons[3];
 PROBLEM problems[146];
 INT problem_crnt = 0;
 INT problem_temp = 0;
+INT problem_reached = 12 * 1 + 3;
 INT problem_latest = 0;
 double(*points_arr)[2];
 INT points_count;
@@ -171,8 +172,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         pane.mHover = FALSE;
         pane.mDrag = FALSE;
 
-        SetScene(SCENE_TITLE);
-        //SetScene(SCENE_STAGES);
+        //SetScene(SCENE_TITLE);
+        SetScene(SCENE_STAGES);
         //problem_crnt = 12 * 1 + 2;
         //problem_crnt = problem_latest;
         //SetScene(SCENE_PROBLEM);
