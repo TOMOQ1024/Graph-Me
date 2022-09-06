@@ -60,11 +60,17 @@ void OnMouseMove_Slider(INT x, INT y)
 void OnLButtonDown_Slider(INT x, INT y)
 {
 	RECT rc;
+	BOOL b = FALSE;
 	for (INT i = 0; i < 4; i++) {
 		GetSliderRect(&sliders[i], &rc);
 		if (sliders[i].mHover && IsIn(x, y, rc)) {
 			sliders[i].mDrag = TRUE;
+			b = TRUE;
 		}
+	}
+
+	if (b) {
+		if (clear == 1)clear = 2;
 	}
 }
 
@@ -72,5 +78,17 @@ void OnLButtonUp_Slider(INT x, INT y)
 {
 	for (INT i = 0; i < 4; i++) {
 		sliders[i].mDrag = FALSE;
+	}
+	if (!clear && IsCorrectAnswer()) {
+		clear = 1;
+		if (problem_crnt < problem_latest) {
+			problem_reached = max(problem_crnt + 1, problem_reached);
+			for (INT i = 0; i < problems[problem_crnt].vcount; i++) {
+				sliders[i].value = problems[problem_crnt].answer[i];
+			}
+		}
+		else {
+			// Š®‘SƒNƒŠƒA
+		}
 	}
 }

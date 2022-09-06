@@ -116,6 +116,8 @@ void SetScene(SCENE s);
 // 全ての描画
 void Draw(HDC hdc, HDC hMemDC);
 
+// 答えの判定
+BOOL IsCorrectAnswer(void);
 
 
 
@@ -129,6 +131,7 @@ extern GRAPH graph;
 extern SLIDER sliders[4];
 extern BUTTON buttons[3];
 extern PROBLEM problems[146];// ファイルから読み取る問題のデータ
+extern INT clear;
 extern INT problem_crnt;
 extern INT problem_temp;
 extern INT problem_reached;

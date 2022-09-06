@@ -6,6 +6,7 @@
 
 void SetScene(SCENE s)
 {
+	clear = 0;
 
 	InitSliders();
 

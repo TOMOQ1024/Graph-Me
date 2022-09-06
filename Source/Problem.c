@@ -569,3 +569,23 @@ void SetCalcs(void)
 	FreeNodes(head);
 }
 
+
+
+
+
+
+BOOL IsCorrectAnswer(void)
+{
+	PROBLEM* p = &problems[problem_crnt];
+	BOOL b = TRUE;
+	for (INT i = 0; i < p->vcount; i++) {
+		if (
+			(sliders[i].max - sliders[i].min) / 30
+			< fabs(sliders[i].value - p->answer[i])
+		) {
+			b = FALSE;
+		}
+	}
+	return b;
+}
+

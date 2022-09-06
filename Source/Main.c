@@ -15,9 +15,10 @@ GRAPH graph;
 SLIDER sliders[4];
 BUTTON buttons[3];
 PROBLEM problems[146];
+INT clear = 0;
 INT problem_crnt = 0;
 INT problem_temp = 0;
-INT problem_reached = 12 * 1 + 3;
+INT problem_reached = 0;
 INT problem_latest = 0;
 double(*points_arr)[2];
 INT points_count;
@@ -174,7 +175,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         SetScene(SCENE_TITLE);
         //SetScene(SCENE_STAGES);
-        //problem_crnt = 12 * 1 + 2;
+        //problem_crnt = 12 * 1 + 3;
+        // problem_reached = 12 * 1 + 3;
+        //problem_reached = problem_latest;
         //problem_crnt = problem_latest;
         //SetScene(SCENE_PROBLEM);
         break;

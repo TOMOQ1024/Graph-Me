@@ -11,7 +11,7 @@ void DrawDebug(HDC hdc, HDC hMemDC)
 
 	SetFont(hMemDC, 0, 0x00FFFFFF, 0x00000000);
 	SetTextAlign(hMemDC, TA_LEFT | TA_TOP);
-	//(str, L"problem: %d, %d", problem_crnt, problem_temp);
+	//wsprintf(str, L"clear: %d", clear);
 	//TextOut(hMemDC, pane.lWidth + 10, 10, str, lstrlen(str));
 	//wsprintf(str, L"mouseX: %d, mouseY: %d", mx, my);
 	//TextOut(hMemDC, pane.lWidth + 10, 30, str, lstrlen(str));
