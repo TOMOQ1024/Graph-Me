@@ -666,6 +666,7 @@ void DrawGraph(HDC hMemDC)
 		for (INT i = 0; i < points_count; i++) {
 			X = gRtoI_x(points_arr[i][0]);
 			Y = gRtoI_y(points_arr[i][1]);
+			if (Y < -10 || pane.height + 10 < Y) continue;
 			Ellipse(
 				hMemDC, X - 3, Y - 3, X + 3, Y + 3
 			);

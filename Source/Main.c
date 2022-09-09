@@ -175,11 +175,17 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         SetScene(SCENE_TITLE);
         //SetScene(SCENE_STAGES);
+<<<<<<< HEAD
         //problem_crnt = 12 * 1 + 3;
         // problem_reached = 12 * 1 + 3;
         problem_reached = problem_latest;
         //problem_crnt = problem_latest;
         //SetScene(SCENE_PROBLEM);
+=======
+        //problem_crnt = 12 * 1 + 2;
+        //problem_crnt = problem_latest;
+        SetScene(SCENE_PROBLEM);
+>>>>>>> [improve] 描画量の削減 for issue #43
         break;
     }
     case WM_SIZE:
