@@ -114,6 +114,7 @@ double CalcTang(INT id, double x, double y);
 void SetScene(SCENE s);
 
 // ‘S‚Ä‚Ì•`‰æ
+void Update(void);
 void Draw(HDC hdc, HDC hMemDC);
 
 // “š‚¦‚Ì”»’è

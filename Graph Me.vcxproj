@@ -150,6 +150,7 @@
     <ClInclude Include="Include\targetver.h" />
     <ClInclude Include="Include\Utils.h" />
     <ClInclude Include="Resource\resource.h" />
+    <ClInclude Include="Source\Update.c" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Button.c" />
