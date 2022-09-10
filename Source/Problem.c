@@ -18,6 +18,9 @@ void Push(Stack* stk, double input)
 	if (stk->size < MAX_DATA_SIZE) {
 		stk->arr[stk->size++] = input;
 	}
+	else {
+		PostQuitMessage(0);
+	}
 }
 
 double Pop(Stack* stk)
@@ -373,10 +376,11 @@ double Calc0(INT op_arr[], INT op_count, double x, double y)
 		case IDOP_CEIL: Push(st, ceil(Pop(st))); break;
 		case IDOP_EXP: Push(st, exp(Pop(st))); break;
 		case IDOP_LOG:
-			errno = 0;
-			tmp = log(Pop(st));
-			if (errno != 0) {
-				Push(st, INFINITY);
+			//errno = 0;
+			tmp = Pop(st);
+			tmp = tmp < 1e-99 ? log(1e-99) : log(tmp);
+			if (FALSE/*errno != 0*/) {
+				Push(st, -1e+99);
 			}
 			else {
 				Push(st, tmp);

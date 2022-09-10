@@ -173,19 +173,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         pane.mHover = FALSE;
         pane.mDrag = FALSE;
 
-        SetScene(SCENE_TITLE);
+        //SetScene(SCENE_TITLE);
         //SetScene(SCENE_STAGES);
-<<<<<<< HEAD
-        //problem_crnt = 12 * 1 + 3;
-        // problem_reached = 12 * 1 + 3;
+        problem_crnt = 1;
+        problem_crnt = 12 * 1 + 2;
+        problem_crnt = 12 * 3 + 2;
         problem_reached = problem_latest;
         //problem_crnt = problem_latest;
-        //SetScene(SCENE_PROBLEM);
-=======
-        //problem_crnt = 12 * 1 + 2;
-        //problem_crnt = problem_latest;
         SetScene(SCENE_PROBLEM);
->>>>>>> [improve] 描画量の削減 for issue #43
         break;
     }
     case WM_SIZE:
@@ -197,7 +192,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         pane.paddingX = pane.rWidth / 2 - pane.radius;
         pane.paddingY = pane.height / 2 - pane.radius;
         if (points_arr != NULL)free(points_arr);
-        points_arr = malloc(sizeof(double) * 2 * ((SIZE_T)pane.rWidth + 20) * pane.height);
+        points_arr = calloc((pane.rWidth + 20) * pane.height, sizeof(double) * 2);
         //GetClientRect(hWnd, &client);
         hBMP = CreateCompatibleBitmap(hdc, pane.width, pane.height);
         hOldBMP = SelectObject(hMemDC, hBMP);

@@ -9,7 +9,7 @@
 
 void Curve(double (*Calc)(INT, double, double), INT id, double x0, double y0, double x1, double y1)
 {
-	double hSq = 0.5 / graph.scale / pane.radius; hSq *= hSq;
+	double hSq = 1 / graph.scale / pane.radius; hSq *= hSq;
 	double x, y;
 	INT X0 = gRtoI_x(x0);
 	INT Y0 = gRtoI_y(y0);
@@ -25,20 +25,19 @@ void Curve(double (*Calc)(INT, double, double), INT id, double x0, double y0, do
 		points_arr[points_count][1] = y;
 		points_count++;
 	}
-	else {
-		y = 0 < Y ? gItoR_y(pane.height + 10) : gItoR_y(-10);
-	}
 	if (hSq < DistanceSq(x0, y0, x, y)) {
-		if (hSq * hSq < x - x0 || hSq * hSq > fabs(atan2(Y1 - Y0, X1 - X0) - atan2(Y - Y0, X - X0))) {
-			Curve(Calc, id, x0, y0, x, y);
-		}
+		if (hSq * 4 < x - x0 || !((Y < -10 && Y0 < -10) || (pane.height + 10 < Y && pane.height + 10 < Y0)))
+			if (hSq < x - x0 || hSq * hSq > fabs(atan2(Y1 - Y0, X1 - X0) - atan2(Y - Y0, X - X0)))
+				Curve(Calc, id, x0, y0, x, y);
+	}
 		//else if((Y0 < -1e+100 || 1e+100 < Y0) ^ (Y < -1e+100 || 1e+100 < Y)) {
 		//	
 		//}
+	if (hSq < DistanceSq(x, y, x1, y1)) {
+		if (hSq * 4 < x1 - x || !((Y1 < -10 && Y < -10) || (pane.height + 10 < Y1 && pane.height + 10 < Y)))
+			if (hSq < x1 - x || hSq * hSq > fabs(atan2(Y1 - Y0, X1 - X0) - atan2(Y1 - Y, X1 - X)))
+				Curve(Calc, id, x, y, x1, y1);
 	}
-	if (hSq < DistanceSq(x, y, x1, y1))
-		if(hSq * hSq < x1 - x || hSq * hSq > fabs(atan2(Y1 - Y0, X1 - X0) - atan2(Y1 - Y, X1 - X)))
-			Curve(Calc, id, x, y, x1, y1);
 }
 
 
