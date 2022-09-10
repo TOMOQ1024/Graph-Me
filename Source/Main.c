@@ -98,7 +98,7 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
     wcex.hbrBackground  = CreateSolidBrush(BLACK_BRUSH);
     wcex.lpszMenuName   = MAKEINTRESOURCEW(IDC_GRAPHME);
     wcex.lpszClassName  = szWindowClass;
-    wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
+    wcex.hIconSm        = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_GRAPHME));
 
     return RegisterClassExW(&wcex);
 }
@@ -173,14 +173,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         pane.mHover = FALSE;
         pane.mDrag = FALSE;
 
-        //SetScene(SCENE_TITLE);
+        SetScene(SCENE_TITLE);
         //SetScene(SCENE_STAGES);
-        problem_crnt = 1;
-        problem_crnt = 12 * 1 + 2;
-        problem_crnt = 12 * 3 + 2;
+        //problem_crnt = 1;
+        //problem_crnt = 12 * 1 + 2;
+        //problem_crnt = 12 * 3 + 2;
         problem_reached = problem_latest;
         //problem_crnt = problem_latest;
-        SetScene(SCENE_PROBLEM);
+        //SetScene(SCENE_PROBLEM);
         break;
     }
     case WM_SIZE:

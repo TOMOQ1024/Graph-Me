@@ -102,10 +102,7 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="Resource\Graph Me.ico">
-      <Filter>リソース ファイル</Filter>
-    </Image>
-    <Image Include="Resource\small.ico">
+    <Image Include="..\..\..\OneDrive\デスクトップ\Graph Me.ico">
       <Filter>リソース ファイル</Filter>
     </Image>
   </ItemGroup>
