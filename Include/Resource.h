@@ -5,7 +5,7 @@
 #define IDS_APP_TITLE			103
 
 #define IDI_GRAPHME			107
-#define IDI_SMALL				108
+//#define IDI_SMALL				108
 #define IDC_GRAPHME			109
 #define IDC_MYICON				2
 
