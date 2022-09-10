@@ -4,40 +4,97 @@
 #include "Utils.h"
 
 
+INT Y_MAX;
+INT Y_MIN;
 
 
 
 void Curve(double (*Calc)(INT, double, double), INT id, double x0, double y0, double x1, double y1)
 {
-	double hSq = 1 / graph.scale / pane.radius; hSq *= hSq;
-	double x, y;
-	INT X0 = gRtoI_x(x0);
-	INT Y0 = gRtoI_y(y0);
-	INT X1 = gRtoI_x(x1);
-	INT Y1 = gRtoI_y(y1);
-	INT X, Y;
-	x = (x0 + x1) / 2;
-	y = Calc(id, x, 0);
-	X = gRtoI_x(x);
-	Y = gRtoI_y(y);
-	if (-10 < Y && Y < pane.height + 10) {
-		points_arr[points_count][0] = x;
-		points_arr[points_count][1] = y;
-		points_count++;
+	static INT count = 100;
+	if (1e+2 < count) {
+		count--;
+		return;
 	}
-	if (hSq < DistanceSq(x0, y0, x, y)) {
-		if (hSq * 4 < x - x0 || !((Y < -10 && Y0 < -10) || (pane.height + 10 < Y && pane.height + 10 < Y0)))
-			if (hSq < x - x0 || hSq * hSq > fabs(atan2(Y1 - Y0, X1 - X0) - atan2(Y - Y0, X - X0)))
-				Curve(Calc, id, x0, y0, x, y);
+	double hSq = 0.5 / graph.scale / pane.radius; hSq *= hSq;
+	double ax, ay, bx, by, cx, cy;
+	INT AY, BY, CY;
+	INT N = 4;
+	double d = (x1 - x0) / N;
+	ax = x0;
+	ay = Calc(id, ax, 0);
+	AY = gRtoI_y(ay);
+	bx = x0 + d;
+	by = Calc(id, bx, 0);
+	BY = gRtoI_y(by);
+	if (hSq < DistanceSq(ax, ay, bx, by)) {
+		if (-10 < BY && BY < Y_MAX) {
+			points_arr[points_count][0] = bx;
+			points_arr[points_count][1] = by;
+			points_count++;
+		}
+		if (hSq * 8 < d || !((AY < Y_MIN && BY < Y_MIN) || (Y_MAX < AY && Y_MAX < BY))) {
+			if (hSq < d || hSq * hSq > fabs(atan2(by - ay, bx - ax) - atan2(by - ay, bx - ax))) {
+				count++;
+				Curve(Calc, id, ax, ay, bx, by);
+			}
+		}
 	}
-		//else if((Y0 < -1e+100 || 1e+100 < Y0) ^ (Y < -1e+100 || 1e+100 < Y)) {
-		//	
-		//}
-	if (hSq < DistanceSq(x, y, x1, y1)) {
-		if (hSq * 4 < x1 - x || !((Y1 < -10 && Y < -10) || (pane.height + 10 < Y1 && pane.height + 10 < Y)))
-			if (hSq < x1 - x || hSq * hSq > fabs(atan2(Y1 - Y0, X1 - X0) - atan2(Y1 - Y, X1 - X)))
-				Curve(Calc, id, x, y, x1, y1);
+	for (INT i = 2; i <= N; i++) {
+		cx = bx + d;
+		cy = Calc(id, cx, 0);
+		CY = gRtoI_y(cy);
+
+		if (hSq < DistanceSq(ax, ay, cx, cy)) {
+			if (-10 < BY && BY < Y_MAX) {
+				points_arr[points_count][0] = bx;
+				points_arr[points_count][1] = by;
+				points_count++;
+			}
+			if (hSq * 8 < d || !((CY < Y_MIN && BY < Y_MIN) || (Y_MAX < CY && Y_MAX < BY))) {
+				if (hSq < d || hSq * hSq > fabs(atan2(cy - by, cx - bx) - atan2(cy - by, cx - bx))) {
+					count++;
+					Curve(Calc, id, bx, by, cx, cy);
+				}
+			}
+		}
+
+		ax = bx;
+		ay = by;
+		AY = BY;
+		bx = cx;
+		by = cy;
+		BY = CY;
 	}
+	//x = (x0 + x1) / 2;
+	//y = Calc(id, x, 0);
+	//X = gRtoI_x(x);
+	//Y = gRtoI_y(y);
+	//if (-10 < Y && Y < pane.height + 10) {
+	//	points_arr[points_count][0] = x;
+	//	points_arr[points_count][1] = y;
+	//	points_count++;
+	//}
+	//if (hSq < DistanceSq(x0, y0, x, y)) {
+	//	if (hSq * 4 < x - x0 || !((Y < -10 && Y0 < -10) || (pane.height + 10 < Y && pane.height + 10 < Y0))) {
+	//		if (hSq < x - x0 || hSq * hSq > fabs(atan2(y1 - y0, x1 - x0) - atan2(y - y0, x - x0))) {
+	//			count++;
+	//			Curve(Calc, id, x0, y0, x, y);
+	//		}
+	//	}
+	//}
+	//	//else if((Y0 < -1e+100 || 1e+100 < Y0) ^ (Y < -1e+100 || 1e+100 < Y)) {
+	//	//	
+	//	//}
+	//if (hSq < DistanceSq(x, y, x1, y1)) {
+	//	if (hSq * 4 < x1 - x || !((Y1 < -10 && Y < -10) || (pane.height + 10 < Y1 && pane.height + 10 < Y))) {
+	//		if (hSq < x1 - x || hSq * hSq > fabs(atan2(Y1 - Y0, X1 - X0) - atan2(Y1 - Y, X1 - X))) {
+	//			count++;
+	//			Curve(Calc, id, x, y, x1, y1);
+	//		}
+	//	}
+	//}
+	count--;
 }
 
 
@@ -574,6 +631,8 @@ void DrawGraph(HDC hMemDC)
 	}
 	case SCENE_PROBLEM:
 	{
+		Y_MAX = pane.height + 5;
+		Y_MIN = -5;
 		INT X, Y;
 		PROBLEM* p = &problems[problem_crnt];
 		double tmp;
@@ -666,7 +725,7 @@ void DrawGraph(HDC hMemDC)
 			X = gRtoI_x(points_arr[i][0]);
 			Y = gRtoI_y(points_arr[i][1]);
 			if (Y < -10 || pane.height + 10 < Y) continue;
-			Ellipse(
+			Rectangle(
 				hMemDC, X - 3, Y - 3, X + 3, Y + 3
 			);
 		}

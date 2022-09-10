@@ -378,9 +378,9 @@ double Calc0(INT op_arr[], INT op_count, double x, double y)
 		case IDOP_LOG:
 			//errno = 0;
 			tmp = Pop(st);
-			tmp = tmp < 1e-99 ? log(1e-99) : log(tmp);
+			tmp = tmp < 1e-200 ? log(1e-200) : log(tmp);
 			if (FALSE/*errno != 0*/) {
-				Push(st, -1e+99);
+				Push(st, -1e+200);
 			}
 			else {
 				Push(st, tmp);
