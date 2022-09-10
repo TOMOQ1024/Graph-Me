@@ -268,7 +268,7 @@ Node* powr(void)
 {
 	Node* node = prim();
 
-	if (consume(L"^"))return new_node(ND_POW, node, powr());
+	if (consume(L"^"))return new_node(ND_POW, powr(), node);
 	return node;
 }
 Node* prim(void)
