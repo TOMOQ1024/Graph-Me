@@ -81,11 +81,11 @@ void OnLButtonUp_Slider(INT x, INT y)
 	}
 	if (!clear && IsCorrectAnswer()) {
 		clear = 1;
-		if (problem_crnt < problem_latest) {
+		for (INT i = 0; i < problems[problem_crnt].vcount; i++) {
+			sliders[i].value = problems[problem_crnt].answer[i];
+		}
+		if (problem_crnt <= problem_latest) {
 			problem_reached = max(problem_crnt + 1, problem_reached);
-			for (INT i = 0; i < problems[problem_crnt].vcount; i++) {
-				sliders[i].value = problems[problem_crnt].answer[i];
-			}
 		}
 		else {
 			// Š®‘SƒNƒŠƒA
